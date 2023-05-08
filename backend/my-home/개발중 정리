@@ -1,0 +1,10 @@
+기존처럼 RestTemplate안쓰고 WebClient 사용
+https://gngsn.tistory.com/154
+
+- uriBuilderFactory : base url을 커스텀한 UriBuilderFactory
+- defaultHeader : 모든 요청에 사용할 헤더
+- defaultCookie : 모든 요청에 사용할 쿠키
+- defaultRequest : 모든 요청을 커스텀할 Consumer
+- filter : 모든 요청에 사용할 클라이언트 필터
+- exchangeStrategies : HTTP 메시지 reader & writer 커스터마이징
+- clientConnector : HTTP 클라이언트 라이브러리 세팅
