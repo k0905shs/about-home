@@ -39,3 +39,6 @@ out/
 
 ### db setting ###
 application-db.yml
+application-db-mongo.yml
+
+

@@ -37,6 +37,11 @@ dependencies {
 
 	//mysql
 	runtimeOnly 'mysql:mysql-connector-java'
+
+	//mongo
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
+	//implementation ('org.springframework.boot:spring-boot-starter-data-mongodb') 로 추가하면 몽고만 사용 가능 다른 db 못씀
+
 }
 
 tasks.named('test') {

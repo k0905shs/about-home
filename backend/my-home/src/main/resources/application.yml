@@ -1,16 +1,18 @@
 spring:
   profiles:
     include: db
-  data:
-  datasource:
-    url: jdbc:mysql://211.218.1.46:3306/mbti_test?serverTimezone=UTC&characterEncoding=UTF-8
+  datasource: #mysql
     driverClassName: com.mysql.cj.jdbc.Driver
-  jpa:
+  jpa: #jpa
     database: mysql #mysql
     database-platform: org.hibernate.dialect.MySQLDialect #방언 mysql 설정
     hibernate:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl #테이블 엔티티 매핑시 소문자로 변환되는 것 막아줌 -> @Table에 적은대로 entity 매핑
+  data :
+    mongodb:
+      port: 27017
+      authentication-database: admin
 
     properties:
       hibernate :
