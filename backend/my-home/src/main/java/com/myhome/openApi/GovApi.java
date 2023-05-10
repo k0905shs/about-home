@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myhome.model.openApi.GovCommonDto;
 import com.myhome.type.GovRequestUrl;
 import com.myhome.type.ResponseFormat;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -14,8 +16,15 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.util.Map;
 
+/**
+ * 실제 공공데이터 data request 를 보내는 컴포넌트
+ */
 @Component
+@Slf4j
 public class GovApi {
+
+    @Value("${gov.service.key}")
+    private String serviceKey;
 
     /**
      * 공공데이터 request 분기
@@ -50,8 +59,9 @@ public class GovApi {
         .host(url.getHost())
         .path(url.getPath())
         .queryParams(params)
-        .queryParam("serviceKey", "5TNF1XMQwRcgHri+3ukTRRSzwiUJnr5JP7SBMUscTWORWs3skuuyM3YfJZpXzUD+dE6ITSrQb1YJb29HHNEzng==")
-        .queryParam("format", "json")
+        .queryParam("serviceKey", serviceKey)
+        .queryParam("format", ResponseFormat.JSON.getType())
+        .queryParam("type", ResponseFormat.JSON.getType())
         .build().encode()
         .toUri();
 

@@ -20,13 +20,12 @@ spring:
         jdbc:
           batch_size: 100
           batch_versioned_data: true
+  # for swagger
+  # Spring boot 2.6버전 이후에 spring.mvc.pathmatch.matching-strategy 값이
+  # ant_apth_matcher에서 path_pattern_parser로 변경되면서 몇몇 라이브러리에서 오류가 발생하기 때문이므로
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-# mvc :
-#  Spring boot 2.6버전 이후에 spring.mvc.pathmatch.matching-strategy 값이
-#  ant_apth_matcher에서 path_pattern_parser로 변경되면서 몇몇 라이브러리에서 오류가 발생하기 때문이므로
-#  application.yml 아래의 코드를 추가
 
 
 logging.level:
@@ -34,3 +33,7 @@ logging.level:
 
 server:
   port: 9999
+
+gov :
+  service :
+    key : 5TNF1XMQwRcgHri+3ukTRRSzwiUJnr5JP7SBMUscTWORWs3skuuyM3YfJZpXzUD+dE6ITSrQb1YJb29HHNEzng==
