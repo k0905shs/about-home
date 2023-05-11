@@ -14,7 +14,6 @@ import java.util.List;
 public class LandPriceDto {
 
     @Getter
-    @Setter
     public static class openApiRequestParam extends GovCommonDto{
         private String pnu;
         private String stdrYear;

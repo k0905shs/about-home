@@ -3,8 +3,8 @@ package com.myhome.openApi;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myhome.model.openApi.GovCommonDto;
-import com.myhome.type.GovRequestUrl;
-import com.myhome.type.ResponseFormat;
+import com.myhome.type.GovRequestUri;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -19,54 +19,43 @@ import java.util.Map;
 /**
  * 실제 공공데이터 data request 를 보내는 컴포넌트
  */
-@Component
 @Slf4j
+@Component
+@RequiredArgsConstructor
 public class GovApi {
 
     @Value("${gov.service.key}")
     private String serviceKey;
+    private final ObjectMapper objectMapper;
 
     /**
-     * 공공데이터 request 분기
-     *
+     * 공공데이터 reqeust
      * @param requestDto 공공데이터 요청 DTO
      * @param <T>        공공데이터 요청 DTO 상속 받은 DTO
      * @return String
      */
-    public <T extends GovCommonDto> String requestGov(final T requestDto, GovRequestUrl url) {
-        String responseBody = "";
-        if (requestDto.getResponseFormat().equals(ResponseFormat.JSON)) {
-            responseBody = responseToJson(requestDto, url);
-        } else if (requestDto.getResponseFormat().equals(ResponseFormat.XML)) {
-            responseBody = responseToXml(requestDto, url);
-        }
-        return responseBody;
-    }
-
-    /**
-     *
-     * @return
-     */
-    private <T extends GovCommonDto> String responseToJson(final T requestDto, GovRequestUrl url) {
-        // TODO : 해당 코드 xml api 사용 승인 나면 공통화 진행해야함!!! Util로 넘기는게 목표
-        ObjectMapper objectMapper = new ObjectMapper();
+    public <T extends GovCommonDto> String requestGov(final T requestDto, GovRequestUri govRequestUri) {
+        //requestDto to MultiValueMap
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         Map<String, String> maps = objectMapper.convertValue(requestDto, new TypeReference<Map<String, String>>() {});
         params.setAll(maps);
 
+        //uri build
         URI uri = UriComponentsBuilder.newInstance()
-        .scheme("http")
-        .host(url.getHost())
-        .path(url.getPath())
-        .queryParams(params)
-        .queryParam("serviceKey", serviceKey)
-        .queryParam("format", ResponseFormat.JSON.getType())
-        .queryParam("type", ResponseFormat.JSON.getType())
-        .build().encode()
-        .toUri();
-
+                .scheme("http")
+                .host(govRequestUri.getHost())
+                .port(govRequestUri.getPort())
+                .path(govRequestUri.getPath())
+                .queryParams(params)
+                .queryParam("serviceKey", serviceKey)
+                .queryParam("format", govRequestUri.getResponseFormat().getType())
+                .queryParam("type", govRequestUri.getResponseFormat().getType())
+                .build().encode()
+                .toUri();
+        
+        // '+' 인코딩 이슈 해결
         uri = this.encodePlus(uri);
-        //TODO : xml 파일 파싱 방법 확인하고 공통화 할 수 있으면 공통화 하자
+
         return WebClient.builder().build()
                 .get()
                 .uri(uri)
@@ -75,13 +64,6 @@ public class GovApi {
                 .block();
     }
 
-    /**
-     *
-     * @return
-     */
-    private <T extends GovCommonDto> String responseToXml(final T requestDto, GovRequestUrl url) {
-        return "xml";
-    }
 
     /**
      * UriComponentsBuilder + 가 인코딩 안돼는 문제 해결

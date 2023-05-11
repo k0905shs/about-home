@@ -9,5 +9,5 @@ public enum ResponseFormat {
     JSON("json"),
     XML("xml");
 
-    private final String type;
+    private final String type; //response 타입
 }

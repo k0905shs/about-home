@@ -1,8 +1,9 @@
 package com.myhome.service;
 
+import com.myhome.model.openApi.BuildingSaleDto;
 import com.myhome.model.openApi.LandPriceDto;
 import com.myhome.model.openApi.StanReginDto;
-import com.myhome.openApi.GovApi;
+import com.myhome.type.BuildingType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,5 +30,24 @@ class GovServiceTest {
         StanReginDto.openApiResponse returnData = govService.requestStanReginApi(requestParam);
 
         assertThat(returnData.getLocataddNm()).isEqualTo("서울특별시 은평구 응암동");
+    }
+
+    @Test
+    void requestBuildingSalesApi() throws Exception {
+        BuildingSaleDto.openApiRequestParam requestParamApart = new BuildingSaleDto.openApiRequestParam("11110" , "201512", BuildingType.APART);
+        BuildingSaleDto.openApiRequestParam requestParamHouse = new BuildingSaleDto.openApiRequestParam("11110" , "201512", BuildingType.HOUSE);
+        BuildingSaleDto.openApiRequestParam requestParamOfficetel = new BuildingSaleDto.openApiRequestParam("11110", "201512", BuildingType.OFFICETEL);
+        BuildingSaleDto.openApiRequestParam requestParamTownHouse = new BuildingSaleDto.openApiRequestParam("11110", "201512", BuildingType.TOWNHOUSE);
+
+        BuildingSaleDto.openApiResponse responseApart = govService.requestBuildingSalesApi(requestParamApart);
+        BuildingSaleDto.openApiResponse responseHouse = govService.requestBuildingSalesApi(requestParamHouse);
+//        BuildingSaleDto.openApiResponse responseOfficetel = govService.requestBuildingSalesApi(requestParamOfficetel);
+        BuildingSaleDto.openApiResponse responseTownHouse = govService.requestBuildingSalesApi(requestParamTownHouse);
+
+        assertThat(responseApart.getField().getBuildingSales().getInfoList().get(0).getReginCode()).isEqualTo("11110");
+        assertThat(responseHouse.getField().getBuildingSales().getInfoList().get(0).getReginCode()).isEqualTo("11110");
+//        assertThat(responseOfficetel.getField().getBuildingSales().getInfoList().get(0).getReginCode()).isEqualTo("11110");
+        assertThat(responseTownHouse.getField().getBuildingSales().getInfoList().get(0).getReginCode()).isEqualTo("11110");
+
     }
 }

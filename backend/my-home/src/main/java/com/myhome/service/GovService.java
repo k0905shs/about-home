@@ -1,5 +1,6 @@
 package com.myhome.service;
 
+import com.myhome.model.openApi.BuildingSaleDto;
 import com.myhome.model.openApi.LandPriceDto;
 import com.myhome.model.openApi.StanReginDto;
 
@@ -23,5 +24,13 @@ public interface GovService {
      * @throws Exception
      */
     StanReginDto.openApiResponse requestStanReginApi(final StanReginDto.openApiRequestParam requestParam) throws Exception;
+
+    /**
+     * 국토교통부 건물 카테고리별 매매 실거래자료
+     * @param requestParam
+     * @return openApiResponse
+     * @throws Exception
+     */
+    BuildingSaleDto.openApiResponse requestBuildingSalesApi(final BuildingSaleDto.openApiRequestParam requestParam) throws Exception;
 
 }
