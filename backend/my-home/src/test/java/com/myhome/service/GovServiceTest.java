@@ -7,10 +7,14 @@ import com.myhome.type.BuildingType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+@Transactional
+@Rollback(value = false)
 class GovServiceTest {
 
     @Autowired
@@ -50,4 +54,14 @@ class GovServiceTest {
         assertThat(responseTownHouse.getField().getBuildingSales().getInfoList().get(0).getReginCode()).isEqualTo("11110");
 
     }
+
+    @Test
+    public void pnuSave() {
+
+//        StanReginDto.openApiRequestParam requestParam = new StanReginDto.openApiRequestParam("서울특별시 은평구 응암동" , 10, 1);
+//        StanReginDto.openApiResponse returnData = govService.requestStanReginApi(requestParam);
+
+
+    }
+
 }

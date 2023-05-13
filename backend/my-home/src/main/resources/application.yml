@@ -11,20 +11,12 @@ spring:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl #테이블 엔티티 매핑시 소문자로 변환되는 것 막아줌 -> @Table에 적은대로 entity 매핑
   data :
     mongodb:
+      host: 211.218.1.46
       port: 27017
-      authentication-database: admin
-
-    properties:
-      hibernate :
-        show_sql: true
-        format_sql: true
-        use_sql_comments: = true
-        jdbc:
-          batch_size: 100
-          batch_versioned_data: true
-  # for swagger
-  # Spring boot 2.6버전 이후에 spring.mvc.pathmatch.matching-strategy 값이
-  # ant_apth_matcher에서 path_pattern_parser로 변경되면서 몇몇 라이브러리에서 오류가 발생하기 때문이므로
+      username: k0905sh
+      password: tjdGUS123~!
+      database: my_home
+      auto-index-creation: true
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher

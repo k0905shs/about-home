@@ -1,0 +1,41 @@
+{
+    "StanReginCd": [
+        {
+            "head": [
+                {
+                    "totalCount": 1
+                },
+                {
+                    "numOfRows": "3",
+                    "pageNo": "1",
+                    "type": "JSON"
+                },
+                {
+                    "RESULT": {
+                        "resultCode": "INFO-0",
+                        "resultMsg": "NOMAL SERVICE"
+                    }
+                }
+            ]
+        },
+        {
+            "row": [
+                {
+                    "region_cd": "1138010700",
+                    "sido_cd": "11",
+                    "sgg_cd": "380",
+                    "umd_cd": "107",
+                    "ri_cd": "00",
+                    "locatjumin_cd": "1138010700",
+                    "locatjijuk_cd": "1138010700",
+                    "locatadd_nm": "서울특별시 은평구 응암동",
+                    "locat_order": 7,
+                    "locat_rm": "",
+                    "locathigh_cd": "1138000000",
+                    "locallow_nm": "응암동",
+                    "adpt_de": ""
+                }
+            ]
+        }
+    ]
+}

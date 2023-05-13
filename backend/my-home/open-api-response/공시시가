@@ -1,0 +1,25 @@
+{
+    "indvdLandPrices": {
+        "field": [
+            {
+                "regstrSeCode": "1",
+                "pnu": "1111017700102110000",
+                "ldCodeNm": "서울특별시 종로구 평동",
+                "ldCode": "1111017700",
+                "stdrYear": "2015",
+                "stdrMt": "01",
+                "pblntfPclnd": "3026000",
+                "pblntfDe": "2015-05-29",
+                "stdLandAt": "N",
+                "mnnmSlno": "211",
+                "regstrSeCodeNm": "일반",
+                "lastUpdtDt": "2019-07-29"
+            }
+        ],
+        "numOfRows": "10",
+        "pageNo": "1",
+        "resultCode": null,
+        "resultMsg": null,
+        "totalCount": "1"
+    }
+}

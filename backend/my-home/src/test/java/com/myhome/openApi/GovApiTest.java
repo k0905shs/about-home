@@ -7,6 +7,7 @@ import com.myhome.model.openApi.LandPriceDto;
 import com.myhome.model.openApi.StanReginDto;
 import com.myhome.type.BuildingType;
 import com.myhome.type.GovRequestUri;
+import com.myhome.util.GovApi;
 import org.json.JSONObject;
 import org.json.XML;
 import org.junit.jupiter.api.Test;

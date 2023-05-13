@@ -3,6 +3,7 @@ package com.myhome.model.openApi;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.myhome.collection.StanRegin;
 import com.myhome.type.ResponseFormat;
 import lombok.*;
 
@@ -43,5 +44,17 @@ public class StanReginDto {
         private String locathighCd;
         private String locallowNm;
         private String adptDe;
+
+        public StanRegin toDocument() {
+            return StanRegin.builder()
+                    .regionCd(this.regionCd).sidoCd(this.sidoCd).sggCd(this.sggCd)
+                    .umdCd(this.getUmdCd()).riCd(this.riCd)
+                    .locatjuminCd(this.locatjuminCd).locatjijukCd(this.locatjijukCd)
+                    .locataddNm(this.locataddNm).locatOrder(this.locatOrder)
+                    .locatRm(this.locatRm).locathighCd(this.locathighCd)
+                    .locallowNm(this.locallowNm).adptDe(this.adptDe)
+                    .build();
+        }
+
     }
 }

@@ -1,4 +1,4 @@
-package com.myhome.openApi;
+package com.myhome.util;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

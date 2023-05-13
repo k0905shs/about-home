@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myhome.model.openApi.BuildingSaleDto;
 import com.myhome.model.openApi.LandPriceDto;
 import com.myhome.model.openApi.StanReginDto;
-import com.myhome.openApi.GovApi;
+import com.myhome.util.GovApi;
 import com.myhome.type.GovRequestUri;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
@@ -13,7 +13,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class GovServiceImpl implements GovService{
+public class
+GovServiceImpl implements GovService{
 
     private final GovApi govApi;
     private final ObjectMapper objectMapper;
