@@ -2,6 +2,7 @@ package com.myhome.model.openApi;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.myhome.collection.LandPrice;
 import com.myhome.type.ResponseFormat;
 import lombok.*;
 
@@ -57,5 +58,14 @@ public class LandPriceDto {
         private String mnnmSlno;
         private String regstrSeCodeNm;
         private String lastUpdtDt;
+
+        public LandPrice.response toDocument() {
+            return LandPrice.response.builder()
+                    .regstrSeCode(this.regstrSeCode).pnu(this.pnu).ldCodeNm(this.ldCodeNm)
+                    .ldCode(this.ldCode).stdrYear(this.stdrYear).stdrMt(this.stdrMt)
+                    .pblntfPclnd(this.pblntfPclnd).pblntfDe(this.pblntfDe)
+                    .stdLandAt(this.stdLandAt).mnnmSlno(this.mnnmSlno).regstrSeCodeNm(this.regstrSeCodeNm).lastUpdtDt(this.lastUpdtDt)
+                    .build();
+        }
     }
 }
