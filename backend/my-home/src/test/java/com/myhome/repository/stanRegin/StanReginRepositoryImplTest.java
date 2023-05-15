@@ -8,11 +8,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+
 @SpringBootTest
 @Transactional
-@Rollback(value = false)
 class StanReginRepositoryImplTest {
 
     @Autowired
@@ -25,11 +24,15 @@ class StanReginRepositoryImplTest {
         StanReginDto.openApiRequestParam openApiRequestParam = new StanReginDto.openApiRequestParam("서울특별시 은평구 응암동", 1, 1);
         StanReginDto.openApiResponse response = govService.requestStanReginApi(openApiRequestParam);
 
-        StanRegin stanRegin = response.toDocument();
+        StanRegin.response documentResponse = response.toDocument();
+        StanRegin.request documentRequest = new StanRegin.request(openApiRequestParam.getLocataddNm());
 
-        StanRegin savedStanRegin = mongoTemplate.save(stanRegin);
+        StanRegin stanRegin = new StanRegin(documentRequest, documentResponse);
 
-        Assertions.assertThat(savedStanRegin.getLocataddNm()).isEqualTo(openApiRequestParam.getLocataddNm());
+        StanRegin save = mongoTemplate.save(stanRegin);
+        Assertions.assertThat(save.getResponse().getLocataddNm()).isEqualTo(openApiRequestParam.getLocataddNm());
     }
+
+
 
 }

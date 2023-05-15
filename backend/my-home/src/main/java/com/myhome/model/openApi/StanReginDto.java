@@ -45,8 +45,8 @@ public class StanReginDto {
         private String locallowNm;
         private String adptDe;
 
-        public StanRegin toDocument() {
-            return StanRegin.builder()
+        public StanRegin.response toDocument() {
+            return StanRegin.response.builder()
                     .regionCd(this.regionCd).sidoCd(this.sidoCd).sggCd(this.sggCd)
                     .umdCd(this.getUmdCd()).riCd(this.riCd)
                     .locatjuminCd(this.locatjuminCd).locatjijukCd(this.locatjijukCd)
@@ -55,6 +55,5 @@ public class StanReginDto {
                     .locallowNm(this.locallowNm).adptDe(this.adptDe)
                     .build();
         }
-
     }
 }
