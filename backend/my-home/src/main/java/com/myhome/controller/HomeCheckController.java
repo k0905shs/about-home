@@ -16,7 +16,7 @@ public class HomeCheckController {
     private final HomeCheckService homeCheckService;
 
     @PostMapping("check-land-price")
-    public HomeCheckDto.checkLandPriceResult checkLandPrice(@RequestBody final HomeCheckDto.checkLandPriceParam checkLandPriceParam) {
+    public HomeCheckDto.checkLandPriceResult checkLandPrice(@RequestBody final HomeCheckDto.checkLandPriceParam checkLandPriceParam) throws Exception {
         return homeCheckService.checkLandPrice(checkLandPriceParam);
     }
 

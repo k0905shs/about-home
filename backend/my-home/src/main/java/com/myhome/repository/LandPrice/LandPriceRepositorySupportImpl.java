@@ -2,7 +2,6 @@ package com.myhome.repository.LandPrice;
 
 import com.myhome.collection.LandPrice;
 import com.myhome.model.homeCheck.HomeCheckDto;
-import com.myhome.model.openApi.LandPriceDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
@@ -24,17 +23,17 @@ public class LandPriceRepositorySupportImpl implements LandPriceRepositorySuppor
 
     @Override
     public List<LandPrice> checkLandPrice(HomeCheckDto.checkLandPriceParam checkLandPriceParam) {
-        LocalDate searchDate = LocalDate.now().minusYears(checkLandPriceParam.getYear()); //작년 기준
-        final String pnu = checkLandPriceParam.getBuildingCode().substring(0, 19);
-        //pnu, year 로 이미 요청한 기록이 있는지 확인
         Query query = new Query();
+        int fromYear = LocalDate.now().minusYears(checkLandPriceParam.getSearchYear()).getYear();
+        final String pnu = checkLandPriceParam.getBuildingCode().substring(0, 19);
+
         query.addCriteria(
                 new Criteria().andOperator(
                         Criteria.where("request.pnu").is(pnu),
-                        Criteria.where("request.stdrYear").gte(searchDate.getYear())
+                        Criteria.where("request.stdrYear").gte(String.valueOf(fromYear))
                 )
         ).with(Sort.by(Sort.Direction.ASC, "request.stdrYear"));
-        log.info(query.toString());
+
         return mongoTemplate.find(query, LandPrice.class);
     }
 }

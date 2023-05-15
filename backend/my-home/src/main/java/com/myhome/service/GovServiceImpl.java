@@ -1,27 +1,44 @@
 package com.myhome.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.myhome.collection.LandPrice;
 import com.myhome.model.openApi.BuildingSaleDto;
 import com.myhome.model.openApi.LandPriceDto;
 import com.myhome.model.openApi.StanReginDto;
+import com.myhome.repository.LandPrice.LandPriceRepository;
 import com.myhome.util.GovApi;
 import com.myhome.type.GovRequestUri;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.json.XML;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(propagation = Propagation.REQUIRES_NEW)
 public class GovServiceImpl implements GovService{
 
     private final GovApi govApi;
     private final ObjectMapper objectMapper;
+    private final LandPriceRepository landPriceRepository;
 
     @Override
     public LandPriceDto.openApiResponse requestLandPriceApi(final LandPriceDto.openApiRequestParam requestParam) throws Exception{
         String response = govApi.requestGov(requestParam, GovRequestUri.LAND_PRICE);
-        return objectMapper.readValue(response, LandPriceDto.openApiResponse.class);
+        LandPriceDto.openApiResponse openApiResponse = 
+                objectMapper.readValue(response, LandPriceDto.openApiResponse.class);
+
+        //request 결과 저장
+        LandPrice.response landPriceResponse =
+                openApiResponse.getField().getLandPriceList().get(0).toDocument();
+        LandPrice.request landPriceRequest
+                = new LandPrice.request(requestParam.getPnu(), requestParam.getStdrYear());
+
+        landPriceRepository.save(new LandPrice(landPriceRequest, landPriceResponse));
+
+        return openApiResponse;
     }
 
     @Override

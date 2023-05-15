@@ -4,6 +4,6 @@ import com.myhome.model.homeCheck.HomeCheckDto;
 
 public interface HomeCheckService {
 
-    HomeCheckDto.checkLandPriceResult checkLandPrice(final HomeCheckDto.checkLandPriceParam checkLandPriceParam);
+    HomeCheckDto.checkLandPriceResult checkLandPrice(final HomeCheckDto.checkLandPriceParam checkLandPriceParam) throws Exception;
 
 }
