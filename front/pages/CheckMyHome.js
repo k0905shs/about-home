@@ -4,12 +4,19 @@ import DaumPostcode from "react-daum-postcode";
 
 const CheckMyHome = () => {
   const [inputVal, setInputVal] = useState({
-    contract: "",
+    contract: "monthlyRent",
     deposit: "",
     rentalFee: "",
     purchaser: "",
     provider: "",
   });
+
+  const [postcode, setPostcode] = useState("");
+  const [address, setAddress] = useState("");
+  const [detailAddress, setDetailAddress] = useState("");
+  const [showDaumPostcode, setShowDaumPostcode] = useState(false);
+
+  const [building, setBuilding] = useState("APART");
 
   const [result, setResult] = useState([]);
 
@@ -23,10 +30,9 @@ const CheckMyHome = () => {
     setInputVal({ ...inputVal, [name]: value });
   };
 
-  const [postcode, setPostcode] = useState("");
-  const [address, setAddress] = useState("");
-  const [detailAddress, setDetailAddress] = useState("");
-  const [showDaumPostcode, setShowDaumPostcode] = useState(false);
+  const handleBuildingChange = (e) => {
+    setBuilding(e.target.value);
+  };
 
   const handleOpenPostcode = () => {
     setShowDaumPostcode(!showDaumPostcode);
@@ -115,6 +121,27 @@ const CheckMyHome = () => {
                   value={inputVal.deposit}
                   onChange={handleInputChange}
                 />
+                <div
+                  style={{
+                    fontWeight: "500",
+                    marginTop: "10px",
+                    fontSize: "20px",
+                  }}
+                >
+                  건물 종류: <br />
+                  <Form.Select
+                    style={{ marginTop: "10px" }}
+                    value={building}
+                    onChange={handleBuildingChange}
+                  >
+                    <option value="APART">아파트</option>
+                    <option value="HOUSE">
+                      다세대주택 / 연립주택 / 빌라 / 도시형 생활주택
+                    </option>
+                    <option value="OFFICETEL">오피스텔</option>
+                    <option value="TOWNHOUSE">단독주택 / 다가구주택</option>
+                  </Form.Select>
+                </div>
                 <Form.Label>
                   <h5 style={{ marginTop: "20px" }}>소재지</h5>
                 </Form.Label>{" "}
