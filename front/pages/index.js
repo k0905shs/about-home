@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>마이홈체크</title>
+        <title>어바웃홈</title>
         <meta
           name="description"
           content="우리집은 안전할까? 우리집 정보 확인하기"
