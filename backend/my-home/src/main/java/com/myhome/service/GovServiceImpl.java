@@ -1,19 +1,24 @@
 package com.myhome.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.myhome.collection.BuildingSale;
 import com.myhome.collection.LandPrice;
 import com.myhome.model.openApi.BuildingSaleDto;
 import com.myhome.model.openApi.LandPriceDto;
 import com.myhome.model.openApi.StanReginDto;
 import com.myhome.repository.LandPrice.LandPriceRepository;
-import com.myhome.util.GovApi;
+import com.myhome.repository.buildingSale.BuildingSaleRepository;
 import com.myhome.type.GovRequestUri;
+import com.myhome.util.GovApi;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.json.XML;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +28,7 @@ public class GovServiceImpl implements GovService{
     private final GovApi govApi;
     private final ObjectMapper objectMapper;
     private final LandPriceRepository landPriceRepository;
+    private final BuildingSaleRepository buildingSaleRepository;
 
     @Override
     public LandPriceDto.openApiResponse requestLandPriceApi(final LandPriceDto.openApiRequestParam requestParam) throws Exception{
@@ -63,6 +69,19 @@ public class GovServiceImpl implements GovService{
         JSONObject jsonObj = XML.toJSONObject(response);
         String json = jsonObj.get("response").toString();
 
-        return objectMapper.readValue(json, BuildingSaleDto.openApiResponse.class);
+        BuildingSaleDto.openApiResponse openApiResponse =
+                objectMapper.readValue(json, BuildingSaleDto.openApiResponse.class);
+
+        //request 결과 저장
+        List<BuildingSaleDto.salesInfo> infoList =
+                openApiResponse.getField().getBuildingSales().getInfoList();
+
+        List<BuildingSale.detail> responseList =
+                infoList.stream().map(BuildingSaleDto.salesInfo::toDocument).collect(Collectors.toList());
+        BuildingSale.request request = new BuildingSale.request(requestParam.getLawdCd(), requestParam.getDealYmd(), requestParam.getBuildingType());
+        BuildingSale buildingSale = new BuildingSale(request, responseList);
+        buildingSaleRepository.save(buildingSale);
+
+        return openApiResponse;
     }
 }

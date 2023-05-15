@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.myhome.collection.BuildingSale;
 import com.myhome.type.BuildingType;
 import com.myhome.type.ResponseFormat;
 import lombok.AccessLevel;
@@ -95,6 +96,14 @@ public class BuildingSaleDto {
         @JsonSetter("연립다세대")
         public void setBuildingName3(String buildingName) {
             this.buildingName = buildingName;
+        }
+
+        public BuildingSale.detail toDocument(){
+            return BuildingSale.detail.builder()
+                    .price(this.price).buildingName(this.buildingName).year(this.year)
+                    .month(this.month).day(this.day).streetCode(this.streetCode)
+                    .reginCode(this.reginCode).streetName(this.streetName)
+                    .build();
         }
     }
 

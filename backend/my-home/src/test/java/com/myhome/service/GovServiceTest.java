@@ -6,6 +6,7 @@ import com.myhome.model.openApi.BuildingSaleDto;
 import com.myhome.model.openApi.LandPriceDto;
 import com.myhome.model.openApi.StanReginDto;
 import com.myhome.type.BuildingType;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -71,6 +72,28 @@ class GovServiceTest {
         //mongo 저장
         LandPrice landPrice = new LandPrice(new LandPrice.request("1111017700102110000", "2023`"), response);
         mongoTemplate.save(landPrice);
+    }
+
+    @Test
+    void 법정동코드_저장_테스트() throws Exception {
+        StanReginDto.openApiRequestParam openApiRequestParam = new StanReginDto.openApiRequestParam("서울특별시 은평구 응암동", 1, 1);
+        StanReginDto.openApiResponse response = govService.requestStanReginApi(openApiRequestParam);
+
+        StanRegin.response documentResponse = response.toDocument();
+        StanRegin.request documentRequest = new StanRegin.request(openApiRequestParam.getLocataddNm());
+
+        StanRegin stanRegin = new StanRegin(documentRequest, documentResponse);
+
+        StanRegin save = mongoTemplate.save(stanRegin);
+        Assertions.assertThat(save.getResponse().getLocataddNm()).isEqualTo(openApiRequestParam.getLocataddNm());
+    }
+
+    @Test
+    void 실거래자료_저장_테스트() throws Exception{
+        BuildingSaleDto.openApiRequestParam openApiRequestParam =
+                new BuildingSaleDto.openApiRequestParam("11110", "201512", BuildingType.APART);
+
+        govService.requestBuildingSalesApi(openApiRequestParam);
     }
 
 }

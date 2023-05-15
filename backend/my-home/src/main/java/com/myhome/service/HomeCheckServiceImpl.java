@@ -5,7 +5,6 @@ import com.myhome.collection.LandPrice;
 import com.myhome.model.homeCheck.HomeCheckDto;
 import com.myhome.model.openApi.LandPriceDto;
 import com.myhome.repository.LandPrice.LandPriceRepositorySupport;
-import com.myhome.util.GovApi;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class HomeCheckServiceImpl implements HomeCheckService{
 
-    private final GovApi govApi;
     private final LandPriceRepositorySupport landPriceRepositorySupport;
     private final GovService govService;
 
@@ -50,17 +48,16 @@ public class HomeCheckServiceImpl implements HomeCheckService{
 
             for (int i = startYear; i < nowYear; i++) { //기록이 없는 연도 공공데이터 request
                 if(!savedYearList.contains(String.valueOf(i))){
-                    //공공데이터 request 실행
+                    // request 실행
                     LandPriceDto.openApiResponse openApiResponse =
                             govService.requestLandPriceApi(new LandPriceDto.openApiRequestParam(pnu, String.valueOf(i), 1, 1));
 
-                    //db에 저장 안돼있는 데이터 추가
+                    //return dto List에 결과 추가
                     LandPriceDto.landPrice landPrice = openApiResponse.getField().getLandPriceList().get(0);
                     landPriceInfoList.add(new HomeCheckDto.landPriceInfo(landPrice.getStdrYear(), landPrice.getPblntfPclnd()));
                 }
             }
         }
-
         return new HomeCheckDto.checkLandPriceResult(pnu, landPriceInfoList);
     }
 }
