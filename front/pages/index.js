@@ -14,13 +14,8 @@ export default function Home() {
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
-
-        {/* <link rel="preload" href="/images/main-banner.png" as="image" /> */}
       </Head>
       <Container fluid className="p-0">
-        {/* <Row>
-          <img src="/images/main-banner.png" alt="Main Banner" />
-        </Row> */}
         <MainPage></MainPage>
       </Container>
     </>
