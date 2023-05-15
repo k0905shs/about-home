@@ -4,7 +4,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
@@ -13,7 +15,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class LandPrice {
 
     @Id
-    private String id;
+    private ObjectId id;
+
+    @Indexed(unique = true)
     private LandPrice.request request;
     private LandPrice.response response;
 
@@ -69,5 +73,4 @@ public class LandPrice {
             this.lastUpdtDt = lastUpdtDt;
         }
     }
-
 }

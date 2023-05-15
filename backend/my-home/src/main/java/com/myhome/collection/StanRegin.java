@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -14,7 +15,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class StanRegin {
 
     @Id
-    private String id;
+    private ObjectId id;
+
+    @Indexed(unique = true)
     private request request;
     private response response;
 
@@ -39,7 +42,6 @@ public class StanRegin {
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class response{
-        @Indexed(unique = true)
         private String regionCd; //1138010700 '리'가 없으니까 뒤에 00
         private String sidoCd; //11
         private String sggCd; //380

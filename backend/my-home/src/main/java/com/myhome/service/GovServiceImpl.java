@@ -13,8 +13,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class
-GovServiceImpl implements GovService{
+public class GovServiceImpl implements GovService{
 
     private final GovApi govApi;
     private final ObjectMapper objectMapper;

@@ -6,19 +6,16 @@ import com.myhome.model.openApi.BuildingSaleDto;
 import com.myhome.model.openApi.LandPriceDto;
 import com.myhome.model.openApi.StanReginDto;
 import com.myhome.type.BuildingType;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
-@Rollback(value = false)
 class GovServiceTest {
 
     @Autowired
@@ -65,16 +62,15 @@ class GovServiceTest {
     @Test
     public void 공시지가_mongo_저장() throws Exception {
         LandPriceDto.openApiRequestParam requestParam =
-                new LandPriceDto.openApiRequestParam("1111017700102110000", "2022", 1, 1);
+                new LandPriceDto.openApiRequestParam("1111017700102110000", "2023", 1, 1);
 
         LandPriceDto.openApiResponse openApiResponse = govService.requestLandPriceApi(requestParam);
         LandPrice.response response =
                 openApiResponse.getField().getLandPriceList().get(0).toDocument();
 
         //mongo 저장
-        LandPrice landPrice = new LandPrice(new LandPrice.request("1111017700102110000", "2022"), response);
+        LandPrice landPrice = new LandPrice(new LandPrice.request("1111017700102110000", "2023`"), response);
         mongoTemplate.save(landPrice);
-
     }
 
 }
