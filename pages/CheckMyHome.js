@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Container, Stack, Form, Button } from "react-bootstrap";
+import DaumPostcode from "react-daum-postcode";
 
 const CheckMyHome = () => {
   const [inputVal, setInputVal] = useState({
     contract: "",
     deposit: "",
-    address: "",
     rentalFee: "",
     purchaser: "",
     provider: "",
@@ -21,6 +21,34 @@ const CheckMyHome = () => {
   const handleRadioChange = (e) => {
     const { name, value } = e.target;
     setInputVal({ ...inputVal, [name]: value });
+  };
+
+  const [postcode, setPostcode] = useState("");
+  const [address, setAddress] = useState("");
+  const [detailAddress, setDetailAddress] = useState("");
+  const [showDaumPostcode, setShowDaumPostcode] = useState(false);
+
+  const handleOpenPostcode = () => {
+    setShowDaumPostcode(!showDaumPostcode);
+  };
+
+  const handleComplete = (data) => {
+    let fullAddress = data.address;
+    let extraAddress = "";
+    if (data.addressType === "R") {
+      if (data.bname !== "") {
+        extraAddress += data.bname;
+      }
+      if (data.buildingName !== "") {
+        extraAddress +=
+          extraAddress !== "" ? `, ${data.buildingName}` : data.buildingName;
+      }
+      fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
+    }
+    console.log(extraAddress); // e.g. '서울 성동구 왕십리로2길 20 (성수동1가)'
+
+    setPostcode(data.zonecode);
+    setAddress(extraAddress);
   };
 
   return (
@@ -88,15 +116,44 @@ const CheckMyHome = () => {
                   onChange={handleInputChange}
                 />
                 <Form.Label>
-                  <h5 style={{ marginTop: "20px" }}>소재지 </h5>
-                </Form.Label>
+                  <h5 style={{ marginTop: "20px" }}>소재지</h5>
+                </Form.Label>{" "}
+                <Button type="button" onClick={handleOpenPostcode}>
+                  검색
+                </Button>
+                {showDaumPostcode && (
+                  <div>
+                    <DaumPostcode
+                      onComplete={handleComplete}
+                      autoClose={true}
+                      width={500}
+                      height={600}
+                      animation
+                    />
+                  </div>
+                )}
                 <Form.Control
                   type="text"
-                  name="address"
-                  value={inputVal.address}
-                  required
-                  onChange={handleInputChange}
+                  placeholder="우편번호"
+                  value={postcode}
+                  readOnly
                 />
+                <div>
+                  <Form.Control
+                    type="text"
+                    placeholder="주소"
+                    value={address}
+                    readOnly
+                  />
+                </div>
+                <div>
+                  <Form.Control
+                    type="text"
+                    placeholder="상세주소"
+                    value={detailAddress}
+                    onChange={(e) => setDetailAddress(e.target.value)}
+                  />
+                </div>
                 <Form.Label>
                   <h5 style={{ marginTop: "20px" }}>월 임차료</h5>
                 </Form.Label>
