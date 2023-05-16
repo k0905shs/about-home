@@ -10,7 +10,7 @@ const Header = () => {
   };
 
   return (
-    <Navbar bg="light" expand="lg" onSelect={handleSelect}>
+    <Navbar bg="primary" variant="dark" expand="lg" onSelect={handleSelect}>
       <Container>
         <Navbar.Brand href="/">어바웃홈</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
