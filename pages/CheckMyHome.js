@@ -7,15 +7,16 @@ const CheckMyHome = () => {
     contract: "monthlyRent",
     deposit: "",
     rentalFee: "",
-    purchaser: "",
-    provider: "",
+    purchaser: [],
+    provider: [],
+    collateral: "",
   });
 
   const [postcode, setPostcode] = useState("");
   const [address, setAddress] = useState("");
   const [detailAddress, setDetailAddress] = useState("");
   const [showDaumPostcode, setShowDaumPostcode] = useState(false);
-
+  const [buildingcode, setBuildingcode] = useState("");
   const [building, setBuilding] = useState("APART");
 
   const [result, setResult] = useState([]);
@@ -38,6 +39,46 @@ const CheckMyHome = () => {
     setShowDaumPostcode(!showDaumPostcode);
   };
 
+  const handleCheckboxChangePurchaser = (e) => {
+    const { name, value, checked } = e.target;
+    setInputVal((prevInputVal) => {
+      let updatedPurchaser;
+      if (checked) {
+        // 선택한 체크박스가 아직 배열에 없는 경우 추가
+        updatedPurchaser = [...prevInputVal.purchaser, value];
+      } else {
+        // 선택한 체크박스가 배열에 있는 경우 제거
+        updatedPurchaser = prevInputVal.purchaser.filter(
+          (item) => item !== value
+        );
+      }
+      return {
+        ...prevInputVal,
+        [name]: updatedPurchaser,
+      };
+    });
+  };
+
+  const handleCheckboxChangeProvider = (e) => {
+    const { name, value, checked } = e.target;
+    setInputVal((prevInputVal) => {
+      let updatedProvider;
+      if (checked) {
+        // 선택한 체크박스가 아직 배열에 없는 경우 추가
+        updatedProvider = [...prevInputVal.provider, value];
+      } else {
+        // 선택한 체크박스가 배열에 있는 경우 제거
+        updatedProvider = prevInputVal.provider.filter(
+          (item) => item !== value
+        );
+      }
+      return {
+        ...prevInputVal,
+        [name]: updatedProvider,
+      };
+    });
+  };
+
   const handleComplete = (data) => {
     let fullAddress = data.address;
     let extraAddress = "";
@@ -51,10 +92,32 @@ const CheckMyHome = () => {
       }
       fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
     }
-    console.log(extraAddress); // e.g. '서울 성동구 왕십리로2길 20 (성수동1가)'
+    console.log(extraAddress);
 
+    setBuildingcode(data.buildingCode);
     setPostcode(data.zonecode);
     setAddress(extraAddress);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newResult = [
+      { name: "contract", value: inputVal.contract },
+      { name: "deposit", value: inputVal.deposit },
+      { name: "rentalFee", value: inputVal.rentalFee },
+      { name: "purchaser", value: inputVal.purchaser },
+      { name: "provider", value: inputVal.provider },
+      { name: "collateral", value: inputVal.collateral },
+      { name: "postcode", value: postcode },
+      { name: "buildingcode", value: buildingcode },
+      { name: "address", value: address },
+      { name: "detailAddress", value: detailAddress },
+      { name: "building", value: building },
+    ];
+    // result에 새로운 값을 추가합니다.
+    setResult(newResult);
+    // 결과를 콘솔에 출력합니다.
+    console.log(newResult);
   };
 
   return (
@@ -121,6 +184,17 @@ const CheckMyHome = () => {
                   value={inputVal.deposit}
                   onChange={handleInputChange}
                 />
+                <Form.Label>
+                  <h5 style={{ marginTop: "20px" }}>월 임차료</h5>
+                </Form.Label>
+                <Form.Control
+                  type="number"
+                  name="rentalFee"
+                  min="0"
+                  required
+                  value={inputVal.rentalFee}
+                  onChange={handleInputChange}
+                />
                 <div
                   style={{
                     fontWeight: "500",
@@ -182,34 +256,90 @@ const CheckMyHome = () => {
                   />
                 </div>
                 <Form.Label>
-                  <h5 style={{ marginTop: "20px" }}>월 임차료</h5>
-                </Form.Label>
-                <Form.Control
-                  type="number"
-                  name="weight"
-                  min="0"
-                  required
-                  value={inputVal.rentalFee}
-                  onChange={handleInputChange}
-                />
-                <Form.Label>
                   <h5 style={{ marginTop: "20px" }}>갑구 </h5>
                 </Form.Label>
-                <Form.Control
-                  type="text"
-                  name="purchaser"
-                  value={inputVal.purchaser}
-                  required
-                  onChange={handleInputChange}
-                />
+                <Form.Group>
+                  <Form.Check
+                    type="checkbox"
+                    name="purchaser"
+                    label="가처분"
+                    value="injunction"
+                    checked={inputVal.purchaser.includes("injunction")}
+                    onChange={handleCheckboxChangePurchaser}
+                    inline
+                  />
+                  <Form.Check
+                    type="checkbox"
+                    name="purchaser"
+                    label="가등기"
+                    value="provisionalRegistration"
+                    checked={inputVal.purchaser.includes(
+                      "provisionalRegistration"
+                    )}
+                    onChange={handleCheckboxChangePurchaser}
+                    inline
+                  />
+                  <Form.Check
+                    type="checkbox"
+                    name="purchaser"
+                    label="가압류 / 압류"
+                    value="provisionalSeizure"
+                    checked={inputVal.purchaser.includes("provisionalSeizure")}
+                    onChange={handleCheckboxChangePurchaser}
+                    inline
+                  />
+                  <Form.Check
+                    type="checkbox"
+                    name="purchaser"
+                    label="신탁"
+                    value="trust"
+                    checked={inputVal.purchaser.includes("trust")}
+                    onChange={handleCheckboxChangePurchaser}
+                    inline
+                  />
+                  <Form.Check
+                    type="checkbox"
+                    name="purchaser"
+                    label="없음"
+                    value="none"
+                    checked={inputVal.purchaser.includes("none")}
+                    onChange={handleCheckboxChangePurchaser}
+                    inline
+                  />
+                </Form.Group>
                 <Form.Label>
                   <h5 style={{ marginTop: "20px" }}>을구 </h5>
                 </Form.Label>
+                <Form.Group>
+                  <Form.Check
+                    type="checkbox"
+                    name="provider"
+                    label="임차권"
+                    value="leasehold"
+                    checked={inputVal.provider.includes("leasehold")}
+                    onChange={handleCheckboxChangeProvider}
+                    inline
+                  />
+
+                  <Form.Check
+                    type="checkbox"
+                    name="provider"
+                    label="없음"
+                    value="none"
+                    checked={inputVal.provider.includes("none")}
+                    onChange={handleCheckboxChangeProvider}
+                    inline
+                  />
+                </Form.Group>
+                <Form.Label>
+                  <h5 style={{ marginTop: "20px" }}>근저당</h5>
+                </Form.Label>
                 <Form.Control
-                  type="text"
-                  name="provider"
-                  value={inputVal.provider}
+                  type="number"
+                  name="collateral"
+                  min="0"
                   required
+                  value={inputVal.collateral}
                   onChange={handleInputChange}
                 />
                 <Button
@@ -218,6 +348,7 @@ const CheckMyHome = () => {
                     marginBottom: "20px",
                     marginTop: "30px",
                   }}
+                  onClick={handleSubmit}
                 >
                   계산하기
                 </Button>
