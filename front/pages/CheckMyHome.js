@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import { Container, Stack, Form, Button } from "react-bootstrap";
 import DaumPostcode from "react-daum-postcode";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 const CheckMyHome = () => {
+  const router = useRouter();
+
   const [inputVal, setInputVal] = useState({
     contract: "monthlyRent",
     deposit: "",
@@ -128,6 +131,13 @@ const CheckMyHome = () => {
       });
       console.log("API 응답", res);
       console.log("res.data", res.data.landPriceInfoList);
+
+      router.push({
+        pathname: "/ResultPage",
+        query: {
+          landPriceInfoList: JSON.stringify(res.data.landPriceInfoList),
+        },
+      });
     } catch (error) {
       // API 호출 중에 오류가 발생한 경우, 에러를 처리합니다.
       console.error(error);
