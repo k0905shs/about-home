@@ -98,6 +98,7 @@ const Footer = () => {
           textAlign: "center",
           backgroundColor: "#ececec",
           paddingTop: "20px",
+          marginTop: "20px",
         }}
       >
         <p> © 2023 cmoonjun11@gmail.com</p>
