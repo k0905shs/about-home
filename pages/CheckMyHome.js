@@ -4,6 +4,8 @@ import DaumPostcode from "react-daum-postcode";
 import axios from "axios";
 import { useRouter } from "next/router";
 
+import LoadingPage from "./LoadingPage";
+
 const CheckMyHome = () => {
   const router = useRouter();
 
@@ -24,6 +26,8 @@ const CheckMyHome = () => {
   const [building, setBuilding] = useState("APART");
 
   const [result, setResult] = useState({});
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -126,11 +130,13 @@ const CheckMyHome = () => {
 
     try {
       // API 호출을 수행하고 응답을 기다립니다.
+      setIsLoading(true);
       const res = await axios.post("/api/check", {
         result: newResult,
       });
       console.log("API 응답", res);
       console.log("res.data", res.data.landPriceInfoList);
+      setIsLoading(false);
 
       router.push({
         pathname: "/ResultPage",
@@ -146,241 +152,247 @@ const CheckMyHome = () => {
 
   return (
     <>
-      <Container style={{ width: "80%" }}>
-        <h2 style={{ marginTop: "10px" }}>우리집 진단하기</h2>
-        <p style={{ fontWeight: "bold" }}>
-          진단을 하려면 해당 주소의 등기부등본이 먼저 필요해요!
-        </p>
-        <section
-          style={{
-            display: "flex",
-            justifyContent: "space-around",
-          }}
-        >
-          <p>
-            <a href="">등기부등본 뽑으러 가기</a>
+      {isLoading ? (
+        <LoadingPage />
+      ) : (
+        <Container style={{ width: "80%" }}>
+          <h2 style={{ marginTop: "10px" }}>우리집 진단하기</h2>
+          <p style={{ fontWeight: "bold" }}>
+            진단을 하려면 해당 주소의 등기부등본이 먼저 필요해요!
           </p>
-          <p>
-            <a href="">등기부등본을 뽑을줄 모른다면?</a>
-          </p>
-        </section>
-        <section>
-          <Stack gap={2}>
-            <Form>
-              <Form.Group
-                className="mb-3"
-                controlId="exampleForm.ControlInput1"
-              >
-                <div
-                  style={{
-                    fontWeight: "500",
-                    marginTop: "10px",
-                    fontSize: "20px",
-                  }}
+          <section
+            style={{
+              display: "flex",
+              justifyContent: "space-around",
+            }}
+          >
+            <p>
+              <a href="">등기부등본 뽑으러 가기</a>
+            </p>
+            <p>
+              <a href="">등기부등본을 뽑을줄 모른다면?</a>
+            </p>
+          </section>
+          <section>
+            <Stack gap={2}>
+              <Form>
+                <Form.Group
+                  className="mb-3"
+                  controlId="exampleForm.ControlInput1"
                 >
-                  계약: <br />
-                  <input
-                    type="radio"
-                    name="contract"
-                    value="monthlyRent"
-                    checked={inputVal.contract === "monthlyRent"}
-                    onChange={handleRadioChange}
-                  />{" "}
-                  월세
-                  <input
-                    style={{ marginLeft: "10px" }}
-                    type="radio"
-                    name="contract"
-                    value="yearlyRent"
-                    checked={inputVal.contract === "yearlyRent"}
-                    onChange={handleRadioChange}
-                  />
-                  전세
-                </div>
-                <Form.Label>
-                  <h5 style={{ marginTop: "20px" }}>보증금</h5>
-                </Form.Label>
-                <Form.Control
-                  type="number"
-                  name="deposit"
-                  min="0"
-                  required
-                  value={inputVal.deposit}
-                  onChange={handleInputChange}
-                />
-                <Form.Label>
-                  <h5 style={{ marginTop: "20px" }}>월 임차료</h5>
-                </Form.Label>
-                <Form.Control
-                  type="number"
-                  name="rentalFee"
-                  min="0"
-                  required
-                  value={inputVal.rentalFee}
-                  onChange={handleInputChange}
-                />
-                <div
-                  style={{
-                    fontWeight: "500",
-                    marginTop: "10px",
-                    fontSize: "20px",
-                  }}
-                >
-                  건물 종류: <br />
-                  <Form.Select
-                    style={{ marginTop: "10px" }}
-                    value={building}
-                    onChange={handleBuildingChange}
+                  <div
+                    style={{
+                      fontWeight: "500",
+                      marginTop: "10px",
+                      fontSize: "20px",
+                    }}
                   >
-                    <option value="APART">아파트</option>
-                    <option value="HOUSE">
-                      다세대주택 / 연립주택 / 빌라 / 도시형 생활주택
-                    </option>
-                    <option value="OFFICETEL">오피스텔</option>
-                    <option value="TOWNHOUSE">단독주택 / 다가구주택</option>
-                  </Form.Select>
-                </div>
-                <Form.Label>
-                  <h5 style={{ marginTop: "20px" }}>소재지</h5>
-                </Form.Label>{" "}
-                <Button type="button" onClick={handleOpenPostcode}>
-                  검색
-                </Button>
-                {showDaumPostcode && (
-                  <div>
-                    <DaumPostcode
-                      onComplete={handleComplete}
-                      autoClose={true}
-                      width={500}
-                      height={600}
-                      animation
+                    계약: <br />
+                    <input
+                      type="radio"
+                      name="contract"
+                      value="monthlyRent"
+                      checked={inputVal.contract === "monthlyRent"}
+                      onChange={handleRadioChange}
+                    />{" "}
+                    월세
+                    <input
+                      style={{ marginLeft: "10px" }}
+                      type="radio"
+                      name="contract"
+                      value="yearlyRent"
+                      checked={inputVal.contract === "yearlyRent"}
+                      onChange={handleRadioChange}
                     />
+                    전세
                   </div>
-                )}
-                <Form.Control
-                  type="text"
-                  placeholder="우편번호"
-                  value={postcode}
-                  readOnly
-                />
-                <div>
+                  <Form.Label>
+                    <h5 style={{ marginTop: "20px" }}>보증금</h5>
+                  </Form.Label>
+                  <Form.Control
+                    type="number"
+                    name="deposit"
+                    min="0"
+                    required
+                    value={inputVal.deposit}
+                    onChange={handleInputChange}
+                  />
+                  <Form.Label>
+                    <h5 style={{ marginTop: "20px" }}>월 임차료</h5>
+                  </Form.Label>
+                  <Form.Control
+                    type="number"
+                    name="rentalFee"
+                    min="0"
+                    required
+                    value={inputVal.rentalFee}
+                    onChange={handleInputChange}
+                  />
+                  <div
+                    style={{
+                      fontWeight: "500",
+                      marginTop: "10px",
+                      fontSize: "20px",
+                    }}
+                  >
+                    건물 종류: <br />
+                    <Form.Select
+                      style={{ marginTop: "10px" }}
+                      value={building}
+                      onChange={handleBuildingChange}
+                    >
+                      <option value="APART">아파트</option>
+                      <option value="HOUSE">
+                        다세대주택 / 연립주택 / 빌라 / 도시형 생활주택
+                      </option>
+                      <option value="OFFICETEL">오피스텔</option>
+                      <option value="TOWNHOUSE">단독주택 / 다가구주택</option>
+                    </Form.Select>
+                  </div>
+                  <Form.Label>
+                    <h5 style={{ marginTop: "20px" }}>소재지</h5>
+                  </Form.Label>{" "}
+                  <Button type="button" onClick={handleOpenPostcode}>
+                    검색
+                  </Button>
+                  {showDaumPostcode && (
+                    <div>
+                      <DaumPostcode
+                        onComplete={handleComplete}
+                        autoClose={true}
+                        width={500}
+                        height={600}
+                        animation
+                      />
+                    </div>
+                  )}
                   <Form.Control
                     type="text"
-                    placeholder="주소"
-                    value={address}
+                    placeholder="우편번호"
+                    value={postcode}
                     readOnly
                   />
-                </div>
-                <div>
-                  <Form.Control
-                    type="text"
-                    placeholder="상세주소"
-                    value={detailAddress}
-                    onChange={(e) => setDetailAddress(e.target.value)}
-                  />
-                </div>
-                <Form.Label>
-                  <h5 style={{ marginTop: "20px" }}>갑구 </h5>
-                </Form.Label>
-                <Form.Group>
-                  <Form.Check
-                    type="checkbox"
-                    name="purchaser"
-                    label="가처분"
-                    value="injunction"
-                    checked={inputVal.purchaser.includes("injunction")}
-                    onChange={handleCheckboxChangePurchaser}
-                    inline
-                  />
-                  <Form.Check
-                    type="checkbox"
-                    name="purchaser"
-                    label="가등기"
-                    value="provisionalRegistration"
-                    checked={inputVal.purchaser.includes(
-                      "provisionalRegistration"
-                    )}
-                    onChange={handleCheckboxChangePurchaser}
-                    inline
-                  />
-                  <Form.Check
-                    type="checkbox"
-                    name="purchaser"
-                    label="가압류 / 압류"
-                    value="provisionalSeizure"
-                    checked={inputVal.purchaser.includes("provisionalSeizure")}
-                    onChange={handleCheckboxChangePurchaser}
-                    inline
-                  />
-                  <Form.Check
-                    type="checkbox"
-                    name="purchaser"
-                    label="신탁"
-                    value="trust"
-                    checked={inputVal.purchaser.includes("trust")}
-                    onChange={handleCheckboxChangePurchaser}
-                    inline
-                  />
-                  <Form.Check
-                    type="checkbox"
-                    name="purchaser"
-                    label="없음"
-                    value="none"
-                    checked={inputVal.purchaser.includes("none")}
-                    onChange={handleCheckboxChangePurchaser}
-                    inline
-                  />
-                </Form.Group>
-                <Form.Label>
-                  <h5 style={{ marginTop: "20px" }}>을구 </h5>
-                </Form.Label>
-                <Form.Group>
-                  <Form.Check
-                    type="checkbox"
-                    name="provider"
-                    label="임차권"
-                    value="leasehold"
-                    checked={inputVal.provider.includes("leasehold")}
-                    onChange={handleCheckboxChangeProvider}
-                    inline
-                  />
+                  <div>
+                    <Form.Control
+                      type="text"
+                      placeholder="주소"
+                      value={address}
+                      readOnly
+                    />
+                  </div>
+                  <div>
+                    <Form.Control
+                      type="text"
+                      placeholder="상세주소"
+                      value={detailAddress}
+                      onChange={(e) => setDetailAddress(e.target.value)}
+                    />
+                  </div>
+                  <Form.Label>
+                    <h5 style={{ marginTop: "20px" }}>갑구 </h5>
+                  </Form.Label>
+                  <Form.Group>
+                    <Form.Check
+                      type="checkbox"
+                      name="purchaser"
+                      label="가처분"
+                      value="injunction"
+                      checked={inputVal.purchaser.includes("injunction")}
+                      onChange={handleCheckboxChangePurchaser}
+                      inline
+                    />
+                    <Form.Check
+                      type="checkbox"
+                      name="purchaser"
+                      label="가등기"
+                      value="provisionalRegistration"
+                      checked={inputVal.purchaser.includes(
+                        "provisionalRegistration"
+                      )}
+                      onChange={handleCheckboxChangePurchaser}
+                      inline
+                    />
+                    <Form.Check
+                      type="checkbox"
+                      name="purchaser"
+                      label="가압류 / 압류"
+                      value="provisionalSeizure"
+                      checked={inputVal.purchaser.includes(
+                        "provisionalSeizure"
+                      )}
+                      onChange={handleCheckboxChangePurchaser}
+                      inline
+                    />
+                    <Form.Check
+                      type="checkbox"
+                      name="purchaser"
+                      label="신탁"
+                      value="trust"
+                      checked={inputVal.purchaser.includes("trust")}
+                      onChange={handleCheckboxChangePurchaser}
+                      inline
+                    />
+                    <Form.Check
+                      type="checkbox"
+                      name="purchaser"
+                      label="없음"
+                      value="none"
+                      checked={inputVal.purchaser.includes("none")}
+                      onChange={handleCheckboxChangePurchaser}
+                      inline
+                    />
+                  </Form.Group>
+                  <Form.Label>
+                    <h5 style={{ marginTop: "20px" }}>을구 </h5>
+                  </Form.Label>
+                  <Form.Group>
+                    <Form.Check
+                      type="checkbox"
+                      name="provider"
+                      label="임차권"
+                      value="leasehold"
+                      checked={inputVal.provider.includes("leasehold")}
+                      onChange={handleCheckboxChangeProvider}
+                      inline
+                    />
 
-                  <Form.Check
-                    type="checkbox"
-                    name="provider"
-                    label="없음"
-                    value="none"
-                    checked={inputVal.provider.includes("none")}
-                    onChange={handleCheckboxChangeProvider}
-                    inline
+                    <Form.Check
+                      type="checkbox"
+                      name="provider"
+                      label="없음"
+                      value="none"
+                      checked={inputVal.provider.includes("none")}
+                      onChange={handleCheckboxChangeProvider}
+                      inline
+                    />
+                  </Form.Group>
+                  <Form.Label>
+                    <h5 style={{ marginTop: "20px" }}>근저당</h5>
+                  </Form.Label>
+                  <Form.Control
+                    type="number"
+                    name="collateral"
+                    min="0"
+                    required
+                    value={inputVal.collateral}
+                    onChange={handleInputChange}
                   />
+                  <Button
+                    style={{
+                      width: "100%",
+                      marginBottom: "20px",
+                      marginTop: "30px",
+                    }}
+                    onClick={handleSubmit}
+                  >
+                    진단하기
+                  </Button>
                 </Form.Group>
-                <Form.Label>
-                  <h5 style={{ marginTop: "20px" }}>근저당</h5>
-                </Form.Label>
-                <Form.Control
-                  type="number"
-                  name="collateral"
-                  min="0"
-                  required
-                  value={inputVal.collateral}
-                  onChange={handleInputChange}
-                />
-                <Button
-                  style={{
-                    width: "100%",
-                    marginBottom: "20px",
-                    marginTop: "30px",
-                  }}
-                  onClick={handleSubmit}
-                >
-                  진단하기
-                </Button>
-              </Form.Group>
-            </Form>
-          </Stack>
-        </section>
-      </Container>
+              </Form>
+            </Stack>
+          </section>
+        </Container>
+      )}
     </>
   );
 };
