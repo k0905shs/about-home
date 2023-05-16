@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Container, Stack, Form, Button } from "react-bootstrap";
 import DaumPostcode from "react-daum-postcode";
+import axios from "axios";
 
 const CheckMyHome = () => {
   const [inputVal, setInputVal] = useState({
@@ -19,7 +20,7 @@ const CheckMyHome = () => {
   const [buildingcode, setBuildingcode] = useState("");
   const [building, setBuilding] = useState("APART");
 
-  const [result, setResult] = useState([]);
+  const [result, setResult] = useState({});
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -99,25 +100,38 @@ const CheckMyHome = () => {
     setAddress(extraAddress);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const newResult = [
-      { name: "contract", value: inputVal.contract },
-      { name: "deposit", value: inputVal.deposit },
-      { name: "rentalFee", value: inputVal.rentalFee },
-      { name: "purchaser", value: inputVal.purchaser },
-      { name: "provider", value: inputVal.provider },
-      { name: "collateral", value: inputVal.collateral },
-      { name: "postcode", value: postcode },
-      { name: "buildingcode", value: buildingcode },
-      { name: "address", value: address },
-      { name: "detailAddress", value: detailAddress },
-      { name: "building", value: building },
-    ];
+
+    const newResult = {
+      contract: inputVal.contract,
+      deposit: inputVal.deposit,
+      rentalFee: inputVal.rentalFee,
+      purchaser: inputVal.purchaser,
+      providere: inputVal.provider,
+      collateral: inputVal.collateral,
+      postcode: postcode,
+      buildingcode: buildingcode,
+      address: address,
+      detailAddress: detailAddress,
+      building: building,
+    };
+
     // result에 새로운 값을 추가합니다.
     setResult(newResult);
     // 결과를 콘솔에 출력합니다.
-    console.log(newResult);
+
+    try {
+      // API 호출을 수행하고 응답을 기다립니다.
+      const res = await axios.post("/api/check", {
+        result: newResult,
+      });
+      console.log("API 응답", res);
+      console.log("res.data", res.data.landPriceInfoList);
+    } catch (error) {
+      // API 호출 중에 오류가 발생한 경우, 에러를 처리합니다.
+      console.error(error);
+    }
   };
 
   return (
@@ -350,7 +364,7 @@ const CheckMyHome = () => {
                   }}
                   onClick={handleSubmit}
                 >
-                  계산하기
+                  진단하기
                 </Button>
               </Form.Group>
             </Form>
