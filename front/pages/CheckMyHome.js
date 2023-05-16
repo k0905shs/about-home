@@ -47,6 +47,7 @@ const CheckMyHome = () => {
     setShowDaumPostcode(!showDaumPostcode);
   };
 
+  // 갑구 체크박스
   const handleCheckboxChangePurchaser = (e) => {
     const { name, value, checked } = e.target;
     setInputVal((prevInputVal) => {
@@ -67,6 +68,7 @@ const CheckMyHome = () => {
     });
   };
 
+  //을구 체크박스
   const handleCheckboxChangeProvider = (e) => {
     const { name, value, checked } = e.target;
     setInputVal((prevInputVal) => {
@@ -87,6 +89,7 @@ const CheckMyHome = () => {
     });
   };
 
+  // 카카오주소 API
   const handleComplete = (data) => {
     let fullAddress = data.address;
     let extraAddress = "";
@@ -107,6 +110,7 @@ const CheckMyHome = () => {
     setAddress(extraAddress);
   };
 
+  // 진단하기
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -146,7 +150,9 @@ const CheckMyHome = () => {
       });
     } catch (error) {
       // API 호출 중에 오류가 발생한 경우, 에러를 처리합니다.
+      setIsLoading(false);
       console.error(error);
+      alert("서버 오류로 나중에 다시 시도해주세요!");
     }
   };
 
