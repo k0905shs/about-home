@@ -1,15 +1,22 @@
 package com.myhome.controller;
 
+import com.myhome.collection.BuildingSale;
 import com.myhome.model.homeCheck.HomeCheckDto;
+import com.myhome.repository.LandPrice.LandPriceRepository;
+import com.myhome.repository.buildingSale.BuildingSaleRepository;
+import com.myhome.repository.buildingSale.BuildingSaleRepositorySupport;
 import com.myhome.service.HomeCheckService;
+import com.myhome.type.BuildingType;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+@CrossOrigin
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/home/*")
 public class HomeCheckController {
 
@@ -20,6 +27,9 @@ public class HomeCheckController {
         return homeCheckService.checkLandPrice(checkLandPriceParam);
     }
 
-
+    @PostMapping("check-building-sale")
+    public HomeCheckDto.checkBuildingSaleParam checkBuildingSaleParam(@RequestBody final HomeCheckDto.checkBuildingSaleParam buildingSaleParam) {
+        return null;
+    }
 
 }

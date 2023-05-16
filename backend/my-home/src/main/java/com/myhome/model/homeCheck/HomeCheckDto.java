@@ -1,5 +1,6 @@
 package com.myhome.model.homeCheck;
 
+import com.myhome.type.BuildingType;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,5 +43,24 @@ public class HomeCheckDto {
             this.price = price;
         }
     }
+
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class checkBuildingSaleParam {
+        private BuildingType buildingType; //건물 타입
+        private String BuildingCode;
+        private String postCode;
+        private int searchYear;
+
+        @Builder
+        public checkBuildingSaleParam(BuildingType buildingType, String buildingCode, String postCode, int searchYear) {
+            this.buildingType = buildingType;
+            BuildingCode = buildingCode;
+            this.postCode = postCode;
+            this.searchYear = searchYear;
+        }
+    }
+
 
 }

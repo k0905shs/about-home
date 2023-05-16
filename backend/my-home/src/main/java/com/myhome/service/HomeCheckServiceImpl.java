@@ -25,7 +25,7 @@ public class HomeCheckServiceImpl implements HomeCheckService{
     @Override
     @Transactional
     public HomeCheckDto.checkLandPriceResult checkLandPrice(HomeCheckDto.checkLandPriceParam checkLandPriceParam) throws Exception{
-        List<LandPrice> checkLandPriceList = landPriceRepositorySupport.checkLandPrice(checkLandPriceParam);
+        List<LandPrice> checkLandPriceList = landPriceRepositorySupport.findLandPriceList(checkLandPriceParam);
 
         List<HomeCheckDto.landPriceInfo> landPriceInfoList =
                 checkLandPriceList.stream()
@@ -58,6 +58,7 @@ public class HomeCheckServiceImpl implements HomeCheckService{
                 }
             }
         }
+        log.info(landPriceInfoList.toString());
         return new HomeCheckDto.checkLandPriceResult(pnu, landPriceInfoList);
     }
 }

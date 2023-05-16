@@ -6,4 +6,5 @@ public interface HomeCheckService {
 
     HomeCheckDto.checkLandPriceResult checkLandPrice(final HomeCheckDto.checkLandPriceParam checkLandPriceParam) throws Exception;
 
+
 }

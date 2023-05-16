@@ -1,10 +1,7 @@
 package com.myhome.collection;
 
 import com.myhome.type.BuildingType;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -16,6 +13,7 @@ import java.util.List;
 @Getter
 @Document(collection = "building_sale")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class BuildingSale {
 
     @Id
@@ -38,6 +36,7 @@ public class BuildingSale {
     }
 
     @Getter
+    @ToString
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class request {
         private String lawdCd; // 각 지역별 코드  11110
@@ -54,9 +53,9 @@ public class BuildingSale {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @ToString
     public static class response{
         List<detail> list;
-
         @Builder
         public response(List<detail> list) {
             this.list = list;
@@ -65,24 +64,25 @@ public class BuildingSale {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @ToString
     public static class detail{
         private BigDecimal price;
         private String buildingName;
         private String year;
         private String month;
         private String day;
-        private String streetCode;
+        private String postCode;
         private String reginCode;
         private String streetName;
 
         @Builder
-        public detail(BigDecimal price, String buildingName, String year, String month, String day, String streetCode, String reginCode, String streetName) {
+        public detail(BigDecimal price, String buildingName, String year, String month, String day, String postCode, String reginCode, String streetName) {
             this.price = price;
             this.buildingName = buildingName;
             this.year = year;
             this.month = month;
             this.day = day;
-            this.streetCode = streetCode;
+            this.postCode = postCode;
             this.reginCode = reginCode;
             this.streetName = streetName;
         }

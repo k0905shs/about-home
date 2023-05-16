@@ -91,7 +91,7 @@ class GovServiceTest {
     @Test
     void 실거래자료_저장_테스트() throws Exception{
         BuildingSaleDto.openApiRequestParam openApiRequestParam =
-                new BuildingSaleDto.openApiRequestParam("11110", "201512", BuildingType.APART);
+                new BuildingSaleDto.openApiRequestParam("11110", "201601", BuildingType.APART);
 
         govService.requestBuildingSalesApi(openApiRequestParam);
     }
