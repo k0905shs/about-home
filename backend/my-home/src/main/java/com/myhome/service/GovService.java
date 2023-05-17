@@ -18,14 +18,6 @@ public interface GovService {
     LandPriceDto.openApiResponse requestLandPriceApi(final LandPriceDto.openApiRequestParam requestParam) throws Exception;
 
     /**
-     * 행정안전부_행정표준코드_법정동코드
-     * @param requestParam
-     * @return openApiResponse
-     * @throws Exception
-     */
-    StanReginDto.openApiResponse requestStanReginApi(final StanReginDto.openApiRequestParam requestParam) throws Exception;
-
-    /**
      * 국토교통부 건물 카테고리별 매매 실거래자료
      * @param requestParam
      * @return openApiResponse
@@ -33,4 +25,11 @@ public interface GovService {
      */
     BuildingSaleDto.openApiResponse requestBuildingSalesApi(final BuildingSaleDto.openApiRequestParam requestParam) throws Exception;
 
+    /**
+     * 행정안전부_행정표준코드_법정동코드
+     * @param requestParam
+     * @return openApiResponse
+     * @throws Exception
+     */
+    StanReginDto.openApiResponse requestStanReginApi(final StanReginDto.openApiRequestParam requestParam) throws Exception;
 }

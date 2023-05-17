@@ -74,9 +74,10 @@ public class BuildingSale {
         private String postCode;
         private String reginCode;
         private String streetName;
+        private String floor;
 
         @Builder
-        public detail(BigDecimal price, String buildingName, String year, String month, String day, String postCode, String reginCode, String streetName) {
+        public detail(BigDecimal price, String buildingName, String year, String month, String day, String postCode, String reginCode, String streetName, String floor) {
             this.price = price;
             this.buildingName = buildingName;
             this.year = year;
@@ -85,6 +86,7 @@ public class BuildingSale {
             this.postCode = postCode;
             this.reginCode = reginCode;
             this.streetName = streetName;
+            this.floor = floor;
         }
     }
 }

@@ -5,11 +5,14 @@ import com.myhome.model.homeCheck.HomeCheckDto;
 import com.myhome.type.BuildingType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
@@ -26,13 +29,15 @@ public class BuildingSaleRepositorySupportImpl implements BuildingSaleRepository
 
     @Override
     public List<BuildingSale> findBuildingSaleList(final HomeCheckDto.checkBuildingSaleParam checkBuildingSaleParam) {
-        String lawdCd = checkBuildingSaleParam.getBuildingCode().substring(0,5);
+        String lawdCd = checkBuildingSaleParam.getLawdCd();
         BuildingType buildingType = checkBuildingSaleParam.getBuildingType();
         String postCode = checkBuildingSaleParam.getPostCode();
+        String dealYmd = LocalDate.now().minusMonths(checkBuildingSaleParam.getSearchMonth())
+                .format(DateTimeFormatter.ofPattern("YYYYMM"));
 
         //$match 조건 추가
         MatchOperation filterRequest = Aggregation.match( new Criteria().andOperator(
-                Criteria.where("request.dealYmd").gte("201512"), //TODO : 년월 입력 변경
+                Criteria.where("request.dealYmd").gte(dealYmd),
                 Criteria.where("request.buildingType").is(buildingType),
                 Criteria.where("request.lawdCd").is(lawdCd)
         ));
@@ -46,8 +51,10 @@ public class BuildingSaleRepositorySupportImpl implements BuildingSaleRepository
                 .as("response.list")
                 .andInclude("request");
 
+        SortOperation sort = Aggregation.sort(Sort.Direction.ASC, "request.dealYmd");
+
         Aggregation aggregation = newAggregation(
-                filterRequest, project
+                filterRequest, project, sort
         );
 
         return mongoTemplate.aggregate(aggregation,"building_sale" ,BuildingSale.class).getMappedResults();

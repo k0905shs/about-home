@@ -56,12 +56,10 @@ public class GovApi {
         // '+' 인코딩 이슈 해결
         uri = this.encodePlus(uri);
 
-        return WebClient.builder().build()
-                .get()
-                .uri(uri)
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
+        String response =
+                WebClient.builder().build().get().uri(uri).retrieve().bodyToMono(String.class).block();
+        log.info("GOV API Response : {}", response);
+        return response;
     }
 
 
@@ -76,8 +74,4 @@ public class GovApi {
                 .build(true)
                 .toUri();
     }
-
-
-
-
 }

@@ -28,8 +28,9 @@ public class HomeCheckController {
     }
 
     @PostMapping("check-building-sale")
-    public HomeCheckDto.checkBuildingSaleParam checkBuildingSaleParam(@RequestBody final HomeCheckDto.checkBuildingSaleParam buildingSaleParam) {
-        return null;
+    public List<HomeCheckDto.checkBuildingSaleResult> checkBuildingSaleParam(@RequestBody final HomeCheckDto.checkBuildingSaleParam buildingSaleParam) throws Exception {
+        log.info(buildingSaleParam.toString());
+        return homeCheckService.checkBuildingSale(buildingSaleParam);
     }
 
 }

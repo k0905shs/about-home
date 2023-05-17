@@ -30,7 +30,7 @@ public class LandPriceRepositorySupportImpl implements LandPriceRepositorySuppor
 
         //$match 조건 추가
         MatchOperation filterRequest = Aggregation.match( new Criteria().andOperator(
-                Criteria.where("request.pnu").gte(pnu),
+                Criteria.where("request.pnu").is(pnu),
                 Criteria.where("request.stdrYear").gte(String.valueOf(fromYear))
         ));
 
