@@ -29,6 +29,8 @@ const CheckMyHome = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
+  const [validated, setValidated] = useState(false);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setInputVal({ ...inputVal, [name]: value });
@@ -112,7 +114,16 @@ const CheckMyHome = () => {
 
   // 진단하기
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    const form = e.currentTarget;
+    console.log(form);
+    if (form.checkValidity() === false) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    setValidated(true);
+    console.log(validated);
+    console.log(form.checkValidity());
 
     const newResult = {
       contract: inputVal.contract,
@@ -131,28 +142,29 @@ const CheckMyHome = () => {
     // result에 새로운 값을 추가합니다.
     setResult(newResult);
     // 결과를 콘솔에 출력합니다.
+    if (form.checkValidity()) {
+      try {
+        // API 호출을 수행하고 응답을 기다립니다.
+        setIsLoading(true);
+        const res = await axios.post("/api/check", {
+          result: newResult,
+        });
+        console.log("API 응답", res);
+        console.log("res.data", res.data.landPriceInfoList);
+        setIsLoading(false);
 
-    try {
-      // API 호출을 수행하고 응답을 기다립니다.
-      setIsLoading(true);
-      const res = await axios.post("/api/check", {
-        result: newResult,
-      });
-      console.log("API 응답", res);
-      console.log("res.data", res.data.landPriceInfoList);
-      setIsLoading(false);
-
-      router.push({
-        pathname: "/ResultPage",
-        query: {
-          landPriceInfoList: JSON.stringify(res.data.landPriceInfoList),
-        },
-      });
-    } catch (error) {
-      // API 호출 중에 오류가 발생한 경우, 에러를 처리합니다.
-      setIsLoading(false);
-      console.error(error);
-      alert("서버 오류로 나중에 다시 시도해주세요!");
+        router.push({
+          pathname: "/ResultPage",
+          query: {
+            landPriceInfoList: JSON.stringify(res.data.landPriceInfoList),
+          },
+        });
+      } catch (error) {
+        // API 호출 중에 오류가 발생한 경우, 에러를 처리합니다.
+        setIsLoading(false);
+        console.error(error);
+        alert("서버 오류로 나중에 다시 시도해주세요!");
+      }
     }
   };
 
@@ -181,7 +193,7 @@ const CheckMyHome = () => {
           </section>
           <section>
             <Stack gap={2}>
-              <Form>
+              <Form noValidate validated={validated} onSubmit={handleSubmit}>
                 <Form.Group
                   className="mb-3"
                   controlId="exampleForm.ControlInput1"
@@ -292,6 +304,7 @@ const CheckMyHome = () => {
                       placeholder="상세주소"
                       value={detailAddress}
                       onChange={(e) => setDetailAddress(e.target.value)}
+                      required
                     />
                   </div>
                   <Form.Label>
@@ -389,7 +402,7 @@ const CheckMyHome = () => {
                       marginBottom: "20px",
                       marginTop: "30px",
                     }}
-                    onClick={handleSubmit}
+                    type="submit"
                   >
                     진단하기
                   </Button>
