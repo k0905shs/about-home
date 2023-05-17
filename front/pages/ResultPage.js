@@ -1,14 +1,16 @@
-// pages/result.js
-import { useEffect } from "react";
 import { useRouter } from "next/router";
+import RealLandPrice from "./components/RealLandPrice";
+import OfficialLandPrice from "./components/OfficialLandPrice";
 
 const ResultPage = () => {
   const router = useRouter();
-  const { landPriceInfoList } = router.query;
+  const { response1, response2, result } = router.query;
 
   return (
     <>
-      <div>{landPriceInfoList}</div>
+      <OfficialLandPrice response1={response1}></OfficialLandPrice>
+      <RealLandPrice response2={response2}></RealLandPrice>
+      {result}
     </>
   );
 };

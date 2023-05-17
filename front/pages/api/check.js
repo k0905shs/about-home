@@ -7,30 +7,55 @@ export default function handler(req, res) {
     console.log("result", result);
 
     // 추출한 값을 사용하여 POST 요청을 보냅니다.
-    const postData = {
+    const officialLandPrice = {
       buildingCode: result.buildingcode,
-      address: result.address,
       searchYear: 5,
     };
-    console.log("postData", postData);
-    axios
-      .post("http://172.30.1.93:9999/home/check-land-price", postData)
-      .then((response) => {
-        console.log("aaaaaaa", response.data);
-        if (response.status === 200) {
-          console.log("요청 성공");
-          res.status(200).json(response.data);
+
+    const realLandPrice = {
+      buildingType: result.building,
+      buildingCode: result.buildingcode,
+      searchMonth: 10,
+    };
+
+    console.log("officialLandPrice", officialLandPrice);
+    console.log("realLandPrice", realLandPrice);
+
+    const request1 = axios.post(
+      "http://172.30.1.4:9999/home/check-land-price",
+      officialLandPrice
+    );
+    const request2 = axios.post(
+      "http://172.30.1.4:9999/home/check-building-sale",
+      realLandPrice
+    );
+
+    Promise.allSettled([request1, request2])
+      .then(([response1, response2]) => {
+        if (response1.status === "fulfilled") {
+          console.log("공시지가 요청 성공", response1.value.data);
+        } else {
+          console.log("공시지가 요청 실패", response1.reason);
         }
-        // POST 요청 성공 시 응답을 클라이언트에게 반환합니다.
+
+        if (response2.status === "fulfilled") {
+          console.log("실거래가 요청 성공", response2.value.data);
+        } else {
+          console.log("실거래가 요청 실패", response2.reason);
+        }
+
+        const responseData1 =
+          response1.status === "fulfilled" ? response1.value.data : null;
+        const responseData2 =
+          response2.status === "fulfilled" ? response2.value.data : null;
+
+        res.json({ response1: responseData1, response2: responseData2 });
       })
       .catch((error) => {
-        // POST 요청 실패 시 에러를 클라이언트에게 반환합니다.
-        res
-          .status(500)
-          .json({ message: "POST 요청 실패", error: error.message });
+        res.status(500).json({ message: "요청 실패", error: error.message });
       });
   } else {
     // POST 요청 외에 다른 HTTP 메소드로의 요청은 허용되지 않습니다.
-    console.log("요청에 실패했습니다.");
+    console.log("서버 요청에 실패했습니다.");
   }
 }
