@@ -6,5 +6,5 @@ import com.myhome.model.homeCheck.HomeCheckDto;
 import java.util.List;
 
 public interface LandPriceRepositorySupport {
-    List<LandPrice> checkLandPrice(final HomeCheckDto.checkLandPriceParam checkLandPriceParam);
+    List<LandPrice> findLandPriceList(final HomeCheckDto.checkLandPriceParam checkLandPriceParam);
 }

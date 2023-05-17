@@ -48,19 +48,6 @@ public class GovServiceImpl implements GovService{
     }
 
     @Override
-    public StanReginDto.openApiResponse requestStanReginApi(final StanReginDto.openApiRequestParam requestParam) throws Exception{
-        String response = govApi.requestGov(requestParam, GovRequestUri.STAN_REGIN);
-
-        // TODO : 해당 API response를 DTO 로 매핑하기는 데이터 자체가 너무 복잡해서 문자열에서 직접 필요한 데이터만 절삭해서 사용함 추후 가능하면 수정
-        StringBuilder json = new StringBuilder(response);
-        json.delete(0, json.indexOf("row"))
-                .delete(json.indexOf("}"), json.length() - 1)
-                .delete(0, json.indexOf("[") + 1);
-
-        return objectMapper.readValue(json.toString(), StanReginDto.openApiResponse.class);
-    }
-
-    @Override
     public BuildingSaleDto.openApiResponse requestBuildingSalesApi(BuildingSaleDto.openApiRequestParam requestParam) throws Exception {
         GovRequestUri requestUrl = requestParam.getBuildingType().getGovRequestUri();
         String response = govApi.requestGov(requestParam, requestUrl);
@@ -84,4 +71,18 @@ public class GovServiceImpl implements GovService{
 
         return openApiResponse;
     }
+
+    @Override
+    public StanReginDto.openApiResponse requestStanReginApi(final StanReginDto.openApiRequestParam requestParam) throws Exception{
+        String response = govApi.requestGov(requestParam, GovRequestUri.STAN_REGIN);
+
+        // TODO : 해당 API response를 DTO 로 매핑하기는 데이터 자체가 너무 복잡해서 문자열에서 직접 필요한 데이터만 절삭해서 사용함 추후 가능하면 수정
+        StringBuilder json = new StringBuilder(response);
+        json.delete(0, json.indexOf("row"))
+                .delete(json.indexOf("}"), json.length() - 1)
+                .delete(0, json.indexOf("[") + 1);
+
+        return objectMapper.readValue(json.toString(), StanReginDto.openApiResponse.class);
+    }
+
 }

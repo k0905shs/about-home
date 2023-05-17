@@ -75,11 +75,13 @@ public class BuildingSaleDto {
         @JsonProperty("일")
         private String day;
         @JsonProperty("지번")
-        private String streetCode;
+        private String postCode;
         @JsonProperty("지역코드")
         private String reginCode;
         @JsonProperty("법정동")
         private String streetName;
+        @JsonProperty("층")
+        private String floor;
 
         @JsonSetter("거래금액")
         public void setPrice(String price) {
@@ -101,8 +103,9 @@ public class BuildingSaleDto {
         public BuildingSale.detail toDocument(){
             return BuildingSale.detail.builder()
                     .price(this.price).buildingName(this.buildingName).year(this.year)
-                    .month(this.month).day(this.day).streetCode(this.streetCode)
+                    .month(this.month).day(this.day).postCode(this.postCode)
                     .reginCode(this.reginCode).streetName(this.streetName)
+                    .floor(this.floor)
                     .build();
         }
     }

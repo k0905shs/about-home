@@ -68,7 +68,7 @@ class GovApiTest {
         response = jsonObj.get("response").toString();
         BuildingSaleDto.openApiResponse openApiResponse =
                 objectMapper.readValue(response, BuildingSaleDto.openApiResponse.class);
-        assertThat(openApiResponse.getField().getBuildingSales().getInfoList().get(0).getStreetCode()).isEqualTo("9");
+        assertThat(openApiResponse.getField().getBuildingSales().getInfoList().get(0).getPostCode()).isEqualTo("9");
     }
 
 }

@@ -2,7 +2,10 @@ package com.myhome.repository.LandPrice;
 
 import com.myhome.collection.LandPrice;
 import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.repository.CrudRepository;
 
-public interface LandPriceRepository extends MongoRepository<LandPrice, ObjectId> {
+public interface LandPriceRepository extends CrudRepository<LandPrice, ObjectId> {
+
+
+
 }
