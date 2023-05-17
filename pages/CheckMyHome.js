@@ -122,8 +122,6 @@ const CheckMyHome = () => {
     }
 
     setValidated(true);
-    console.log(validated);
-    console.log(form.checkValidity());
 
     const newResult = {
       contract: inputVal.contract,
@@ -150,13 +148,15 @@ const CheckMyHome = () => {
           result: newResult,
         });
         console.log("API 응답", res);
-        console.log("res.data", res.data.landPriceInfoList);
+        console.log("res.data", res.data);
         setIsLoading(false);
 
         router.push({
           pathname: "/ResultPage",
           query: {
-            landPriceInfoList: JSON.stringify(res.data.landPriceInfoList),
+            response1: JSON.stringify(res.data.response1),
+            response2: JSON.stringify(res.data.response2),
+            result: result,
           },
         });
       } catch (error) {
