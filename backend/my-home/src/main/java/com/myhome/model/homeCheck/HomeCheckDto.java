@@ -21,12 +21,10 @@ public class HomeCheckDto {
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class checkLandPriceResult {
-        private String pnu;
         private List<landPriceInfo> landPriceInfoList;
 
         @Builder
-        public checkLandPriceResult(String pnu, List<landPriceInfo> landPriceInfoList) {
-            this.pnu = pnu;
+        public checkLandPriceResult(List<landPriceInfo> landPriceInfoList) {
             this.landPriceInfoList = landPriceInfoList;
         }
     }

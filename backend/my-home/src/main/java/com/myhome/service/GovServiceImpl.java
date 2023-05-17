@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(propagation = Propagation.REQUIRES_NEW)
 public class GovServiceImpl implements GovService{
 
     private final GovApi govApi;
@@ -31,14 +30,20 @@ public class GovServiceImpl implements GovService{
     private final BuildingSaleRepository buildingSaleRepository;
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public LandPriceDto.openApiResponse requestLandPriceApi(final LandPriceDto.openApiRequestParam requestParam) throws Exception{
         String response = govApi.requestGov(requestParam, GovRequestUri.LAND_PRICE);
         LandPriceDto.openApiResponse openApiResponse = 
                 objectMapper.readValue(response, LandPriceDto.openApiResponse.class);
 
+        LandPrice.response landPriceResponse = null;
+
+        //response 결과 저장
+        if(openApiResponse.getField().getLandPriceList().size() != 0){
+            landPriceResponse = openApiResponse.getField().getLandPriceList().get(0).toDocument();
+        }
+
         //request 결과 저장
-        LandPrice.response landPriceResponse =
-                openApiResponse.getField().getLandPriceList().get(0).toDocument();
         LandPrice.request landPriceRequest
                 = new LandPrice.request(requestParam.getPnu(), requestParam.getStdrYear());
 
@@ -48,6 +53,7 @@ public class GovServiceImpl implements GovService{
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public BuildingSaleDto.openApiResponse requestBuildingSalesApi(BuildingSaleDto.openApiRequestParam requestParam) throws Exception {
         GovRequestUri requestUrl = requestParam.getBuildingType().getGovRequestUri();
         String response = govApi.requestGov(requestParam, requestUrl);

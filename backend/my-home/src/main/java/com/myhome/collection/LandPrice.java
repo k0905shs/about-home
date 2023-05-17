@@ -24,7 +24,7 @@ public class LandPrice {
     @Builder
     public LandPrice(LandPrice.request request, LandPrice.response response) {
         this.request = request;
-        this.response = response;
+        this.response = response != null ? response : new response();
     }
 
 

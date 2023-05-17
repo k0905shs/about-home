@@ -12,6 +12,7 @@ import com.myhome.repository.buildingSale.BuildingSaleRepositorySupport;
 import com.myhome.util.BuildingCodeUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -37,14 +39,13 @@ public class HomeCheckServiceImpl implements HomeCheckService {
 
         List<HomeCheckDto.landPriceInfo> landPriceInfoList =
                 checkLandPriceList.stream()
-                        .map(LandPrice::getResponse)
-                        .map(v -> new HomeCheckDto.landPriceInfo(v.getStdrYear(), v.getPblntfPclnd()))
+                        .filter(Objects::nonNull)
+                        .map(v -> new HomeCheckDto.landPriceInfo(v.getRequest().getStdrYear(), v.getResponse().getPblntfPclnd()))
                         .collect(Collectors.toList());
 
         String pnu = checkLandPriceParam.getBuildingCode().substring(0, 19); //pnu코드
         int searchYear = checkLandPriceParam.getSearchYear();
 
-        // TODO : 뎁스 너무 커서 해당 로직 반드시 리펙토링 해야함!
         if (searchYear != checkLandPriceList.size()) { //요청한 연도 수 만큼의 요청 데이터가 없으면
             //request 기록이 있는 year list 생성
             List<String> savedYearList = checkLandPriceList.stream()
@@ -59,14 +60,16 @@ public class HomeCheckServiceImpl implements HomeCheckService {
                     // request 실행
                     LandPriceDto.openApiResponse openApiResponse =
                             govService.requestLandPriceApi(new LandPriceDto.openApiRequestParam(pnu, String.valueOf(i), 1, 1));
-
-                    //return dto List에 결과 추가
-                    LandPriceDto.landPrice landPrice = openApiResponse.getField().getLandPriceList().get(0);
-                    landPriceInfoList.add(new HomeCheckDto.landPriceInfo(landPrice.getStdrYear(), landPrice.getPblntfPclnd()));
                 }
             }
         }
-        return new HomeCheckDto.checkLandPriceResult(pnu, landPriceInfoList);
+        checkLandPriceList = landPriceRepositorySupport.findLandPriceList(checkLandPriceParam);
+        landPriceInfoList = checkLandPriceList.stream()
+                .filter(Objects::nonNull)
+                .map(v -> new HomeCheckDto.landPriceInfo(v.getRequest().getStdrYear(), v.getResponse().getPblntfPclnd()))
+                .collect(Collectors.toList());
+
+        return new HomeCheckDto.checkLandPriceResult(landPriceInfoList);
     }
 
     @Override
