@@ -38,6 +38,8 @@ dependencies {
 	// xml to json
 	implementation 'org.json:json:20230227'
 
+	//StringUtils
+	implementation 'org.apache.commons:commons-lang3:3.6'
 }
 
 tasks.named('test') {

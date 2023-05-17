@@ -41,7 +41,6 @@ public class BuildingSaleDto {
     public static class openApiResponse {
         @JsonProperty("body")
         private BuildingSaleDto.field field;
-        // TODO header 추가?
     }
 
     @Getter

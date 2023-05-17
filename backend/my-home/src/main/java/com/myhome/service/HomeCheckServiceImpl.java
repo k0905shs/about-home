@@ -9,6 +9,7 @@ import com.myhome.model.openApi.LandPriceDto;
 import com.myhome.repository.LandPrice.LandPriceRepositorySupport;
 import com.myhome.repository.buildingSale.BuildingSaleRepository;
 import com.myhome.repository.buildingSale.BuildingSaleRepositorySupport;
+import com.myhome.util.BuildingCodeUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -87,6 +88,7 @@ public class HomeCheckServiceImpl implements HomeCheckService {
         //검색 시작 년월
         LocalDate searchStartDate = LocalDate.now().minusMonths(checkBuildingSaleParam.getSearchMonth());
         List<String> searchTargetList = new ArrayList<>();
+
         //검색 시작일을 기준으로 검색해야 하는 날짜 리스트 추가
         for (LocalDate ld = searchStartDate; ld.isBefore(LocalDate.now()); ld = ld.plusMonths(1)) {
             String dealYmd = ld.format(DateTimeFormatter.ofPattern("YYYYMM"));
@@ -96,17 +98,17 @@ public class HomeCheckServiceImpl implements HomeCheckService {
         }
 
         // TODO : ThreadTaskPoolExecutor 과 개별 실행중 뭐가 더 낳은 방법일지 생각을 해보자..
+        String lawdCd = BuildingCodeUtils.getLawdCd(checkBuildingSaleParam.getBuildingCode());
         boolean reCheck = false;
         for (String dealYmd : searchTargetList) { //개별 API 재실행
             BuildingSaleDto.openApiResponse openApiResponse =
-                    govService.requestBuildingSalesApi(new BuildingSaleDto.openApiRequestParam(checkBuildingSaleParam.getLawdCd(), dealYmd, checkBuildingSaleParam.getBuildingType()));
+                    govService.requestBuildingSalesApi(new BuildingSaleDto.openApiRequestParam(lawdCd, dealYmd, checkBuildingSaleParam.getBuildingType()));
             reCheck = true;
         }
         // 전체 로직 실행 후 재검색
         if (reCheck) {
             buildingSaleList =
                     buildingSaleRepositorySupport.findBuildingSaleList(checkBuildingSaleParam); //입력 받은 param으로 추출한 도큐먼트 리스트
-
             //Document list -> dto List
              results = buildingSaleList.stream()
                      .map(HomeCheckDto.checkBuildingSaleResult::new)

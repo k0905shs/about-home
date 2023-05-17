@@ -58,6 +58,7 @@ public class GovApi {
 
         String response =
                 WebClient.builder().build().get().uri(uri).retrieve().bodyToMono(String.class).block();
+        log.info("GOV API Request : {}", uri);
         log.info("GOV API Response : {}", response);
         return response;
     }

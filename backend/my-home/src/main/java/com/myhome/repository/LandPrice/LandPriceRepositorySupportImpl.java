@@ -2,6 +2,7 @@ package com.myhome.repository.LandPrice;
 
 import com.myhome.collection.LandPrice;
 import com.myhome.model.homeCheck.HomeCheckDto;
+import com.myhome.util.BuildingCodeUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -26,7 +27,7 @@ public class LandPriceRepositorySupportImpl implements LandPriceRepositorySuppor
     @Override
     public List<LandPrice> findLandPriceList(HomeCheckDto.checkLandPriceParam checkLandPriceParam) {
         int fromYear = LocalDate.now().minusYears(checkLandPriceParam.getSearchYear()).getYear();
-        final String pnu = checkLandPriceParam.getBuildingCode().substring(0, 19);
+        final String pnu = BuildingCodeUtils.getPnu(checkLandPriceParam.getBuildingCode());
 
         //$match 조건 추가
         MatchOperation filterRequest = Aggregation.match( new Criteria().andOperator(

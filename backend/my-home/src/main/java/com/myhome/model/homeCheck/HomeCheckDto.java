@@ -49,15 +49,13 @@ public class HomeCheckDto {
     @ToString
     public static class checkBuildingSaleParam {
         private BuildingType buildingType; //건물 타입
-        private String lawdCd; //시군구 코드 41135
-        private String postCode; // 지번
+        private String buildingCode;
         private int searchMonth; //총 검색 월
 
         @Builder
-        public checkBuildingSaleParam(BuildingType buildingType, String lawdCd, String postCode, int searchMonth) {
+        public checkBuildingSaleParam(BuildingType buildingType, String buildingCode, int searchMonth) {
             this.buildingType = buildingType;
-            this.lawdCd = lawdCd;
-            this.postCode = postCode;
+            this.buildingCode = buildingCode;
             this.searchMonth = searchMonth;
         }
     }

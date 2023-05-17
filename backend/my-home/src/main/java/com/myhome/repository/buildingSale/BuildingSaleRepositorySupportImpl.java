@@ -3,6 +3,7 @@ package com.myhome.repository.buildingSale;
 import com.myhome.collection.BuildingSale;
 import com.myhome.model.homeCheck.HomeCheckDto;
 import com.myhome.type.BuildingType;
+import com.myhome.util.BuildingCodeUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
@@ -29,9 +30,11 @@ public class BuildingSaleRepositorySupportImpl implements BuildingSaleRepository
 
     @Override
     public List<BuildingSale> findBuildingSaleList(final HomeCheckDto.checkBuildingSaleParam checkBuildingSaleParam) {
-        String lawdCd = checkBuildingSaleParam.getLawdCd();
+        String buildingCode = checkBuildingSaleParam.getBuildingCode();
         BuildingType buildingType = checkBuildingSaleParam.getBuildingType();
-        String postCode = checkBuildingSaleParam.getPostCode();
+
+        String lawdCd = BuildingCodeUtils.getLawdCd(buildingCode);
+        String postCode = BuildingCodeUtils.getPostCode(buildingCode);
         String dealYmd = LocalDate.now().minusMonths(checkBuildingSaleParam.getSearchMonth())
                 .format(DateTimeFormatter.ofPattern("YYYYMM"));
 
