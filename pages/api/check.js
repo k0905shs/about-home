@@ -24,11 +24,11 @@ export default function handler(req, res) {
     console.log("realLandPrice", realLandPrice);
 
     const request1 = axios.post(
-      "http://172.30.1.84:9999/home/check-land-price",
+      "http://211.218.1.46:28080/home/check-land-price",
       officialLandPrice
     );
     const request2 = axios.post(
-      "http://172.30.1.84:9999/home/check-building-sale",
+      "http://211.218.1.46:28080/home/check-building-sale",
       realLandPrice
     );
 
