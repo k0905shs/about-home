@@ -4,6 +4,9 @@ import com.myhome.collection.BuildingSale;
 import com.myhome.type.BuildingType;
 import lombok.*;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,8 +16,11 @@ public class HomeCheckDto {
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class checkLandPriceParam {
+        @Size(min = 20)@NotBlank
         private String buildingCode; //1111017700102110000
+        @Size(min = 3)@NotBlank
         private String jibun;
+        @Min(1)
         private int searchYear; //총 검색 년도
     }
 
@@ -49,8 +55,11 @@ public class HomeCheckDto {
     @ToString
     public static class checkBuildingSaleParam {
         private BuildingType buildingType; //건물 타입
+        @Size(min = 3)@NotBlank
         private String jibun;
+        @Size(min = 20)@NotBlank
         private String buildingCode;
+        @Min(1)
         private int searchMonth; //총 검색 월
     }
 
