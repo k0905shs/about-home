@@ -4,25 +4,22 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 @Getter
 @Document(collection = "land_price")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LandPrice {
 
-    @Id
-    private ObjectId id;
+    @MongoId
+    private String id;
 
-    @Indexed(unique = true)
     private LandPrice.request request;
     private LandPrice.response response;
 
-    @Builder
     public LandPrice(LandPrice.request request, LandPrice.response response) {
+        this.id = request.getPnu() + request.getStdrYear();
         this.request = request;
         this.response = response != null ? response : new response();
     }
@@ -34,7 +31,6 @@ public class LandPrice {
         private String pnu;
         private String stdrYear;
 
-        @Builder
         public request(String pnu, String stdrYear) {
             this.pnu = pnu;
             this.stdrYear = stdrYear;

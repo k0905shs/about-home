@@ -34,7 +34,6 @@ public class EndpointSuccessHandler implements ResponseBodyAdvice<Object> {
         Long startTime = Optional.ofNullable((Long)oldRequest.getAttribute("beforeStartTime")).orElseGet(() -> -1L);
         
         GlobalResponse.success<?> returnClass = new GlobalResponse.success<>(body);
-        returnClass.setStartTime(startTime);
         returnClass.setPath(request.getURI().getPath());
 
         return returnClass;

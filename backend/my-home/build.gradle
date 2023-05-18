@@ -40,6 +40,8 @@ dependencies {
 
 	//StringUtils
 	implementation 'org.apache.commons:commons-lang3:3.6'
+
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
 }
 
 tasks.named('test') {

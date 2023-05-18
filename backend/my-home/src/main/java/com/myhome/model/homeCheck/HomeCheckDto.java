@@ -52,7 +52,6 @@ public class HomeCheckDto {
         private String jibun;
         private String buildingCode;
         private int searchMonth; //총 검색 월
-
     }
 
 
@@ -60,12 +59,18 @@ public class HomeCheckDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class checkBuildingSaleResult {
         private String date; //거래 월
+        private BigDecimal totalPrice;
+        private int count;
         private List<buildingSaleInfo> buildingSaleInfoList;
 
+        // entity to Dto
         public checkBuildingSaleResult(BuildingSale buildingSale) {
             this.date = buildingSale.getRequest().getDealYmd();
             this.buildingSaleInfoList = buildingSale.getResponse().getList().stream()
                     .map(buildingSaleInfo::new).collect(Collectors.toList());
+            this.totalPrice = buildingSale.getResponse().getList().stream()
+                    .map(BuildingSale.detail::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+            this.count = buildingSale.getResponse().getList().size();
         }
     }
 

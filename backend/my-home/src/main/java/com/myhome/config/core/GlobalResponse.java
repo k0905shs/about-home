@@ -3,9 +3,7 @@ package com.myhome.config.core;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 
 /**
  * API Response 에 대한 전역 객체 선언
@@ -17,8 +15,6 @@ public class GlobalResponse {
     public static class defualtData {
         // API 자체에 대한 실행성공 여부
         protected boolean isSuccess = true;
-        // API 시작시간 (RequestTime)
-        protected Long startTime;
         // API 종료시간 (Advice 에서 실행시 호출)
         protected LocalDateTime endTime = LocalDateTime.now();
         // Request URI
