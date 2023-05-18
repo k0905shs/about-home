@@ -23,6 +23,8 @@ const CheckMyHome = () => {
   const [detailAddress, setDetailAddress] = useState("");
   const [showDaumPostcode, setShowDaumPostcode] = useState(false);
   const [buildingcode, setBuildingcode] = useState("");
+  const [jibun, setJibun] = useState("");
+
   const [building, setBuilding] = useState("APART");
 
   const [result, setResult] = useState({});
@@ -95,6 +97,7 @@ const CheckMyHome = () => {
   const handleComplete = (data) => {
     let fullAddress = data.address;
     let extraAddress = "";
+    let jibunAddress = "";
     if (data.addressType === "R") {
       if (data.bname !== "") {
         extraAddress += data.bname;
@@ -105,8 +108,21 @@ const CheckMyHome = () => {
       }
       fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
     }
-    console.log(extraAddress);
 
+    // 지번 찾는 함수
+    const getJibun = (address) => {
+      const commaIndex = address.indexOf(",");
+      return address.substring(0, commaIndex);
+    };
+
+    if (data.userSelectedType === "J") {
+      jibunAddress = getJibun(data.jibunAddressEnglish);
+    } else if (data.userSelectedType === "R") {
+      jibunAddress = getJibun(data.autoJibunAddressEnglish);
+    }
+
+    // 주소에 필요한 값 set
+    setJibun(jibunAddress);
     setBuildingcode(data.buildingCode);
     setPostcode(data.zonecode);
     setAddress(extraAddress);
@@ -135,6 +151,7 @@ const CheckMyHome = () => {
       address: address,
       detailAddress: detailAddress,
       building: building,
+      jibun: jibun,
     };
 
     // result에 새로운 값을 추가합니다.
