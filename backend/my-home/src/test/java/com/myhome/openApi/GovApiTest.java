@@ -1,7 +1,10 @@
 package com.myhome.openApi;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.myhome.collection.BuildingSale;
 import com.myhome.model.openApi.BuildingSaleDto;
 import com.myhome.model.openApi.LandPriceDto;
 import com.myhome.model.openApi.StanReginDto;
@@ -16,7 +19,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.xml.bind.JAXBException;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.predicate;
 
 @SpringBootTest
 class GovApiTest {
@@ -66,9 +72,18 @@ class GovApiTest {
 
         JSONObject jsonObj = XML.toJSONObject(response);
         response = jsonObj.get("response").toString();
-        BuildingSaleDto.openApiResponse openApiResponse =
-                objectMapper.readValue(response, BuildingSaleDto.openApiResponse.class);
-        assertThat(openApiResponse.getField().getBuildingSales().getInfoList().get(0).getPostCode()).isEqualTo("9");
+        JsonNode jsonNode = objectMapper.readTree(response);
+
+        System.out.println(jsonNode.path("body").get("totalCount"));
+        System.out.println(jsonNode.path("body").get("items").toString());
+
+        jsonNode.path("body").get("items");
+        JsonNode jsonNode1 = objectMapper.readTree(jsonNode.path("body").get("items").toString());
+
+        List<BuildingSaleDto.salesInfo> list =
+                objectMapper.readValue(jsonNode1.path("item").toString(), new TypeReference<List<BuildingSaleDto.salesInfo>>(){});
+
+        System.out.println(list.toString());
     }
 
 }

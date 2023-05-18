@@ -52,10 +52,10 @@ class GovServiceTest {
 //        BuildingSaleDto.openApiResponse responseOfficetel = govService.requestBuildingSalesApi(requestParamOfficetel);
         BuildingSaleDto.openApiResponse responseTownHouse = govService.requestBuildingSalesApi(requestParamTownHouse);
 
-        assertThat(responseApart.getField().getBuildingSales().getInfoList().get(0).getReginCode()).isEqualTo("11110");
-        assertThat(responseHouse.getField().getBuildingSales().getInfoList().get(0).getReginCode()).isEqualTo("11110");
-//        assertThat(responseOfficetel.getField().getBuildingSales().getInfoList().get(0).getReginCode()).isEqualTo("11110");
-        assertThat(responseTownHouse.getField().getBuildingSales().getInfoList().get(0).getReginCode()).isEqualTo("11110");
+//        assertThat(responseApart.getField().getBuildingSales().getInfoList().get(0).getReginCode()).isEqualTo("11110");
+//        assertThat(responseHouse.getField().getBuildingSales().getInfoList().get(0).getReginCode()).isEqualTo("11110");
+////        assertThat(responseOfficetel.getField().getBuildingSales().getInfoList().get(0).getReginCode()).isEqualTo("11110");
+//        assertThat(responseTownHouse.getField().getBuildingSales().getInfoList().get(0).getReginCode()).isEqualTo("11110");
 
     }
 

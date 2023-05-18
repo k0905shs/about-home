@@ -104,7 +104,8 @@ public class HomeCheckServiceImpl implements HomeCheckService {
                     govService.requestBuildingSalesApi(new BuildingSaleDto.openApiRequestParam(lawdCd, dealYmd, checkBuildingSaleParam.getBuildingType()));
             reCheck = true;
         }
-        // 전체 로직 실행 후 재검색
+
+        // 전체 로직 실행 후 request 추가 요청 있었으면 쿼리 재실행
         if (reCheck) {
             buildingSaleList =
                     buildingSaleRepositorySupport.findBuildingSaleList(checkBuildingSaleParam); //입력 받은 param으로 추출한 도큐먼트 리스트

@@ -1,16 +1,10 @@
 package com.myhome.model.openApi;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.*;
 import com.myhome.collection.BuildingSale;
 import com.myhome.type.BuildingType;
 import com.myhome.type.ResponseFormat;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -36,29 +30,17 @@ public class BuildingSaleDto {
     }
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @JsonIgnoreProperties(ignoreUnknown=true)
-    public static class openApiResponse {
-        @JsonProperty("body")
-        private BuildingSaleDto.field field;
-    }
-
-    @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    @JsonIgnoreProperties(ignoreUnknown=true)
-    public static class field{
-        @JsonProperty("items")
-        private buildingSales buildingSales;
-        private int pageNo;
-        private int totalCount;
-    }
-
-    @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class buildingSales{
-        @JsonProperty("item")
+    public static class openApiResponse{
         private List<BuildingSaleDto.salesInfo> infoList;
+        private int totalCount;
 
+        @Builder
+        public openApiResponse(List<salesInfo> infoList, int totalCount) {
+            this.infoList = infoList;
+            this.totalCount = totalCount;
+        }
     }
 
     @Getter
