@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Container, Stack, Form, Button } from "react-bootstrap";
+import {
+  Container,
+  Stack,
+  Form,
+  Button,
+  Collapse,
+  Badge,
+} from "react-bootstrap";
 import DaumPostcode from "react-daum-postcode";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -8,6 +15,8 @@ import LoadingPage from "./LoadingPage";
 
 const CheckMyHome = () => {
   const router = useRouter();
+
+  const [open, setOpen] = useState(false);
 
   const [inputVal, setInputVal] = useState({
     contract: "monthlyRent",
@@ -176,7 +185,7 @@ const CheckMyHome = () => {
           query: {
             response1: JSON.stringify(res.data.response1),
             response2: JSON.stringify(res.data.response2),
-            result: result,
+            result: newResult,
           },
         });
       } catch (error) {
@@ -196,21 +205,27 @@ const CheckMyHome = () => {
         <Container style={{ width: "80%" }}>
           <h2 style={{ marginTop: "10px" }}>우리집 진단하기</h2>
           <p style={{ fontWeight: "bold" }}>
-            진단을 하려면 해당 주소의 등기부등본이 먼저 필요해요!
+            진단을 하려면 해당 주소의{" "}
+            <a
+              onClick={() => setOpen(!open)}
+              aria-controls="example-collapse-text"
+              aria-expanded={open}
+            >
+              <Badge pill bg="danger">
+                등기부등본
+              </Badge>{" "}
+              이 먼저 필요해요!
+            </a>
+            <Collapse in={open}>
+              <div id="example-collapse-text">
+                <a href="http://www.iros.go.kr/PMainJ.jsp" target="_blank">
+                  뽑으러 가기
+                </a>
+                <br />
+                <a href="">뽑을줄 모른다면?</a>
+              </div>
+            </Collapse>
           </p>
-          <section
-            style={{
-              display: "flex",
-              justifyContent: "space-around",
-            }}
-          >
-            <p>
-              <a href="">등기부등본 뽑으러 가기</a>
-            </p>
-            <p>
-              <a href="">등기부등본을 뽑을줄 모른다면?</a>
-            </p>
-          </section>
           <section>
             <Stack gap={2}>
               <Form noValidate validated={validated} onSubmit={handleSubmit}>
