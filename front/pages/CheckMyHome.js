@@ -115,10 +115,13 @@ const CheckMyHome = () => {
       return address.substring(0, commaIndex);
     };
 
+    console.log(data.userSelectedType);
     if (data.userSelectedType === "J") {
       jibunAddress = getJibun(data.jibunAddressEnglish);
-    } else if (data.userSelectedType === "R") {
+    } else if (data.autoJibunAddressEnglish) {
       jibunAddress = getJibun(data.autoJibunAddressEnglish);
+    } else if (data.jibunAddressEnglish) {
+      jibunAddress = getJibun(data.jibunAddressEnglish);
     }
 
     // 주소에 필요한 값 set
