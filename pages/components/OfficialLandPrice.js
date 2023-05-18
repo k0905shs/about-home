@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import { commaFormat } from "../../utils/util";
+import { Button, Overlay, Popover } from "react-bootstrap";
 
 import {
   ResponsiveContainer,
@@ -31,6 +32,7 @@ const OfficialLandPrice = ({ response1 }) => {
     return value.toLocaleString();
   };
 
+  // 그래프 툴팁
   const customTooltip = (price, name) => {
     if (name === "Line" || name === "Area") {
       return [null];
@@ -43,13 +45,50 @@ const OfficialLandPrice = ({ response1 }) => {
     return null;
   };
 
+  //공시지가 툴팁
+  const [show, setShow] = useState(false);
+  const [target, setTarget] = useState(null);
+  const ref = useRef(null);
+
+  const handleClick = (event) => {
+    setShow(!show);
+    setTarget(event.target);
+  };
+
   if (landPrice.count === 0) {
     return <h5>공시지가 데이터가 없습니다.</h5>;
   }
 
   return (
     <>
-      <h2 style={{ paddingTop: "20px" }}>공시지가</h2>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <h2 style={{ paddingTop: "20px", marginRight: "10px" }}>공시지가</h2>
+        <div ref={ref}>
+          <Button
+            style={{ marginTop: "10px" }}
+            onClick={handleClick}
+            variant="outline-primary"
+            size="sm"
+          >
+            공시지가란?
+          </Button>
+
+          <Overlay
+            show={show}
+            target={target}
+            placement="bottom"
+            container={ref}
+            containerPadding={20}
+          >
+            <Popover id="popover-contained">
+              <Popover.Body>
+                <strong>공시지가란?</strong> <br /> 국토교통부 장관이
+                조사·평가하여 공시한 토지의 단위면적(㎡)당 가격.
+              </Popover.Body>
+            </Popover>
+          </Overlay>
+        </div>
+      </div>
       <ResponsiveContainer width="100%" height={300}>
         <ComposedChart
           data={landPrice.landPriceInfoList}
