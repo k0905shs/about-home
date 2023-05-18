@@ -55,14 +55,32 @@ const OfficialLandPrice = ({ response1 }) => {
     setTarget(event.target);
   };
 
+  // 공시지가 데이터가 없을 경우
   if (landPrice.count === 0) {
-    return <h5>공시지가 데이터가 없습니다.</h5>;
+    return (
+      <>
+        <h4 style={{ marginTop: "10px" }}>공시지가 데이터가 없습니다.</h4>
+        <div>
+          <h6>왜 공시지가 데이터가 없나요?</h6>
+          <li>건물 유형을 확인해주세요</li>
+        </div>
+      </>
+    );
   }
+
+  // 년, 월 노출 시키는 함수
+  const getCurrentYearAndMonth = () => {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
+    return `${year}.${month}`;
+  };
 
   return (
     <>
       <div style={{ display: "flex", alignItems: "center" }}>
         <h2 style={{ paddingTop: "20px", marginRight: "10px" }}>공시지가</h2>
+
         <div ref={ref}>
           <Button
             style={{ marginTop: "10px" }}
@@ -88,6 +106,9 @@ const OfficialLandPrice = ({ response1 }) => {
             </Popover>
           </Overlay>
         </div>
+      </div>
+      <div style={{ marginLeft: "auto", fontSize: "14px", color: "gray" }}>
+        {getCurrentYearAndMonth()} 국토교통부 기준
       </div>
       <ResponsiveContainer width="100%" height={300}>
         <ComposedChart
