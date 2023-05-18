@@ -12,21 +12,21 @@ public class HomeCheckDto {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    @AllArgsConstructor
     public static class checkLandPriceParam {
         private String buildingCode; //1111017700102110000
+        private String jibun;
         private int searchYear; //총 검색 년도
     }
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class checkLandPriceResult {
-        private String pnu;
+        private long count;
         private List<landPriceInfo> landPriceInfoList;
 
         @Builder
-        public checkLandPriceResult(String pnu, List<landPriceInfo> landPriceInfoList) {
-            this.pnu = pnu;
+        public checkLandPriceResult(List<landPriceInfo> landPriceInfoList, long count) {
+            this.count = count;
             this.landPriceInfoList = landPriceInfoList;
         }
     }
@@ -49,17 +49,9 @@ public class HomeCheckDto {
     @ToString
     public static class checkBuildingSaleParam {
         private BuildingType buildingType; //건물 타입
-        private String lawdCd; //시군구 코드 41135
-        private String postCode; // 지번
+        private String jibun;
+        private String buildingCode;
         private int searchMonth; //총 검색 월
-
-        @Builder
-        public checkBuildingSaleParam(BuildingType buildingType, String lawdCd, String postCode, int searchMonth) {
-            this.buildingType = buildingType;
-            this.lawdCd = lawdCd;
-            this.postCode = postCode;
-            this.searchMonth = searchMonth;
-        }
     }
 
 
@@ -67,12 +59,18 @@ public class HomeCheckDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class checkBuildingSaleResult {
         private String date; //거래 월
+        private BigDecimal totalPrice;
+        private int count;
         private List<buildingSaleInfo> buildingSaleInfoList;
 
+        // entity to Dto
         public checkBuildingSaleResult(BuildingSale buildingSale) {
             this.date = buildingSale.getRequest().getDealYmd();
             this.buildingSaleInfoList = buildingSale.getResponse().getList().stream()
                     .map(buildingSaleInfo::new).collect(Collectors.toList());
+            this.totalPrice = buildingSale.getResponse().getList().stream()
+                    .map(BuildingSale.detail::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+            this.count = buildingSale.getResponse().getList().size();
         }
     }
 

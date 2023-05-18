@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
@@ -17,13 +16,10 @@ public class StanRegin {
     @Id
     private ObjectId id;
 
-    @Indexed(unique = true)
     private request request;
     private response response;
 
-    @Builder
     public StanRegin(StanRegin.request request, StanRegin.response response) {
-        this.id = id;
         this.request = request;
         this.response = response;
     }
@@ -33,7 +29,6 @@ public class StanRegin {
     public static class request{
         private String locataddNm;
 
-        @Builder
         public request(String locataddNm) {
             this.locataddNm = locataddNm;
         }

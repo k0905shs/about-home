@@ -1,5 +1,7 @@
 package com.myhome.service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myhome.collection.BuildingSale;
 import com.myhome.collection.LandPrice;
@@ -17,12 +19,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(propagation = Propagation.REQUIRES_NEW)
 public class GovServiceImpl implements GovService{
 
     private final GovApi govApi;
@@ -31,14 +33,20 @@ public class GovServiceImpl implements GovService{
     private final BuildingSaleRepository buildingSaleRepository;
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public LandPriceDto.openApiResponse requestLandPriceApi(final LandPriceDto.openApiRequestParam requestParam) throws Exception{
         String response = govApi.requestGov(requestParam, GovRequestUri.LAND_PRICE);
-        LandPriceDto.openApiResponse openApiResponse = 
+        LandPriceDto.openApiResponse openApiResponse =
                 objectMapper.readValue(response, LandPriceDto.openApiResponse.class);
 
+        LandPrice.response landPriceResponse = null;
+
+        //response 결과 저장
+        if(openApiResponse.getField().getLandPriceList().size() != 0){
+            landPriceResponse = openApiResponse.getField().getLandPriceList().get(0).toDocument();
+        }
+
         //request 결과 저장
-        LandPrice.response landPriceResponse =
-                openApiResponse.getField().getLandPriceList().get(0).toDocument();
         LandPrice.request landPriceRequest
                 = new LandPrice.request(requestParam.getPnu(), requestParam.getStdrYear());
 
@@ -48,23 +56,33 @@ public class GovServiceImpl implements GovService{
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public BuildingSaleDto.openApiResponse requestBuildingSalesApi(BuildingSaleDto.openApiRequestParam requestParam) throws Exception {
         GovRequestUri requestUrl = requestParam.getBuildingType().getGovRequestUri();
         String response = govApi.requestGov(requestParam, requestUrl);
 
         //XML to Json parsing
         JSONObject jsonObj = XML.toJSONObject(response);
-        String json = jsonObj.get("response").toString();
+        JsonNode jsonNode = objectMapper.readTree(jsonObj.get("response").toString());
 
-        BuildingSaleDto.openApiResponse openApiResponse =
-                objectMapper.readValue(json, BuildingSaleDto.openApiResponse.class);
+        List<BuildingSaleDto.salesInfo> openApiList = new ArrayList<>();
+        int totalCount = jsonNode.path("body").get("totalCount").asInt();
+        jsonNode = objectMapper.readTree(jsonNode.path("body").get("items").toString());
 
-        //request 결과 저장
-        List<BuildingSaleDto.salesInfo> infoList =
-                openApiResponse.getField().getBuildingSales().getInfoList();
+        if (totalCount == 1) { //한건만 있는 경우 리스트 변환시 예외 발생하므로 따로 관리함
+            openApiList.add(objectMapper.readValue(jsonNode.path("item").toString()
+                    , new TypeReference<BuildingSaleDto.salesInfo>() {}));
+        } else if (totalCount > 1) { //조회 결과가 2건 이상이면
+            openApiList = objectMapper.readValue(jsonNode.path("item").toString()
+                    , new TypeReference<List<BuildingSaleDto.salesInfo>>(){});
+        }
 
+        //response 결과 저장
+        BuildingSaleDto.openApiResponse openApiResponse = new BuildingSaleDto.openApiResponse(openApiList, totalCount);
+
+        //mongo에 request : {} , response : {} 형태로 저장
         List<BuildingSale.detail> responseList =
-                infoList.stream().map(BuildingSaleDto.salesInfo::toDocument).collect(Collectors.toList());
+                openApiList.stream().map(BuildingSaleDto.salesInfo::toDocument).collect(Collectors.toList());
         BuildingSale.request request = new BuildingSale.request(requestParam.getLawdCd(), requestParam.getDealYmd(), requestParam.getBuildingType());
         BuildingSale buildingSale = new BuildingSale(request, responseList);
         buildingSaleRepository.save(buildingSale);

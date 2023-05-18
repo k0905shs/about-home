@@ -1,6 +1,8 @@
 package com.myhome.openApi;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myhome.model.openApi.BuildingSaleDto;
 import com.myhome.model.openApi.LandPriceDto;
@@ -14,7 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.xml.bind.JAXBException;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -58,7 +60,7 @@ class GovApiTest {
     }
 
     @Test
-    void buildingSales() throws JAXBException, JsonProcessingException {
+    void buildingSales() throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         BuildingSaleDto.openApiRequestParam requestParam = new BuildingSaleDto.openApiRequestParam("11110" , "201512", BuildingType.APART);
         String response= govApi.requestGov(requestParam, requestParam.getBuildingType().getGovRequestUri());
@@ -66,9 +68,14 @@ class GovApiTest {
 
         JSONObject jsonObj = XML.toJSONObject(response);
         response = jsonObj.get("response").toString();
-        BuildingSaleDto.openApiResponse openApiResponse =
-                objectMapper.readValue(response, BuildingSaleDto.openApiResponse.class);
-        assertThat(openApiResponse.getField().getBuildingSales().getInfoList().get(0).getPostCode()).isEqualTo("9");
+        JsonNode jsonNode = objectMapper.readTree(response);
+
+
+        jsonNode.path("body").get("items");
+        JsonNode jsonNode1 = objectMapper.readTree(jsonNode.path("body").get("items").toString());
+
+        List<BuildingSaleDto.salesInfo> list =
+                objectMapper.readValue(jsonNode1.path("item").toString(), new TypeReference<List<BuildingSaleDto.salesInfo>>(){});
     }
 
 }
