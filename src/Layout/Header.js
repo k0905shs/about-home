@@ -12,7 +12,9 @@ const Header = () => {
   return (
     <Navbar bg="primary" variant="dark" expand="lg" onSelect={handleSelect}>
       <Container>
-        <Navbar.Brand href="/">어바웃홈</Navbar.Brand>
+        <Navbar.Brand href="/" style={{ marginLeft: "10px" }}>
+          어바웃홈
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
