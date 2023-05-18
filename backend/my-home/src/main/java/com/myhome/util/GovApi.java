@@ -57,9 +57,10 @@ public class GovApi {
         uri = this.encodePlus(uri);
 
         String response =
-                WebClient.builder().build().get().uri(uri).retrieve().bodyToMono(String.class).block();
+                WebClient.builder()
+                        .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(20 * 1024 * 1024)) //DataBufferLimitException  이슈
+                        .build().get().uri(uri).retrieve().bodyToMono(String.class).block();
         log.info("GOV API Request : {}", uri);
-        log.info("GOV API Response : {}", response);
         return response;
     }
 

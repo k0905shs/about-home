@@ -9,15 +9,25 @@ import org.apache.commons.lang3.StringUtils;
  * 본번 코드(4자리) + 부번 코드(4자리) = pnu
  */
 @Slf4j
-public class BuildingCodeUtils {
+public class AddressCodeUtils {
 
     /**
      * 빌딩코드로 pnu code 확인
      * @param buildingCode 건물 코드
      * @return pnu code
      */
-    public static String getPnu(String buildingCode) {
-        return buildingCode.substring(0, 19);
+    public static String getPnu(String buildingCode, String jibun) {
+        StringBuilder sb = new StringBuilder(buildingCode.substring(0, 11));
+
+        if (jibun.contains("-")) {
+            String[] arr = jibun.split("-");
+            sb.append(addZero(arr[0], 4));
+            sb.append(addZero(arr[1], 4));
+        } else {
+            sb.append(addZero(jibun, 4)).append("0000");
+        }
+
+        return sb.toString();
     }
 
     /**
@@ -57,4 +67,20 @@ public class BuildingCodeUtils {
         }
         return sb.toString().replace(" ", "");
     }
+
+    /**
+     * 입력받은 숫자 코드에서 max 자리수 될때가지 앞에 0 추가
+     * @param code
+     * @return 0을 제거한 코드값
+     */
+    private static String addZero(String code, int max) {
+        StringBuilder sb = new StringBuilder();
+        if (code.length() < max) {
+            for (int i = 0; i < max - code.length(); i++) {
+                sb.append("0");
+            }
+        }
+        return sb.append(code).toString();
+    }
+
 }

@@ -12,19 +12,21 @@ public class HomeCheckDto {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    @AllArgsConstructor
     public static class checkLandPriceParam {
         private String buildingCode; //1111017700102110000
+        private String jibun;
         private int searchYear; //총 검색 년도
     }
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class checkLandPriceResult {
+        private long count;
         private List<landPriceInfo> landPriceInfoList;
 
         @Builder
-        public checkLandPriceResult(List<landPriceInfo> landPriceInfoList) {
+        public checkLandPriceResult(List<landPriceInfo> landPriceInfoList, long count) {
+            this.count = count;
             this.landPriceInfoList = landPriceInfoList;
         }
     }
@@ -47,15 +49,10 @@ public class HomeCheckDto {
     @ToString
     public static class checkBuildingSaleParam {
         private BuildingType buildingType; //건물 타입
+        private String jibun;
         private String buildingCode;
         private int searchMonth; //총 검색 월
 
-        @Builder
-        public checkBuildingSaleParam(BuildingType buildingType, String buildingCode, int searchMonth) {
-            this.buildingType = buildingType;
-            this.buildingCode = buildingCode;
-            this.searchMonth = searchMonth;
-        }
     }
 
 

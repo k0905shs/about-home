@@ -7,12 +7,10 @@ import com.myhome.model.homeCheck.HomeCheckDto;
 import com.myhome.model.openApi.BuildingSaleDto;
 import com.myhome.model.openApi.LandPriceDto;
 import com.myhome.repository.LandPrice.LandPriceRepositorySupport;
-import com.myhome.repository.buildingSale.BuildingSaleRepository;
 import com.myhome.repository.buildingSale.BuildingSaleRepositorySupport;
-import com.myhome.util.BuildingCodeUtils;
+import com.myhome.util.AddressCodeUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,13 +35,7 @@ public class HomeCheckServiceImpl implements HomeCheckService {
     public HomeCheckDto.checkLandPriceResult checkLandPrice(HomeCheckDto.checkLandPriceParam checkLandPriceParam) throws Exception {
         List<LandPrice> checkLandPriceList = landPriceRepositorySupport.findLandPriceList(checkLandPriceParam);
 
-        List<HomeCheckDto.landPriceInfo> landPriceInfoList =
-                checkLandPriceList.stream()
-                        .filter(Objects::nonNull)
-                        .map(v -> new HomeCheckDto.landPriceInfo(v.getRequest().getStdrYear(), v.getResponse().getPblntfPclnd()))
-                        .collect(Collectors.toList());
-
-        String pnu = checkLandPriceParam.getBuildingCode().substring(0, 19); //pnu코드
+        String pnu = AddressCodeUtils.getPnu(checkLandPriceParam.getBuildingCode(), checkLandPriceParam.getJibun());
         int searchYear = checkLandPriceParam.getSearchYear();
 
         if (searchYear != checkLandPriceList.size()) { //요청한 연도 수 만큼의 요청 데이터가 없으면
@@ -58,19 +50,24 @@ public class HomeCheckServiceImpl implements HomeCheckService {
             for (int i = startYear; i < nowYear; i++) { //기록이 없는 연도 공공데이터 request
                 if (!savedYearList.contains(String.valueOf(i))) {
                     // request 실행
-                    LandPriceDto.openApiResponse openApiResponse =
-                            govService.requestLandPriceApi(new LandPriceDto.openApiRequestParam(pnu, String.valueOf(i), 1, 1));
+                     govService.requestLandPriceApi(new LandPriceDto.openApiRequestParam(pnu, String.valueOf(i), 1, 1));
                 }
             }
+            checkLandPriceList = landPriceRepositorySupport.findLandPriceList(checkLandPriceParam); //쿼리 재실행
         }
-        checkLandPriceList = landPriceRepositorySupport.findLandPriceList(checkLandPriceParam);
-        landPriceInfoList = checkLandPriceList.stream()
+
+        //entity to dto
+        List<HomeCheckDto.landPriceInfo> landPriceInfoList = checkLandPriceList.stream()
                 .filter(Objects::nonNull)
                 .map(v -> new HomeCheckDto.landPriceInfo(v.getRequest().getStdrYear(), v.getResponse().getPblntfPclnd()))
                 .collect(Collectors.toList());
 
-        return new HomeCheckDto.checkLandPriceResult(landPriceInfoList);
+        //공시지가 정보가 있는 데이터 수 확인
+        long count = landPriceInfoList.stream().filter(v -> v.getPrice() != null).count();
+
+        return new HomeCheckDto.checkLandPriceResult(landPriceInfoList, count);
     }
+
 
     @Override
     public List<HomeCheckDto.checkBuildingSaleResult> checkBuildingSale(HomeCheckDto.checkBuildingSaleParam checkBuildingSaleParam) throws Exception {
@@ -100,8 +97,7 @@ public class HomeCheckServiceImpl implements HomeCheckService {
             }
         }
 
-        // TODO : ThreadTaskPoolExecutor 과 개별 실행중 뭐가 더 낳은 방법일지 생각을 해보자..
-        String lawdCd = BuildingCodeUtils.getLawdCd(checkBuildingSaleParam.getBuildingCode());
+        String lawdCd = AddressCodeUtils.getLawdCd(checkBuildingSaleParam.getBuildingCode());
         boolean reCheck = false;
         for (String dealYmd : searchTargetList) { //개별 API 재실행
             BuildingSaleDto.openApiResponse openApiResponse =
@@ -112,6 +108,7 @@ public class HomeCheckServiceImpl implements HomeCheckService {
         if (reCheck) {
             buildingSaleList =
                     buildingSaleRepositorySupport.findBuildingSaleList(checkBuildingSaleParam); //입력 받은 param으로 추출한 도큐먼트 리스트
+
             //Document list -> dto List
              results = buildingSaleList.stream()
                      .map(HomeCheckDto.checkBuildingSaleResult::new)
