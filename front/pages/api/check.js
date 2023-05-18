@@ -9,24 +9,26 @@ export default function handler(req, res) {
     // 추출한 값을 사용하여 POST 요청을 보냅니다.
     const officialLandPrice = {
       buildingCode: result.buildingcode,
+      jibun: result.jibun,
       searchYear: 5,
     };
 
     const realLandPrice = {
       buildingType: result.building,
       buildingCode: result.buildingcode,
-      searchMonth: 10,
+      jibun: result.jibun,
+      searchMonth: 24,
     };
 
     console.log("officialLandPrice", officialLandPrice);
     console.log("realLandPrice", realLandPrice);
 
     const request1 = axios.post(
-      "http://172.30.1.4:9999/home/check-land-price",
+      "http://172.30.1.84:9999/home/check-land-price",
       officialLandPrice
     );
     const request2 = axios.post(
-      "http://172.30.1.4:9999/home/check-building-sale",
+      "http://172.30.1.84:9999/home/check-building-sale",
       realLandPrice
     );
 
