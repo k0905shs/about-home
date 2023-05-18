@@ -25,7 +25,9 @@ const RealLandPrice = ({ response2 }) => {
     for (let i = 0; i < landPrice.length; i++) {
       let realAveragePrice = 0;
       if (landPrice[i].totalPrice !== 0) {
-        const date = landPrice[i].date.substring(0, 6);
+        const date = `${landPrice[i].date.substring(2, 4)}.${landPrice[
+          i
+        ].date.substring(4, 6)}`;
         realAveragePrice =
           Number(landPrice[i].totalPrice) / Number(landPrice[i].count);
         const averagePriceFormatted = realAveragePrice.toFixed(0);
@@ -170,15 +172,16 @@ const RealLandPrice = ({ response2 }) => {
 
         <div>
           <h5>평균 실거래가 참고사항</h5>
+          <p>1. 실거래가 없는 달은 노출되지 않아요!</p>
           <p>
-            1. 평균 실거래가는 단순한 평균 값이며, 개별 매매 거래 가격은 상이할
-            수 있습니다.
+            2. 평균 실거래가는 단순한 평균 값이며, 개별 매매 거래 가격은 상이할
+            수 있어요!
             <br /> 따라서 실제 거래 시 가격 협상이 이루어지며, 매매 가격은
-            실거래가보다 낮거나 높을 수 있습니다.
+            실거래가보다 낮거나 높을 수 있어요!!
           </p>
           <p>
-            2. 평균 실거래가는 시장의 경향을 파악하는 데 도움을 줄 수 있지만,
-            개별 지번의 가치를 판단하는 데에는 절대적인 기준이 아닙니다.
+            3. 평균 실거래가는 시장의 경향을 파악하는 데 도움을 줄 수 있지만,
+            개별 지번의 가치를 판단하는 데에는 절대적인 기준이 아니예요!
           </p>
         </div>
       </Container>
