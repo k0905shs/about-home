@@ -12,11 +12,13 @@ const Header = () => {
   return (
     <Navbar bg="primary" variant="dark" expand="lg" onSelect={handleSelect}>
       <Container>
-        <Navbar.Brand href="/">어바웃홈</Navbar.Brand>
+        <Navbar.Brand href="/" style={{ marginLeft: "10px" }}>
+          어바웃홈
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link eventKey="/">공지사항</Nav.Link>
+            <Nav.Link eventKey="/Board">공지사항</Nav.Link>
             <Nav.Link eventKey="/CheckMyHome">진단하기</Nav.Link>
             <Nav.Link eventKey="/">부동산 정보</Nav.Link>
           </Nav>

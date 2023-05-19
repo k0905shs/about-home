@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Container, Stack, Form, Button } from "react-bootstrap";
+import {
+  Container,
+  Stack,
+  Form,
+  Button,
+  Collapse,
+  Badge,
+} from "react-bootstrap";
 import DaumPostcode from "react-daum-postcode";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -8,6 +15,8 @@ import LoadingPage from "./LoadingPage";
 
 const CheckMyHome = () => {
   const router = useRouter();
+
+  const [open, setOpen] = useState(false);
 
   const [inputVal, setInputVal] = useState({
     contract: "monthlyRent",
@@ -23,6 +32,8 @@ const CheckMyHome = () => {
   const [detailAddress, setDetailAddress] = useState("");
   const [showDaumPostcode, setShowDaumPostcode] = useState(false);
   const [buildingcode, setBuildingcode] = useState("");
+  const [jibun, setJibun] = useState("");
+
   const [building, setBuilding] = useState("APART");
 
   const [result, setResult] = useState({});
@@ -95,6 +106,7 @@ const CheckMyHome = () => {
   const handleComplete = (data) => {
     let fullAddress = data.address;
     let extraAddress = "";
+    let jibunAddress = "";
     if (data.addressType === "R") {
       if (data.bname !== "") {
         extraAddress += data.bname;
@@ -105,8 +117,24 @@ const CheckMyHome = () => {
       }
       fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
     }
-    console.log(extraAddress);
 
+    // 지번 찾는 함수
+    const getJibun = (address) => {
+      const commaIndex = address.indexOf(",");
+      return address.substring(0, commaIndex);
+    };
+
+    console.log(data.userSelectedType);
+    if (data.userSelectedType === "J") {
+      jibunAddress = getJibun(data.jibunAddressEnglish);
+    } else if (data.autoJibunAddressEnglish) {
+      jibunAddress = getJibun(data.autoJibunAddressEnglish);
+    } else if (data.jibunAddressEnglish) {
+      jibunAddress = getJibun(data.jibunAddressEnglish);
+    }
+
+    // 주소에 필요한 값 set
+    setJibun(jibunAddress);
     setBuildingcode(data.buildingCode);
     setPostcode(data.zonecode);
     setAddress(extraAddress);
@@ -135,6 +163,7 @@ const CheckMyHome = () => {
       address: address,
       detailAddress: detailAddress,
       building: building,
+      jibun: jibun,
     };
 
     // result에 새로운 값을 추가합니다.
@@ -147,8 +176,7 @@ const CheckMyHome = () => {
         const res = await axios.post("/api/check", {
           result: newResult,
         });
-        console.log("API 응답", res);
-        console.log("res.data", res.data);
+
         setIsLoading(false);
 
         router.push({
@@ -156,7 +184,7 @@ const CheckMyHome = () => {
           query: {
             response1: JSON.stringify(res.data.response1),
             response2: JSON.stringify(res.data.response2),
-            result: result,
+            result: newResult,
           },
         });
       } catch (error) {
@@ -176,21 +204,27 @@ const CheckMyHome = () => {
         <Container style={{ width: "80%" }}>
           <h2 style={{ marginTop: "10px" }}>우리집 진단하기</h2>
           <p style={{ fontWeight: "bold" }}>
-            진단을 하려면 해당 주소의 등기부등본이 먼저 필요해요!
+            진단을 하려면 해당 주소의{" "}
+            <a
+              onClick={() => setOpen(!open)}
+              aria-controls="example-collapse-text"
+              aria-expanded={open}
+            >
+              <Badge pill bg="danger">
+                등기부등본
+              </Badge>{" "}
+              이 먼저 필요해요!
+            </a>
+            <Collapse in={open}>
+              <div id="example-collapse-text">
+                <a href="http://www.iros.go.kr/PMainJ.jsp" target="_blank">
+                  뽑으러 가기
+                </a>
+                <br />
+                <a href="">뽑을줄 모른다면?</a>
+              </div>
+            </Collapse>
           </p>
-          <section
-            style={{
-              display: "flex",
-              justifyContent: "space-around",
-            }}
-          >
-            <p>
-              <a href="">등기부등본 뽑으러 가기</a>
-            </p>
-            <p>
-              <a href="">등기부등본을 뽑을줄 모른다면?</a>
-            </p>
-          </section>
           <section>
             <Stack gap={2}>
               <Form noValidate validated={validated} onSubmit={handleSubmit}>
@@ -270,7 +304,7 @@ const CheckMyHome = () => {
                   <Form.Label>
                     <h5 style={{ marginTop: "20px" }}>소재지</h5>
                   </Form.Label>{" "}
-                  <Button type="button" onClick={handleOpenPostcode}>
+                  <Button type="button" onClick={handleOpenPostcode} size="sm">
                     검색
                   </Button>
                   {showDaumPostcode && (
