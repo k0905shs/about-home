@@ -3,13 +3,12 @@ package com.myhome.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.myhome.collection.BuildingRent;
 import com.myhome.collection.BuildingSale;
 import com.myhome.collection.LandPrice;
-import com.myhome.model.openApi.BuildingSaleDto;
-import com.myhome.model.openApi.GovCommonDto;
-import com.myhome.model.openApi.LandPriceDto;
-import com.myhome.model.openApi.StanReginDto;
+import com.myhome.model.openApi.*;
 import com.myhome.repository.LandPrice.LandPriceRepository;
+import com.myhome.repository.buildingRent.BuildingRentRepository;
 import com.myhome.repository.buildingSale.BuildingSaleRepository;
 import com.myhome.type.GovRequestUri;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +41,7 @@ public class GovServiceImpl implements GovService{
     private final ObjectMapper objectMapper;
     private final LandPriceRepository landPriceRepository;
     private final BuildingSaleRepository buildingSaleRepository;
+    private final BuildingRentRepository buildingRentRepository;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -68,8 +68,8 @@ public class GovServiceImpl implements GovService{
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public BuildingSaleDto.openApiResponse requestBuildingSalesApi(BuildingSaleDto.openApiRequestParam requestParam) throws Exception {
-        GovRequestUri requestUrl = requestParam.getBuildingType().getGovRequestUri();
+    public BuildingSaleDto.openApiResponse requestBuildingSaleApi(BuildingSaleDto.openApiRequestParam requestParam) throws Exception {
+        GovRequestUri requestUrl = requestParam.getBuildingType().getBuildingSaleUri(); //건물 실거래 요청 uri
         String response = this.requestGov(requestParam, requestUrl); //request 요청
 
         //XML to Json parsing
@@ -97,6 +97,40 @@ public class GovServiceImpl implements GovService{
         BuildingSale.request request = new BuildingSale.request(requestParam.getLawdCd(), requestParam.getDealYmd(), requestParam.getBuildingType());
         BuildingSale buildingSale = new BuildingSale(request, responseList);
         buildingSaleRepository.save(buildingSale);
+
+        return openApiResponse;
+    }
+
+    @Override
+    public BuildingRentDto.openApiResponse requestBuildingRentApi(BuildingRentDto.openApiRequestParam requestParam) throws Exception {
+        GovRequestUri requestUrl = requestParam.getBuildingType().getBuildingRentUri(); //건물 전월세 요청 uri
+        String response = this.requestGov(requestParam, requestUrl); //request 요청
+
+        //XML to Json parsing
+        JSONObject jsonObj = XML.toJSONObject(response);
+        JsonNode jsonNode = objectMapper.readTree(jsonObj.get("response").toString());
+
+        List<BuildingRentDto.rentInfo> openApiList = new ArrayList<>();
+        int totalCount = jsonNode.path("body").get("totalCount").asInt();
+        jsonNode = objectMapper.readTree(jsonNode.path("body").get("items").toString());
+
+        if (totalCount == 1) { //한건만 있는 경우 리스트 변환시 예외 발생하므로 따로 관리함
+            openApiList.add(objectMapper.readValue(jsonNode.path("item").toString()
+                    , new TypeReference<BuildingRentDto.rentInfo>() {}));
+        } else if (totalCount > 1) { //조회 결과가 2건 이상이면
+            openApiList = objectMapper.readValue(jsonNode.path("item").toString()
+                    , new TypeReference<List<BuildingRentDto.rentInfo>>(){});
+        }
+
+        //response 결과 저장
+        BuildingRentDto.openApiResponse openApiResponse = new BuildingRentDto.openApiResponse(openApiList, totalCount);
+
+        //mongo에 request : {} , response : {} 형태로 저장
+        List<BuildingRent.detail> responseList =
+                openApiList.stream().map(BuildingRentDto.rentInfo::toDocument).collect(Collectors.toList());
+        BuildingRent.request request = new BuildingRent.request(requestParam.getLawdCd(), requestParam.getDealYmd(), requestParam.getBuildingType());
+        BuildingRent buildingRent = new BuildingRent(request, responseList);
+        buildingRentRepository.save(buildingRent);
 
         return openApiResponse;
     }

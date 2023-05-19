@@ -9,21 +9,21 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
-@Document(collection = "building_sale")
+@Document(collection = "building_rent")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class BuildingSale {
+public class BuildingRent {
 
     @MongoId
     private String id;
 
-    private BuildingSale.request request;
-    private BuildingSale.response response;
+    private BuildingRent.request request;
+    private BuildingRent.response response;
 
-    public BuildingSale(BuildingSale.request request, List<BuildingSale.detail> detailList) {
+    public BuildingRent(BuildingRent.request request, List<BuildingRent.detail> detailList) {
         this.id = request.getDealYmd() + request.getBuildingType() + request.getLawdCd();
         this.request = request;
-        this.response = new BuildingSale.response(detailList);
+        this.response = new BuildingRent.response(detailList);
     }
 
     @Getter
@@ -52,25 +52,27 @@ public class BuildingSale {
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class detail{
-        private BigDecimal price;
-        private String buildingName;
-        private String year;
-        private String month;
-        private String day;
-        private String postCode;
-        private String reginCode;
-        private String streetName;
-        private String floor;
-        private String area;
+        private BigDecimal rentPrice; //월세금액
+        private BigDecimal deposit; //보증금액
+        private String buildingName; //건물명
+        private String year; //연
+        private String month; //월
+        private String day; //일
+        private String postCode; //지번
+        private String reginCode; //지역코드
+        private String streetName; //법정동
+        private String floor; //층
+        private String area; //전용면적
 
         @Builder
-        public detail(BigDecimal price, String buildingName, String year, String month, String day, String postCode, String reginCode, String streetName, String floor, String area) {
-            this.price = price;
-            this.buildingName = buildingName;
+        public detail(BigDecimal rentPrice, BigDecimal deposit, String buildingName, String year, String month, String day, String postCode, String reginCode, String streetName, String floor, String area) {
+            this.rentPrice = rentPrice;
+            this.deposit = deposit;
             this.year = year;
             this.month = month;
             this.day = day;
             this.postCode = postCode;
+            this.buildingName = buildingName;
             this.reginCode = reginCode;
             this.streetName = streetName;
             this.floor = floor;
