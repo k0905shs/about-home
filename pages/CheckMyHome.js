@@ -184,6 +184,7 @@ const CheckMyHome = () => {
           query: {
             response1: JSON.stringify(res.data.response1),
             response2: JSON.stringify(res.data.response2),
+            response3: JSON.stringify(res.data.response3),
             result: newResult,
           },
         });

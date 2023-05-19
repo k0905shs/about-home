@@ -66,6 +66,7 @@ const RealLandPrice = ({ response2 }) => {
             date,
             price: building.price,
             saleDate: formattedSaleDate,
+            area: building.area,
             floor: building.floor,
           });
         });
@@ -186,7 +187,7 @@ const RealLandPrice = ({ response2 }) => {
           >
             <XAxis
               dataKey="date"
-              label={{ value: "년/월", position: "bottom", offset: 0 }}
+              label={{ value: "년.월", position: "bottom", offset: 0 }}
               interval={3}
             />
             <YAxis
@@ -213,68 +214,54 @@ const RealLandPrice = ({ response2 }) => {
           </ComposedChart>
         </ResponsiveContainer>
 
-        <div>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <h5 style={{ paddingTop: "10px", marginRight: "10px" }}>
-              평균 실거래가 참고사항
-            </h5>
-            <Button variant="outline-primary" onClick={handleShow} size="sm">
-              실거래가 확인
-            </Button>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <h5 style={{ paddingTop: "10px", marginRight: "10px" }}>
+            평균 실거래가 참고사항
+          </h5>
+          <Button variant="outline-primary" onClick={handleShow} size="sm">
+            실거래가 확인
+          </Button>
 
-            <Modal show={showModal} onHide={handleClose}>
-              <Modal.Header closeButton>
-                <Modal.Title>실거래가</Modal.Title>
-                <div
-                  style={{
-                    marginLeft: "auto",
-                    fontSize: "14px",
-                    color: "gray",
-                  }}
-                >
-                  {getCurrentYearAndMonth()} 국토교통부 기준
-                </div>
-              </Modal.Header>
-              <Modal.Body>
-                <Table striped bordered hover>
-                  <thead>
-                    <tr>
-                      <th>계약월</th>
-                      <th>매매가</th>
+          <Modal show={showModal} onHide={handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>실거래가</Modal.Title>
+              <div
+                style={{
+                  marginLeft: "10px",
+                  fontSize: "14px",
+                  color: "gray",
+                }}
+              >
+                {getCurrentYearAndMonth()} 국토교통부 기준
+              </div>
+            </Modal.Header>
+            <Modal.Body>
+              <Table striped bordered hover>
+                <thead>
+                  <tr>
+                    <th>계약월</th>
+                    <th>매매가</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {realPiceStackData.map((price, index) => (
+                    <tr key={index}>
+                      <td>{price.date}</td>
+                      <td>
+                        {commaFormat(price.price)}만원, {price.saleDate},{" "}
+                        {price.floor}층, 전용면적 {price.area}(㎡)
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {realPiceStackData.map((price, index) => (
-                      <tr key={index}>
-                        <td>{price.date}</td>
-                        <td>
-                          {commaFormat(price.price)}만원, {price.saleDate}, (
-                          {price.floor}
-                          층)
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              </Modal.Body>
-              <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
-                  Close
-                </Button>
-              </Modal.Footer>
-            </Modal>
-          </div>
-          <p>1. 실거래가 없는 달은 노출되지 않아요!</p>
-          <p>
-            2. 평균 실거래가는 단순한 평균 값이며, 개별 매매 거래 가격은 상이할
-            수 있어요!
-            <br /> 따라서 실제 거래 시 가격 협상이 이루어지며, 매매 가격은
-            실거래가보다 낮거나 높을 수 있어요!!
-          </p>
-          <p>
-            3. 평균 실거래가는 시장의 경향을 파악하는 데 도움을 줄 수 있지만,
-            개별 지번의 가치를 판단하는 데에는 절대적인 기준이 아니예요!
-          </p>
+                  ))}
+                </tbody>
+              </Table>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
         </div>
       </Container>
     </>
