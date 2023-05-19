@@ -4,7 +4,7 @@ import OfficialLandPrice from "./components/Result/OfficialLandPrice";
 import { Container, Tab, Tabs } from "react-bootstrap";
 import HighDelinquent from "./components/Result/HighDelinquent";
 import LongtermRent from "./components/Result/LongtermRent";
-import MonthlyRent from "./components/Result/MonthlyRent";
+
 import CheckInfo from "./components/Result/CheckInfo";
 
 const ResultPage = () => {
