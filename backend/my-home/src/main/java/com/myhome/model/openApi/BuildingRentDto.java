@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.myhome.collection.BuildingSale;
+import com.myhome.collection.BuildingRent;
 import com.myhome.type.BuildingType;
 import com.myhome.type.ResponseFormat;
 import lombok.AccessLevel;
@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class BuildingSaleDto {
+public class BuildingRentDto {
 
     @Getter
     public static class openApiRequestParam extends GovCommonDto{
@@ -39,11 +39,11 @@ public class BuildingSaleDto {
     @JsonIgnoreProperties(ignoreUnknown=true)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class openApiResponse{
-        private List<BuildingSaleDto.salesInfo> infoList;
+        private List<BuildingRentDto.rentInfo> infoList;
         private int totalCount;
 
         @Builder
-        public openApiResponse(List<salesInfo> infoList, int totalCount) {
+        public openApiResponse(List<rentInfo> infoList, int totalCount) {
             this.infoList = infoList;
             this.totalCount = totalCount;
         }
@@ -52,8 +52,9 @@ public class BuildingSaleDto {
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @JsonIgnoreProperties(ignoreUnknown=true)
-    public static class salesInfo{
-        private BigDecimal price; //만 단위
+    public static class rentInfo{
+        private BigDecimal rentPrice; //월세금액
+        private BigDecimal deposit; //보증금액
         private String buildingName;
         @JsonProperty("년")
         private String year;
@@ -72,10 +73,17 @@ public class BuildingSaleDto {
         @JsonProperty("전용면적")
         private String area;
 
-        @JsonSetter("거래금액")
-        public void setPrice(String price) {
-            this.price = new BigDecimal(price.replace(" ", "").replace(",", ""));
+
+        @JsonSetter("월세금액")
+        public void setRentPrice(String rentPrice) {
+            this.rentPrice = new BigDecimal(rentPrice.replace(",", ""));
         }
+
+        @JsonSetter("보증금액")
+        public void setDeposit(String deposit) {
+            this.deposit = new BigDecimal(deposit.replace(",", ""));
+        }
+
         @JsonSetter("아파트")
         public void setBuildingName1(String buildingName) {
             this.buildingName = buildingName;
@@ -89,9 +97,10 @@ public class BuildingSaleDto {
             this.buildingName = buildingName;
         }
 
-        public BuildingSale.detail toDocument(){
-            return BuildingSale.detail.builder()
-                    .price(this.price).buildingName(this.buildingName).year(this.year)
+        public BuildingRent.detail toDocument(){
+            return BuildingRent.detail.builder()
+                    .rentPrice(this.rentPrice).deposit(this.deposit)
+                    .buildingName(this.buildingName).year(this.year)
                     .month(this.month).day(this.day).postCode(this.postCode)
                     .reginCode(this.reginCode).streetName(this.streetName)
                     .floor(this.floor).area(this.area)

@@ -1,13 +1,16 @@
 package com.myhome.service;
 
 
+import com.myhome.collection.BuildingRent;
 import com.myhome.collection.BuildingSale;
 import com.myhome.collection.LandPrice;
 import com.myhome.model.homeCheck.HomeCheckDto;
+import com.myhome.model.openApi.BuildingRentDto;
 import com.myhome.model.openApi.BuildingSaleDto;
 import com.myhome.model.openApi.LandPriceDto;
-import com.myhome.repository.LandPrice.LandPriceRepositorySupport;
-import com.myhome.repository.buildingSale.BuildingSaleRepositorySupport;
+import com.myhome.repository.LandPrice.LandPriceRepository;
+import com.myhome.repository.buildingRent.BuildingRentRepository;
+import com.myhome.repository.buildingSale.BuildingSaleRepository;
 import com.myhome.util.AddressCodeUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,13 +30,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class HomeCheckServiceImpl implements HomeCheckService {
 
-    private final LandPriceRepositorySupport landPriceRepositorySupport;
-    private final BuildingSaleRepositorySupport buildingSaleRepositorySupport;
+    private final LandPriceRepository landPriceRepository;
+    private final BuildingSaleRepository buildingSaleRepository;
+    private final BuildingRentRepository buildingRentRepository;
     private final GovService govService;
 
     @Override
     public HomeCheckDto.checkLandPriceResult checkLandPrice(HomeCheckDto.checkLandPriceParam checkLandPriceParam) throws Exception {
-        List<LandPrice> checkLandPriceList = landPriceRepositorySupport.findLandPriceList(checkLandPriceParam);
+        List<LandPrice> checkLandPriceList = landPriceRepository.findLandPriceList(checkLandPriceParam);
 
         String pnu = AddressCodeUtils.getPnu(checkLandPriceParam.getBuildingCode(), checkLandPriceParam.getJibun());
         int searchYear = checkLandPriceParam.getSearchYear();
@@ -53,7 +57,7 @@ public class HomeCheckServiceImpl implements HomeCheckService {
                      govService.requestLandPriceApi(new LandPriceDto.openApiRequestParam(pnu, String.valueOf(i), 1, 1));
                 }
             }
-            checkLandPriceList = landPriceRepositorySupport.findLandPriceList(checkLandPriceParam); //쿼리 재실행
+            checkLandPriceList = landPriceRepository.findLandPriceList(checkLandPriceParam); //쿼리 재실행
         }
 
         //entity to dto
@@ -72,7 +76,7 @@ public class HomeCheckServiceImpl implements HomeCheckService {
     @Override
     public List<HomeCheckDto.checkBuildingSaleResult> checkBuildingSale(HomeCheckDto.checkBuildingSaleParam checkBuildingSaleParam) throws Exception {
         List<BuildingSale> buildingSaleList =
-                buildingSaleRepositorySupport.findBuildingSaleList(checkBuildingSaleParam); //입력 받은 param으로 추출한 도큐먼트 리스트
+                buildingSaleRepository.findBuildingSaleList(checkBuildingSaleParam); //입력 받은 param으로 추출한 도큐먼트 리스트
 
         //Document list -> dto List
         List<HomeCheckDto.checkBuildingSaleResult> results =
@@ -101,19 +105,66 @@ public class HomeCheckServiceImpl implements HomeCheckService {
         boolean reCheck = false;
         for (String dealYmd : searchTargetList) { //개별 API 재실행
             BuildingSaleDto.openApiResponse openApiResponse =
-                    govService.requestBuildingSalesApi(new BuildingSaleDto.openApiRequestParam(lawdCd, dealYmd, checkBuildingSaleParam.getBuildingType()));
+                    govService.requestBuildingSaleApi(new BuildingSaleDto.openApiRequestParam(lawdCd, dealYmd, checkBuildingSaleParam.getBuildingType()));
             reCheck = true;
         }
 
         // 전체 로직 실행 후 request 추가 요청 있었으면 쿼리 재실행
         if (reCheck) {
             buildingSaleList =
-                    buildingSaleRepositorySupport.findBuildingSaleList(checkBuildingSaleParam); //입력 받은 param으로 추출한 도큐먼트 리스트
+                    buildingSaleRepository.findBuildingSaleList(checkBuildingSaleParam); //입력 받은 param으로 추출한 도큐먼트 리스트
 
             //Document list -> dto List
              results = buildingSaleList.stream()
                      .map(HomeCheckDto.checkBuildingSaleResult::new)
                      .collect(Collectors.toList());
+        }
+        return results;
+    }
+
+    @Override
+    public List<HomeCheckDto.checkBuildingRentResult> checkBuildingRent(HomeCheckDto.checkBuildingRentParam checkBuildingRentParam) throws Exception {
+        List<BuildingRent> buildingRentList = buildingRentRepository.findBuildingRentList(checkBuildingRentParam);
+        //Document list -> dto List
+        List<HomeCheckDto.checkBuildingRentResult> results =
+                buildingRentList.stream()
+                        .map(HomeCheckDto.checkBuildingRentResult::new)
+                        .collect(Collectors.toList());
+
+        //Document list -> 검색이 완료된 'dealYmd'
+        List<String> searchedDateList = results.stream()
+                .map(HomeCheckDto.checkBuildingRentResult::getDate)
+                .collect(Collectors.toList());
+
+        //검색 시작 년월
+        LocalDate searchStartDate = LocalDate.now().minusMonths(checkBuildingRentParam.getSearchMonth());
+        List<String> searchTargetList = new ArrayList<>();
+
+        //검색 시작일을 기준으로 검색해야 하는 날짜 리스트 추가
+        for (LocalDate ld = searchStartDate; ld.isBefore(LocalDate.now()); ld = ld.plusMonths(1)) {
+            String dealYmd = ld.format(DateTimeFormatter.ofPattern("YYYYMM"));
+            if (!searchedDateList.contains(dealYmd)) { //건물 실거래가 api 요청을 하지 않은 년월 리스트 추가
+                searchTargetList.add(dealYmd);
+            }
+        }
+
+        String lawdCd = AddressCodeUtils.getLawdCd(checkBuildingRentParam.getBuildingCode());
+        boolean reCheck = false;
+        for (String dealYmd : searchTargetList) { //개별 API 재실행
+            BuildingRentDto.openApiResponse openApiResponse =
+                    govService.requestBuildingRentApi(new BuildingRentDto.openApiRequestParam(lawdCd, dealYmd, checkBuildingRentParam.getBuildingType()));
+            reCheck = true;
+        }
+
+        // 전체 로직 실행 후 request 추가 요청 있었으면 쿼리 재실행
+        if (reCheck) {
+            buildingRentList =
+                    buildingRentRepository.findBuildingRentList(checkBuildingRentParam); //입력 받은 param으로 추출한 도큐먼트 리스트
+
+            //Document list -> dto List
+            results = buildingRentList.stream()
+                    .map(HomeCheckDto.checkBuildingRentResult::new)
+                    .collect(Collectors.toList());
         }
 
         return results;

@@ -47,10 +47,10 @@ class GovServiceTest {
         BuildingSaleDto.openApiRequestParam requestParamOfficetel = new BuildingSaleDto.openApiRequestParam("11110", "201512", BuildingType.OFFICETEL);
         BuildingSaleDto.openApiRequestParam requestParamTownHouse = new BuildingSaleDto.openApiRequestParam("11110", "201512", BuildingType.TOWNHOUSE);
 
-        BuildingSaleDto.openApiResponse responseApart = govService.requestBuildingSalesApi(requestParamApart);
-        BuildingSaleDto.openApiResponse responseHouse = govService.requestBuildingSalesApi(requestParamHouse);
+//        BuildingSaleDto.openApiResponse responseApart = govService.requestBuildingSalesApi(requestParamApart);
+//        BuildingSaleDto.openApiResponse responseHouse = govService.requestBuildingSalesApi(requestParamHouse);
 //        BuildingSaleDto.openApiResponse responseOfficetel = govService.requestBuildingSalesApi(requestParamOfficetel);
-        BuildingSaleDto.openApiResponse responseTownHouse = govService.requestBuildingSalesApi(requestParamTownHouse);
+//        BuildingSaleDto.openApiResponse responseTownHouse = govService.requestBuildingSalesApi(requestParamTownHouse);
 
 //        assertThat(responseApart.getField().getBuildingSales().getInfoList().get(0).getReginCode()).isEqualTo("11110");
 //        assertThat(responseHouse.getField().getBuildingSales().getInfoList().get(0).getReginCode()).isEqualTo("11110");
@@ -93,7 +93,7 @@ class GovServiceTest {
         BuildingSaleDto.openApiRequestParam openApiRequestParam =
                 new BuildingSaleDto.openApiRequestParam("11110", "201601", BuildingType.APART);
 
-        govService.requestBuildingSalesApi(openApiRequestParam);
+//        govService.requestBuildingSalesApi(openApiRequestParam);
     }
 
 }

@@ -23,9 +23,13 @@ public class HomeCheckController {
     }
 
     @PostMapping("check-building-sale")
-    public List<HomeCheckDto.checkBuildingSaleResult> checkBuildingSaleParam(@RequestBody final HomeCheckDto.checkBuildingSaleParam buildingSaleParam) throws Exception {
-        log.info(buildingSaleParam.toString());
-        return homeCheckService.checkBuildingSale(buildingSaleParam);
+    public List<HomeCheckDto.checkBuildingSaleResult> checkBuildingSaleParam(@RequestBody final HomeCheckDto.checkBuildingSaleParam checkBuildingSaleParam) throws Exception {
+        return homeCheckService.checkBuildingSale(checkBuildingSaleParam);
+    }
+
+    @PostMapping("check-building-rent")
+    public List<HomeCheckDto.checkBuildingRentResult> checkBuildingRentParam(@RequestBody final HomeCheckDto.checkBuildingRentParam checkBuildingRentParam) throws Exception {
+        return homeCheckService.checkBuildingRent(checkBuildingRentParam);
     }
 
 }

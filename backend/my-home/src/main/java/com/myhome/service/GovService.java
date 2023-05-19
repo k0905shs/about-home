@@ -1,5 +1,6 @@
 package com.myhome.service;
 
+import com.myhome.model.openApi.BuildingRentDto;
 import com.myhome.model.openApi.BuildingSaleDto;
 import com.myhome.model.openApi.LandPriceDto;
 import com.myhome.model.openApi.StanReginDto;
@@ -23,7 +24,16 @@ public interface GovService {
      * @return openApiResponse
      * @throws Exception
      */
-    BuildingSaleDto.openApiResponse requestBuildingSalesApi(final BuildingSaleDto.openApiRequestParam requestParam) throws Exception;
+    BuildingSaleDto.openApiResponse requestBuildingSaleApi(final BuildingSaleDto.openApiRequestParam requestParam) throws Exception;
+
+    /**
+     * 국토교통부 건물 카테고리별 전/월세 자료
+     * @param requestParam
+     * @return openApiResponse
+     * @throws Exception
+     */
+    BuildingRentDto.openApiResponse requestBuildingRentApi(final BuildingRentDto.openApiRequestParam requestParam) throws Exception;
+    
 
     /**
      * 행정안전부_행정표준코드_법정동코드
@@ -32,4 +42,5 @@ public interface GovService {
      * @throws Exception
      */
     StanReginDto.openApiResponse requestStanReginApi(final StanReginDto.openApiRequestParam requestParam) throws Exception;
+
 }

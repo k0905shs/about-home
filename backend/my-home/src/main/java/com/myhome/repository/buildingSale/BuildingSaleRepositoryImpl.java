@@ -8,23 +8,27 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.*;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.MatchOperation;
+import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
+import org.springframework.data.mongodb.core.aggregation.SortOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 import static org.springframework.data.mongodb.core.aggregation.ArrayOperators.Filter.filter;
 import static org.springframework.data.mongodb.core.aggregation.ComparisonOperators.Eq.valueOf;
 
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class BuildingSaleRepositorySupportImpl implements BuildingSaleRepositorySupport{
+public class BuildingSaleRepositoryImpl implements BuildingSaleCustomRepository<BuildingSale> {
+    //반드시 클래스명은 XXXRepositoryImpl 이어야 Spring data 에서 구현체로 인식할 수 있다.있다
 
     private final MongoTemplate mongoTemplate;
 
@@ -61,5 +65,19 @@ public class BuildingSaleRepositorySupportImpl implements BuildingSaleRepository
         );
 
         return mongoTemplate.aggregate(aggregation,"building_sale" ,BuildingSale.class).getMappedResults();
+    }
+
+    @Override
+    public BuildingSale save(BuildingSale buildingSale) {
+        Query query = new Query();
+        query.addCriteria(
+                new Criteria().andOperator(
+                        Criteria.where("request.dealYmd").gte(buildingSale.getRequest().getDealYmd()),
+                        Criteria.where("request.buildingType").is(buildingSale.getRequest().getBuildingType()),
+                        Criteria.where("request.lawdCd").is(buildingSale.getRequest().getLawdCd())
+                )
+        );
+        BuildingSale result = mongoTemplate.findOne(query, BuildingSale.class);
+        return result == null ? mongoTemplate.save(buildingSale) : result;
     }
 }

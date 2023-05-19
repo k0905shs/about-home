@@ -8,4 +8,6 @@ public interface HomeCheckService {
     HomeCheckDto.checkLandPriceResult checkLandPrice(final HomeCheckDto.checkLandPriceParam checkLandPriceParam) throws Exception;
 
     List<HomeCheckDto.checkBuildingSaleResult> checkBuildingSale(final HomeCheckDto.checkBuildingSaleParam buildingSaleParam) throws Exception;
+
+    List<HomeCheckDto.checkBuildingRentResult> checkBuildingRent(final HomeCheckDto.checkBuildingRentParam checkBuildingRentParam) throws Exception;
 }
