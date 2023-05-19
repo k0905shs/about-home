@@ -11,11 +11,19 @@ const HighDelinquent = () => {
     setShow(!show);
     setTarget(event.target);
   };
+
+  // 년, 월 노출 시키는 함수
+  const getCurrentYearAndMonth = () => {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
+    return `${year}.${month}`;
+  };
   return (
     <>
       <Container>
         <div style={{ display: "flex", alignItems: "center" }}>
-          <h2
+          <h3
             style={{
               paddingTop: "20px",
               marginRight: "10px",
@@ -23,7 +31,8 @@ const HighDelinquent = () => {
             }}
           >
             고액·상습 체납자 명단
-          </h2>
+          </h3>
+
           <div ref={ref}>
             <Button
               style={{ marginTop: "10px" }}
@@ -49,6 +58,9 @@ const HighDelinquent = () => {
             </Overlay>
           </div>
         </div>
+        <div style={{ marginBottom: "10px", fontSize: "14px", color: "gray" }}>
+          {getCurrentYearAndMonth()} 국세청 기준
+        </div>
         <Tabs
           defaultActiveKey="personal"
           id="fill-tab-example"
@@ -73,6 +85,9 @@ const HighDelinquent = () => {
           </Tab>
         </Tabs>
         <div style={{ marginTop: "20px" }}>
+          <h5 style={{ paddingTop: "10px", marginRight: "10px" }}>
+            고액·상습 체납자 참고사항
+          </h5>
           <p>1. 해당 명단은 고액·상습 체납자 명단이예요!</p>
           <p>
             2. 해당 명단에 없어도 세금 미납, 체납 내역이 있을 수도 있어요!!!
