@@ -216,7 +216,7 @@ const RealLandPrice = ({ response2 }) => {
 
         <div style={{ display: "flex", alignItems: "center" }}>
           <h5 style={{ paddingTop: "10px", marginRight: "10px" }}>
-            평균 실거래가 참고사항
+            실거래가 확인하기
           </h5>
           <Button variant="outline-primary" onClick={handleShow} size="sm">
             실거래가 확인

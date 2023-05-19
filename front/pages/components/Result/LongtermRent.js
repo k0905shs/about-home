@@ -234,7 +234,7 @@ const LongtermRent = ({ response3 }) => {
 
         <div style={{ display: "flex", alignItems: "center" }}>
           <h5 style={{ paddingTop: "10px", marginRight: "10px" }}>
-            평균 전세가 참고사항
+            전세가 확인하기
           </h5>
           <Button variant="outline-primary" onClick={handleShow} size="sm">
             전세가 확인
