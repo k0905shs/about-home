@@ -26,7 +26,6 @@ public class AddressCodeUtils {
         } else {
             sb.append(addZero(jibun, 4)).append("0000");
         }
-
         return sb.toString();
     }
 
@@ -36,7 +35,6 @@ public class AddressCodeUtils {
      * @return
      */
     public static String getPostCode(String buildingCode) {
-        //1126010200101260039
         String mainCode = removeZero(buildingCode.substring(11, 15));
         String subCode = removeZero(buildingCode.substring(15, 19));
         return StringUtils.isEmpty(subCode) ? mainCode : mainCode + "-" + subCode;
