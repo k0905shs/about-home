@@ -203,7 +203,7 @@ const CheckMyHome = () => {
       ) : (
         <Container style={{ width: "80%" }}>
           <h2 style={{ marginTop: "10px" }}>우리집 진단하기</h2>
-          <p style={{ fontWeight: "bold" }}>
+          <div style={{ fontWeight: "bold" }}>
             진단을 하려면 해당 주소의{" "}
             <a
               onClick={() => setOpen(!open)}
@@ -216,7 +216,7 @@ const CheckMyHome = () => {
               이 먼저 필요해요!
             </a>
             <Collapse in={open}>
-              <div id="example-collapse-text">
+              <div id="example-collapse-text" style={{ marginTop: "10px" }}>
                 <a href="http://www.iros.go.kr/PMainJ.jsp" target="_blank">
                   뽑으러 가기
                 </a>
@@ -224,7 +224,7 @@ const CheckMyHome = () => {
                 <a href="">뽑을줄 모른다면?</a>
               </div>
             </Collapse>
-          </p>
+          </div>
           <section>
             <Stack gap={2}>
               <Form noValidate validated={validated} onSubmit={handleSubmit}>
@@ -235,7 +235,7 @@ const CheckMyHome = () => {
                   <div
                     style={{
                       fontWeight: "500",
-                      marginTop: "10px",
+                      marginTop: "30px",
                       fontSize: "20px",
                     }}
                   >
