@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.data.mongodb.core.aggregation.SortOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -64,5 +65,19 @@ public class BuildingRentRepositoryImpl implements BuildingRentCustomRepository<
         );
 
         return mongoTemplate.aggregate(aggregation,"building_rent" ,BuildingRent.class).getMappedResults();
+    }
+
+    @Override
+    public BuildingRent save(BuildingRent buildingRent) {
+        Query query = new Query();
+        query.addCriteria(
+                new Criteria().andOperator(
+                        Criteria.where("request.dealYmd").gte(buildingRent.getRequest().getDealYmd()),
+                        Criteria.where("request.buildingType").is(buildingRent.getRequest().getBuildingType()),
+                        Criteria.where("request.lawdCd").is(buildingRent.getRequest().getLawdCd())
+                )
+        );
+        BuildingRent result = mongoTemplate.findOne(query, BuildingRent.class);
+        return result == null ? mongoTemplate.save(buildingRent) : result;
     }
 }

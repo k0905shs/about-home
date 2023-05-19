@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -40,5 +41,18 @@ public class LandPriceRepositoryImpl implements LandPriceCustomRepository<LandPr
         );
 
         return mongoTemplate.aggregate(aggregation,"land_price" , LandPrice.class).getMappedResults();
+    }
+
+    @Override
+    public LandPrice save(LandPrice landPrice) {
+        Query query = new Query();
+        query.addCriteria(
+                new Criteria().andOperator(
+                        Criteria.where("request.pnu").is(landPrice.getRequest().getPnu()),
+                        Criteria.where("request.stdrYear").gte(landPrice.getRequest().getStdrYear())
+                )
+        );
+        LandPrice savedDoc = mongoTemplate.findOne(query, LandPrice.class);
+        return savedDoc == null ? mongoTemplate.save(landPrice) : savedDoc;
     }
 }

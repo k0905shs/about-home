@@ -4,6 +4,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
@@ -11,15 +13,13 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 @Document(collection = "land_price")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LandPrice {
-
     @MongoId
-    private String id;
-
+    private ObjectId id;
+    @Indexed(unique = true)
     private LandPrice.request request;
     private LandPrice.response response;
 
     public LandPrice(LandPrice.request request, LandPrice.response response) {
-        this.id = request.getPnu() + request.getStdrYear();
         this.request = request;
         this.response = response != null ? response : new response();
     }

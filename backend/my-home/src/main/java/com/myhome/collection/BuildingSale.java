@@ -2,6 +2,8 @@ package com.myhome.collection;
 
 import com.myhome.type.BuildingType;
 import lombok.*;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
@@ -13,15 +15,13 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 public class BuildingSale {
-
     @MongoId
-    private String id;
-
+    private ObjectId id;
+    @Indexed(unique = true)
     private BuildingSale.request request;
     private BuildingSale.response response;
 
     public BuildingSale(BuildingSale.request request, List<BuildingSale.detail> detailList) {
-        this.id = request.getDealYmd() + request.getBuildingType() + request.getLawdCd();
         this.request = request;
         this.response = new BuildingSale.response(detailList);
     }

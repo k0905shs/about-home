@@ -166,6 +166,7 @@ public class HomeCheckServiceImpl implements HomeCheckService {
                     .map(HomeCheckDto.checkBuildingRentResult::new)
                     .collect(Collectors.toList());
         }
+
         return results;
     }
 }

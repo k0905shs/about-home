@@ -11,4 +11,11 @@ public interface BuildingRentCustomRepository<T>{
      * @return
      */
     List<T> findBuildingRentList(final HomeCheckDto.checkBuildingRentParam checkBuildingRentParam);
+
+    /**
+     * index key duplicated key 예외 발생 가능성 문제
+     * @param t
+     * @return
+     */
+    T save(final T t);
 }
