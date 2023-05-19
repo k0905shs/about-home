@@ -68,9 +68,10 @@ const LongtermRent = ({ response3 }) => {
     const { date, deposit } = item;
 
     const year = date.substring(0, 4); // 년도 추출
-    const quarter = Math.ceil(Number(date.substring(4, 6)) / 3); // 분기 계산
+    const month = date.substring(4, 6); // 월 추출
+    const quarter = Math.ceil(Number(month) / 3); // 분기 계산
 
-    const key = `${year}.${quarter}`; // 분기를 포함한 키 생성
+    const key = `${year}.${quarter}분기`; // 분기를 포함한 키 생성
 
     if (!acc[key]) {
       acc[key] = {
@@ -96,6 +97,8 @@ const LongtermRent = ({ response3 }) => {
       averageDeposit,
     });
   }
+
+  console.log(LongtermRentAverageData);
 
   // 년, 월 노출 시키는 함수
   const getCurrentYearAndMonth = () => {
@@ -201,7 +204,7 @@ const LongtermRent = ({ response3 }) => {
           >
             <XAxis
               dataKey="quarter"
-              label={{ value: "년", position: "bottom", offset: 0 }}
+              label={{ value: "분기", position: "bottom", offset: 0 }}
             />
             <YAxis
               type="number"
