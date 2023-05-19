@@ -29,8 +29,13 @@ export default function handler(req, res) {
       realLandPrice
     );
 
-    Promise.allSettled([request1, request2])
-      .then(([response1, response2]) => {
+    const request3 = axios.post(
+      "http://211.218.1.46:28080/home/check-building-rent",
+      realLandPrice
+    );
+
+    Promise.allSettled([request1, request2, request3])
+      .then(([response1, response2, response3]) => {
         if (response1.status === "fulfilled") {
           console.log("공시지가 요청 성공", response1.value.data);
         } else {
@@ -43,13 +48,26 @@ export default function handler(req, res) {
           console.log("실거래가 요청 실패", response2.reason);
         }
 
+        if (response3.status === "fulfilled") {
+          console.log("전월세 거래 요청 성공", response3.value.data);
+        } else {
+          console.log("전월세 거래 요청 실패", response3.reason);
+        }
+
         const responseData1 =
           response1.status === "fulfilled" ? response1.value.data : null;
         const responseData2 =
           response2.status === "fulfilled" ? response2.value.data : null;
+        const responseData3 =
+          response3.status === "fulfilled" ? response3.value.data : null;
 
-        res.json({ response1: responseData1, response2: responseData2 });
+        res.json({
+          response1: responseData1,
+          response2: responseData2,
+          response3: responseData3,
+        });
       })
+
       .catch((error) => {
         res.status(500).json({ message: "요청 실패", error: error.message });
       });
