@@ -3,6 +3,9 @@ import RealLandPrice from "./components/Result/RealLandPrice";
 import OfficialLandPrice from "./components/Result/OfficialLandPrice";
 import { Container, Tab, Tabs } from "react-bootstrap";
 import HighDelinquent from "./components/Result/HighDelinquent";
+import LongtermRent from "./components/Result/LongtermRent";
+import MonthlyRent from "./components/Result/MonthlyRent";
+import CheckInfo from "./components/Result/CheckInfo";
 
 const ResultPage = () => {
   const router = useRouter();
@@ -21,6 +24,8 @@ const ResultPage = () => {
           <Container>
             <OfficialLandPrice response1={response1}></OfficialLandPrice>
             <RealLandPrice response2={response2}></RealLandPrice>
+            <LongtermRent response3={response3}></LongtermRent>
+            <CheckInfo></CheckInfo>
           </Container>
         </Tab>
         <Tab eventKey="HighDelinquent" title="고액 체납자 조회">
