@@ -176,8 +176,7 @@ const CheckMyHome = () => {
         const res = await axios.post("/api/check", {
           result: newResult,
         });
-        console.log("API 응답", res);
-        console.log("res.data", res.data);
+
         setIsLoading(false);
 
         router.push({
@@ -305,7 +304,7 @@ const CheckMyHome = () => {
                   <Form.Label>
                     <h5 style={{ marginTop: "20px" }}>소재지</h5>
                   </Form.Label>{" "}
-                  <Button type="button" onClick={handleOpenPostcode}>
+                  <Button type="button" onClick={handleOpenPostcode} size="sm">
                     검색
                   </Button>
                   {showDaumPostcode && (
