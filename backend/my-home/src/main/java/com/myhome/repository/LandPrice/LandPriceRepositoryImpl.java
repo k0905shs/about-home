@@ -19,10 +19,9 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class LandPriceRepositorySupportImpl implements LandPriceRepositorySupport{
+public class LandPriceRepositoryImpl implements LandPriceCustomRepository<LandPrice> {
 
     private final MongoTemplate mongoTemplate;
-
 
     @Override
     public List<LandPrice> findLandPriceList(HomeCheckDto.checkLandPriceParam checkLandPriceParam) {

@@ -6,8 +6,8 @@ import com.myhome.collection.LandPrice;
 import com.myhome.model.homeCheck.HomeCheckDto;
 import com.myhome.model.openApi.BuildingSaleDto;
 import com.myhome.model.openApi.LandPriceDto;
-import com.myhome.repository.LandPrice.LandPriceRepositorySupport;
-import com.myhome.repository.buildingSale.BuildingSaleRepositorySupport;
+import com.myhome.repository.LandPrice.LandPriceRepository;
+import com.myhome.repository.buildingSale.BuildingSaleRepository;
 import com.myhome.util.AddressCodeUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,13 +27,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class HomeCheckServiceImpl implements HomeCheckService {
 
-    private final LandPriceRepositorySupport landPriceRepositorySupport;
-    private final BuildingSaleRepositorySupport buildingSaleRepositorySupport;
+    private final LandPriceRepository landPriceRepository;
+    private final BuildingSaleRepository buildingSaleRepository;
     private final GovService govService;
 
     @Override
     public HomeCheckDto.checkLandPriceResult checkLandPrice(HomeCheckDto.checkLandPriceParam checkLandPriceParam) throws Exception {
-        List<LandPrice> checkLandPriceList = landPriceRepositorySupport.findLandPriceList(checkLandPriceParam);
+        List<LandPrice> checkLandPriceList = landPriceRepository.findLandPriceList(checkLandPriceParam);
 
         String pnu = AddressCodeUtils.getPnu(checkLandPriceParam.getBuildingCode(), checkLandPriceParam.getJibun());
         int searchYear = checkLandPriceParam.getSearchYear();
@@ -53,7 +53,7 @@ public class HomeCheckServiceImpl implements HomeCheckService {
                      govService.requestLandPriceApi(new LandPriceDto.openApiRequestParam(pnu, String.valueOf(i), 1, 1));
                 }
             }
-            checkLandPriceList = landPriceRepositorySupport.findLandPriceList(checkLandPriceParam); //쿼리 재실행
+            checkLandPriceList = landPriceRepository.findLandPriceList(checkLandPriceParam); //쿼리 재실행
         }
 
         //entity to dto
@@ -72,7 +72,7 @@ public class HomeCheckServiceImpl implements HomeCheckService {
     @Override
     public List<HomeCheckDto.checkBuildingSaleResult> checkBuildingSale(HomeCheckDto.checkBuildingSaleParam checkBuildingSaleParam) throws Exception {
         List<BuildingSale> buildingSaleList =
-                buildingSaleRepositorySupport.findBuildingSaleList(checkBuildingSaleParam); //입력 받은 param으로 추출한 도큐먼트 리스트
+                buildingSaleRepository.findBuildingSaleList(checkBuildingSaleParam); //입력 받은 param으로 추출한 도큐먼트 리스트
 
         //Document list -> dto List
         List<HomeCheckDto.checkBuildingSaleResult> results =
@@ -108,7 +108,7 @@ public class HomeCheckServiceImpl implements HomeCheckService {
         // 전체 로직 실행 후 request 추가 요청 있었으면 쿼리 재실행
         if (reCheck) {
             buildingSaleList =
-                    buildingSaleRepositorySupport.findBuildingSaleList(checkBuildingSaleParam); //입력 받은 param으로 추출한 도큐먼트 리스트
+                    buildingSaleRepository.findBuildingSaleList(checkBuildingSaleParam); //입력 받은 param으로 추출한 도큐먼트 리스트
 
             //Document list -> dto List
              results = buildingSaleList.stream()
