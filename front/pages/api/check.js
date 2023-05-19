@@ -20,9 +20,6 @@ export default function handler(req, res) {
       searchMonth: 24,
     };
 
-    console.log("officialLandPrice", officialLandPrice);
-    console.log("realLandPrice", realLandPrice);
-
     const request1 = axios.post(
       "http://211.218.1.46:28080/home/check-land-price",
       officialLandPrice

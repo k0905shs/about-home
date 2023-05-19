@@ -12,7 +12,6 @@ const ResultPage = () => {
       <Container>
         <OfficialLandPrice response1={response1}></OfficialLandPrice>
         <RealLandPrice response2={response2}></RealLandPrice>
-        {result}
       </Container>
     </>
   );
