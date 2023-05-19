@@ -102,6 +102,7 @@ const Footer = () => {
         }}
       >
         <p> © 2023 cmoonjun11@gmail.com</p>
+        <p> © 2023 k0905sh@kakao.com</p>
         <FlexContainer>
           <h5>공유하기</h5>
           <GridContainer>
