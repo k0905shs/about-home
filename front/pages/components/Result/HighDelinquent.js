@@ -1,6 +1,12 @@
 import React, { useState, useRef } from "react";
 import { Tab, Tabs } from "react-bootstrap";
-import { Button, Overlay, Popover, Container } from "react-bootstrap";
+import {
+  Button,
+  Overlay,
+  Popover,
+  Container,
+  Accordion,
+} from "react-bootstrap";
 const HighDelinquent = () => {
   // 툴팁 제어
   const [show, setShow] = useState(false);
@@ -84,19 +90,25 @@ const HighDelinquent = () => {
             />{" "}
           </Tab>
         </Tabs>
-        <div style={{ marginTop: "20px" }}>
-          <h5 style={{ paddingTop: "10px", marginRight: "10px" }}>
-            고액·상습 체납자 참고사항
-          </h5>
-          <p>1. 해당 명단은 고액·상습 체납자 명단이예요!</p>
-          <p>
-            2. 해당 명단에 없어도 세금 미납, 체납 내역이 있을 수도 있어요!!!
-          </p>
-          <p>
-            3. 관할청의 <strong>미납조세 정보조회</strong>를 하면 보다 정확하게
-            확인할 수 있어요!
-            <br /> 개인정보의 문제로 본인이 아니면 확인하기 어려워요ㅠ
-          </p>
+
+        <div style={{ paddingTop: "30px", marginRight: "10px" }}>
+          <Accordion defaultActiveKey={["0"]} alwaysOpen>
+            <Accordion.Item eventKey="0">
+              <Accordion.Header> 고액·상습 체납자 참고사항</Accordion.Header>
+              <Accordion.Body>
+                <p>1. 해당 명단은 고액·상습 체납자 명단이예요!</p>
+                <p>
+                  2. 해당 명단에 없어도 세금 미납, 체납 내역이 있을 수도
+                  있어요!!!
+                </p>
+                <p>
+                  3. 관할청의 <strong>미납조세 정보조회</strong>를 하면 보다
+                  정확하게 확인할 수 있어요!
+                  <br /> 개인정보의 문제로 본인이 아니면 확인하기 어려워요ㅠ
+                </p>
+              </Accordion.Body>
+            </Accordion.Item>
+          </Accordion>
         </div>
       </Container>
     </>
