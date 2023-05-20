@@ -1,8 +1,6 @@
 import React from "react";
 
 const TopPriorityRightToCompensation = ({ parsedResult }) => {
-  console.log("최우선변제권", parsedResult.address);
-
   return (
     <>
       <div>
