@@ -59,10 +59,11 @@ const OfficialLandPrice = ({ response1 }) => {
   if (landPrice.count === 0) {
     return (
       <>
-        <h4 style={{ marginTop: "10px" }}>공시지가 데이터가 없습니다.</h4>
+        <h4 style={{ marginTop: "30px" }}>공시지가 데이터가 없습니다.</h4>
         <div>
           <h6>왜 공시지가 데이터가 없나요?</h6>
-          <li>건물 유형을 확인해주세요</li>
+          <li>건물 유형을 확인해주세요!!</li>
+          <li>신축 건물이면 아직 없을 수 있어요!</li>
         </div>
       </>
     );
