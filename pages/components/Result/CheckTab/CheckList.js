@@ -16,6 +16,8 @@ const CheckList = ({ parsedResult }) => {
           } else if (item === "provisionalRegistration") {
             return "가등기";
           }
+          // 모든 경우에 값을 반환하도록 추가
+          return null;
         })
       : [];
   let strPurchaser = modifiedPurchaser.join(", ");
@@ -30,6 +32,8 @@ const CheckList = ({ parsedResult }) => {
           } else if (item === "LongtermRent") {
             return "전세권";
           }
+          // 모든 경우에 값을 반환하도록 추가
+          return null;
         })
       : [];
 
