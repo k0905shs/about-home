@@ -68,9 +68,10 @@ const LongtermRent = ({ response3 }) => {
     const { date, deposit } = item;
 
     const year = date.substring(0, 4); // 년도 추출
-    const quarter = Math.ceil(Number(date.substring(4, 6)) / 3); // 분기 계산
+    const month = date.substring(4, 6); // 월 추출
+    const quarter = Math.ceil(Number(month) / 3); // 분기 계산
 
-    const key = `${year}.${quarter}`; // 분기를 포함한 키 생성
+    const key = `${year}.${quarter}분기`; // 분기를 포함한 키 생성
 
     if (!acc[key]) {
       acc[key] = {
@@ -142,7 +143,7 @@ const LongtermRent = ({ response3 }) => {
   if (LongtermRentAverageData.length === 0) {
     return (
       <>
-        <h4 style={{ marginTop: "10px" }}>실거래 데이터가 없습니다.</h4>
+        <h4 style={{ marginTop: "10px" }}>전세 실거래 데이터가 없습니다.</h4>
         <div>
           <h6>왜 실거래 데이터가 없나요?</h6>
           <li>건물 유형을 확인해주세요</li>
@@ -201,7 +202,8 @@ const LongtermRent = ({ response3 }) => {
           >
             <XAxis
               dataKey="quarter"
-              label={{ value: "년", position: "bottom", offset: 0 }}
+              label={{ value: "분기", position: "bottom", offset: 0 }}
+              interval={3}
             />
             <YAxis
               type="number"
