@@ -156,7 +156,7 @@ const CheckMyHome = () => {
       deposit: inputVal.deposit,
       rentalFee: inputVal.rentalFee,
       purchaser: inputVal.purchaser,
-      providere: inputVal.provider,
+      provider: inputVal.provider,
       collateral: inputVal.collateral,
       postcode: postcode,
       buildingcode: buildingcode,
@@ -179,15 +179,19 @@ const CheckMyHome = () => {
 
         setIsLoading(false);
 
-        router.push({
-          pathname: "/ResultPage",
-          query: {
-            response1: JSON.stringify(res.data.response1),
-            response2: JSON.stringify(res.data.response2),
-            response3: JSON.stringify(res.data.response3),
-            result: newResult,
+        router.push(
+          {
+            pathname: "/ResultPage",
+            query: {
+              response1: JSON.stringify(res.data.response1),
+              response2: JSON.stringify(res.data.response2),
+              response3: JSON.stringify(res.data.response3),
+              result: JSON.stringify(newResult),
+            },
           },
-        });
+          "/ResultPage",
+          { shallow: true }
+        );
       } catch (error) {
         // API 호출 중에 오류가 발생한 경우, 에러를 처리합니다.
         setIsLoading(false);
@@ -386,15 +390,6 @@ const CheckMyHome = () => {
                       onChange={handleCheckboxChangePurchaser}
                       inline
                     />
-                    <Form.Check
-                      type="checkbox"
-                      name="purchaser"
-                      label="없음"
-                      value="none"
-                      checked={inputVal.purchaser.includes("none")}
-                      onChange={handleCheckboxChangePurchaser}
-                      inline
-                    />
                   </Form.Group>
                   <Form.Label>
                     <h5 style={{ marginTop: "20px" }}>을구 </h5>
@@ -413,9 +408,9 @@ const CheckMyHome = () => {
                     <Form.Check
                       type="checkbox"
                       name="provider"
-                      label="없음"
-                      value="none"
-                      checked={inputVal.provider.includes("none")}
+                      label="전세권"
+                      value="LongtermRent"
+                      checked={inputVal.provider.includes("LongtermRent")}
                       onChange={handleCheckboxChangeProvider}
                       inline
                     />
