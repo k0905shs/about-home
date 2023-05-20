@@ -1,15 +1,18 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { Container, Tab, Tabs } from "react-bootstrap";
+
+//page
 import RealLandPrice from "./components/Result/RealLandPrice";
 import OfficialLandPrice from "./components/Result/OfficialLandPrice";
-import { Container, Tab, Tabs } from "react-bootstrap";
 import HighDelinquent from "./components/Result/HighDelinquent";
 import LongtermRent from "./components/Result/LongtermRent";
-
 import CheckInfo from "./components/Result/CheckInfo";
+import Report from "./components/Result/Report";
 
 const ResultPage = () => {
   const router = useRouter();
+
   const {
     response1: initialResponse1,
     response2: initialResponse2,
@@ -21,6 +24,7 @@ const ResultPage = () => {
   const [response2, setResponse2] = useState(initialResponse2);
   const [response3, setResponse3] = useState(initialResponse3);
   const [result, setResult] = useState(initialResult);
+  const [address, setAddress] = useState("");
 
   useEffect(() => {
     // 컴포넌트가 마운트될 때 클라이언트 로컬스토리지에서 값 가져오기
@@ -39,7 +43,9 @@ const ResultPage = () => {
       setResponse3(storedResponse3);
     }
     if (storedResult && storedResult !== "undefined") {
+      const parsedResult = JSON.parse(storedResult);
       setResult(storedResult);
+      setAddress(parsedResult.address);
     }
   }, []);
 
@@ -51,7 +57,7 @@ const ResultPage = () => {
     localStorage.setItem("result", result);
   }, [response1, response2, response3, result]);
 
-  console.log("result", result);
+  console.log("result", address);
 
   const Separator = () => {
     return (
@@ -76,12 +82,12 @@ const ResultPage = () => {
       >
         <Tab eventKey="ResultPage" title="공시지가 / 실거래가">
           <Container>
+            <h2 style={{ marginTop: "40px" }}>{address}</h2>
             <OfficialLandPrice response1={response1}></OfficialLandPrice>
             <Separator />
             <RealLandPrice response2={response2}></RealLandPrice>
             <Separator />
             <LongtermRent response3={response3}></LongtermRent>
-
             <CheckInfo></CheckInfo>
           </Container>
         </Tab>
@@ -89,7 +95,7 @@ const ResultPage = () => {
           <HighDelinquent></HighDelinquent>
         </Tab>
         <Tab eventKey="Result" title="결과">
-          Tab content for Loooonger Tab
+          <Report result={result}></Report>
         </Tab>
       </Tabs>
     </>
