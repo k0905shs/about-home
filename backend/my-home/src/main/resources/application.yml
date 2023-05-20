@@ -28,9 +28,18 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 
-
-logging.level:
-  org.hibernate.SQL: debug
+#ant_path_matcher
+#logging.level:
+#  org :
+#    hibernate.SQL: debug
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          mongodb:
+            core:
+              MongoTemplate : DEBUG
 
 server:
   tomcat:
@@ -44,3 +53,4 @@ server:
 gov :
   service :
     key : 5TNF1XMQwRcgHri+3ukTRRSzwiUJnr5JP7SBMUscTWORWs3skuuyM3YfJZpXzUD+dE6ITSrQb1YJb29HHNEzng==
+
