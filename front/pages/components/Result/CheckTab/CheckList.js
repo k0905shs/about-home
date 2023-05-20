@@ -13,6 +13,7 @@ const CheckList = ({ parsedResult }) => {
       return "가등기";
     }
   });
+  let strPurchaser = modifiedPurchaser.join(", ");
 
   const modifiedProvider = parsedResult.provider.map((item) => {
     if (item === "leasehold") {
@@ -21,7 +22,8 @@ const CheckList = ({ parsedResult }) => {
       return "전세권";
     }
   });
-  console.log(modifiedProvider);
+
+  let strProvider = modifiedProvider.join(", ");
 
   return (
     <>
@@ -72,7 +74,7 @@ const CheckList = ({ parsedResult }) => {
       </section>
       <h5 style={{ marginTop: "30px" }}>
         해당 등기의 갑구에{" "}
-        <strong style={{ color: "red" }}>{modifiedPurchaser}</strong>
+        <strong style={{ color: "red" }}>{strPurchaser}</strong>
         {modifiedPurchaser.length > 0
           ? " 내용이 있어요!!! 정확한 권리사항 확인이 필요해 보여요!!"
           : "특이사항이 없어요!"}
@@ -111,7 +113,7 @@ const CheckList = ({ parsedResult }) => {
       </section>
       <h5 style={{ marginTop: "30px" }}>
         해당 등기의 을구에{" "}
-        <strong style={{ color: "red" }}>{modifiedProvider}</strong>
+        <strong style={{ color: "red" }}>{strProvider}</strong>
         {modifiedProvider.length > 0
           ? " 내용이 있어요!!! 정확한 권리사항 확인이 필요해 보여요!!"
           : "특이사항이 없어요!"}
