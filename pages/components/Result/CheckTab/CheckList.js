@@ -3,7 +3,9 @@ import { ListGroup, Accordion } from "react-bootstrap";
 
 const CheckList = ({ parsedResult }) => {
   const modifiedPurchaser =
-    parsedResult.purchaser && Array.isArray(parsedResult.purchaser)
+    parsedResult &&
+    parsedResult.purchaser &&
+    Array.isArray(parsedResult.purchaser)
       ? parsedResult.purchaser.map((item) => {
           if (item === "trust") {
             return "신탁";
