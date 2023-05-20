@@ -2,26 +2,34 @@ import React from "react";
 import { ListGroup, Accordion } from "react-bootstrap";
 
 const CheckList = ({ parsedResult }) => {
-  const modifiedPurchaser = parsedResult.purchaser.map((item) => {
-    if (item === "trust") {
-      return "신탁";
-    } else if (item === "provisionalSeizure") {
-      return "가압류 / 압류";
-    } else if (item === "injunction") {
-      return "가처분";
-    } else if (item === "provisionalRegistration") {
-      return "가등기";
-    }
-  });
+  const modifiedPurchaser =
+    parsedResult.purchaser && Array.isArray(parsedResult.purchaser)
+      ? parsedResult.purchaser.map((item) => {
+          if (item === "trust") {
+            return "신탁";
+          } else if (item === "provisionalSeizure") {
+            return "가압류 / 압류";
+          } else if (item === "injunction") {
+            return "가처분";
+          } else if (item === "provisionalRegistration") {
+            return "가등기";
+          }
+        })
+      : [];
   let strPurchaser = modifiedPurchaser.join(", ");
 
-  const modifiedProvider = parsedResult.provider.map((item) => {
-    if (item === "leasehold") {
-      return "임차권";
-    } else if (item === "LongtermRent") {
-      return "전세권";
-    }
-  });
+  const modifiedProvider =
+    parsedResult &&
+    parsedResult.provider &&
+    Array.isArray(parsedResult.provider)
+      ? parsedResult.provider.map((item) => {
+          if (item === "leasehold") {
+            return "임차권";
+          } else if (item === "LongtermRent") {
+            return "전세권";
+          }
+        })
+      : [];
 
   let strProvider = modifiedProvider.join(", ");
 
