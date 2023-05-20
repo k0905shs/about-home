@@ -1,11 +1,12 @@
 package com.myhome.service;
 
-import com.myhome.collection.LandPrice;
-import com.myhome.collection.StanRegin;
-import com.myhome.model.openApi.BuildingSaleDto;
-import com.myhome.model.openApi.LandPriceDto;
-import com.myhome.model.openApi.StanReginDto;
-import com.myhome.type.BuildingType;
+import com.myhome.checkHome.collection.LandPrice;
+import com.myhome.checkHome.collection.StanRegin;
+import com.myhome.checkHome.model.openApi.BuildingSaleDto;
+import com.myhome.checkHome.model.openApi.LandPriceDto;
+import com.myhome.checkHome.model.openApi.StanReginDto;
+import com.myhome.checkHome.service.GovService;
+import com.myhome.checkHome.type.BuildingType;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
