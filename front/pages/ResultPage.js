@@ -57,8 +57,6 @@ const ResultPage = () => {
     localStorage.setItem("result", result);
   }, [response1, response2, response3, result]);
 
-  console.log("result", address);
-
   const Separator = () => {
     return (
       <hr
@@ -94,7 +92,7 @@ const ResultPage = () => {
         <Tab eventKey="HighDelinquent" title="고액 체납자 조회">
           <HighDelinquent></HighDelinquent>
         </Tab>
-        <Tab eventKey="Result" title="결과">
+        <Tab eventKey="Check" title="확인사항">
           <Report result={result}></Report>
         </Tab>
       </Tabs>
