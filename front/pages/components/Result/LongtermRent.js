@@ -203,6 +203,7 @@ const LongtermRent = ({ response3 }) => {
             <XAxis
               dataKey="quarter"
               label={{ value: "분기", position: "bottom", offset: 0 }}
+              interval={3}
             />
             <YAxis
               type="number"
