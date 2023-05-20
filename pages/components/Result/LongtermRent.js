@@ -98,8 +98,6 @@ const LongtermRent = ({ response3 }) => {
     });
   }
 
-  console.log(LongtermRentAverageData);
-
   // 년, 월 노출 시키는 함수
   const getCurrentYearAndMonth = () => {
     const currentDate = new Date();
@@ -145,7 +143,7 @@ const LongtermRent = ({ response3 }) => {
   if (LongtermRentAverageData.length === 0) {
     return (
       <>
-        <h4 style={{ marginTop: "10px" }}>실거래 데이터가 없습니다.</h4>
+        <h4 style={{ marginTop: "10px" }}>전세 실거래 데이터가 없습니다.</h4>
         <div>
           <h6>왜 실거래 데이터가 없나요?</h6>
           <li>건물 유형을 확인해주세요</li>
