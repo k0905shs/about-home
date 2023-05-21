@@ -56,7 +56,7 @@ const OfficialLandPrice = ({ response1 }) => {
   };
 
   // 공시지가 데이터가 없을 경우
-  if (landPrice.count === 0) {
+  if (landPrice.length === 0) {
     return (
       <>
         <h4 style={{ marginTop: "30px" }}>공시지가 데이터가 없습니다.</h4>
