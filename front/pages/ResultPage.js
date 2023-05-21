@@ -45,10 +45,8 @@ const ResultPage = () => {
       }
       if (storedResult && storedResult !== "undefined") {
         const parsedResult = JSON.parse(storedResult);
-        setResult(storedResult);
+        setResult(parsedResult);
         setAddress(parsedResult.address);
-      } else {
-        return null;
       }
     }
   }, []);

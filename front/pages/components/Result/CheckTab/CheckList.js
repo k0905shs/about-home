@@ -10,6 +10,7 @@ const CheckList = ({ parsedResult }) => {
       },
     };
   }
+  console.log("aa", parsedResult);
 
   const modifiedPurchaser =
     parsedResult &&
