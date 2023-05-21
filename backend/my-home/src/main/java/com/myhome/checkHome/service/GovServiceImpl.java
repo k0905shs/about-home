@@ -17,7 +17,6 @@ import org.json.JSONObject;
 import org.json.XML;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -43,7 +42,6 @@ public class GovServiceImpl implements GovService{
     private final BuildingRentRepository buildingRentRepository;
 
     @Override
-    @Transactional
     public LandPriceDto.openApiResponse requestLandPriceApi(final LandPriceDto.openApiRequestParam requestParam) throws Exception{
         String response = this.requestGov(requestParam, GovRequestUri.LAND_PRICE); //request 요청
         LandPriceDto.openApiResponse openApiResponse =
@@ -66,7 +64,6 @@ public class GovServiceImpl implements GovService{
     }
 
     @Override
-    @Transactional
     public BuildingSaleDto.openApiResponse requestBuildingSaleApi(BuildingSaleDto.openApiRequestParam requestParam) throws Exception {
         GovRequestUri requestUrl = requestParam.getBuildingType().getBuildingSaleUri(); //건물 실거래 요청 uri
         String response = this.requestGov(requestParam, requestUrl); //request 요청
@@ -102,7 +99,6 @@ public class GovServiceImpl implements GovService{
     }
 
     @Override
-    @Transactional
     public BuildingRentDto.openApiResponse requestBuildingRentApi(BuildingRentDto.openApiRequestParam requestParam) throws Exception {
         GovRequestUri requestUrl = requestParam.getBuildingType().getBuildingRentUri(); //건물 전월세 요청 uri
         String response = this.requestGov(requestParam, requestUrl); //request 요청

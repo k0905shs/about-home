@@ -15,7 +15,6 @@ import com.myhome.util.AddressCodeUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -35,7 +34,6 @@ public class HomeCheckServiceImpl implements HomeCheckService {
     private final GovService govService;
 
     @Override
-    @Transactional
     public HomeCheckDto.checkLandPriceResult checkLandPrice(HomeCheckDto.checkLandPriceParam checkLandPriceParam) throws Exception {
         List<LandPrice> checkLandPriceList = landPriceRepository.findLandPriceList(checkLandPriceParam);
 
@@ -74,7 +72,6 @@ public class HomeCheckServiceImpl implements HomeCheckService {
 
 
     @Override
-    @Transactional
     public List<HomeCheckDto.checkBuildingSaleResult> checkBuildingSale(HomeCheckDto.checkBuildingSaleParam checkBuildingSaleParam) throws Exception {
         List<BuildingSale> buildingSaleList =
                 buildingSaleRepository.findBuildingSaleList(checkBuildingSaleParam); //입력 받은 param으로 추출한 도큐먼트 리스트
@@ -116,7 +113,6 @@ public class HomeCheckServiceImpl implements HomeCheckService {
     }
 
     @Override
-    @Transactional
     public List<HomeCheckDto.checkBuildingRentResult> checkBuildingRent(HomeCheckDto.checkBuildingRentParam checkBuildingRentParam) throws Exception {
         List<BuildingRent> buildingRentList = buildingRentRepository.findBuildingRentList(checkBuildingRentParam);
 
