@@ -9,7 +9,7 @@ function App({ Component, pageProps }) {
     <>
       <SSRProvider>
         <Header></Header>
-        <Container style={{ minHeight: "80vh" }}>
+        <Container>
           <Component {...pageProps} />
         </Container>
         <Footer></Footer>
