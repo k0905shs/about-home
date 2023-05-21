@@ -103,6 +103,7 @@ public class GovServiceImpl implements GovService{
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public BuildingRentDto.openApiResponse requestBuildingRentApi(BuildingRentDto.openApiRequestParam requestParam) throws Exception {
         GovRequestUri requestUrl = requestParam.getBuildingType().getBuildingRentUri(); //건물 전월세 요청 uri
         String response = this.requestGov(requestParam, requestUrl); //request 요청
