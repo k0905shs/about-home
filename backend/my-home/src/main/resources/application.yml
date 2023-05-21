@@ -47,7 +47,7 @@ server:
       max: 200
       min-spare: 10 # 활성화 상태로 유지할 최소 쓰레드의 개수
 #    accept-count: 100 #모든 스레드가 사용 중일때 들어오는 연결 요청 큐의 최대 길이
-  port: 8080
+  port: 9879
 
 
 gov :
