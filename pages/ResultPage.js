@@ -20,42 +20,38 @@ const ResultPage = () => {
     result: initialResult,
   } = router.query;
 
-  const [response1, setResponse1] = useState(initialResponse1);
-  const [response2, setResponse2] = useState(initialResponse2);
-  const [response3, setResponse3] = useState(initialResponse3);
-  const [result, setResult] = useState(initialResult);
+  const [response1, setResponse1] = useState(initialResponse1 || []);
+  const [response2, setResponse2] = useState(initialResponse2 || []);
+  const [response3, setResponse3] = useState(initialResponse3 || []);
+  const [result, setResult] = useState(initialResult || []);
   const [address, setAddress] = useState("");
 
   useEffect(() => {
     // 컴포넌트가 마운트될 때 클라이언트 로컬스토리지에서 값 가져오기
-    const storedResponse1 = localStorage.getItem("response1");
-    const storedResponse2 = localStorage.getItem("response2");
-    const storedResponse3 = localStorage.getItem("response3");
-    const storedResult = localStorage.getItem("result");
+    if (typeof localStorage !== "undefined") {
+      const storedResponse1 = localStorage.getItem("response1");
+      const storedResponse2 = localStorage.getItem("response2");
+      const storedResponse3 = localStorage.getItem("response3");
+      const storedResult = localStorage.getItem("result");
 
-    if (storedResponse1 && storedResponse1 !== "undefined") {
-      setResponse1(storedResponse1);
-    }
-    if (storedResponse2 && storedResponse2 !== "undefined") {
-      setResponse2(storedResponse2);
-    }
-    if (storedResponse3 && storedResponse3 !== "undefined") {
-      setResponse3(storedResponse3);
-    }
-    if (storedResult && storedResult !== "undefined") {
-      const parsedResult = JSON.parse(storedResult);
-      setResult(storedResult);
-      setAddress(parsedResult.address);
+      if (storedResponse1 && storedResponse1 !== "undefined") {
+        setResponse1(storedResponse1);
+      }
+      if (storedResponse2 && storedResponse2 !== "undefined") {
+        setResponse2(storedResponse2);
+      }
+      if (storedResponse3 && storedResponse3 !== "undefined") {
+        setResponse3(storedResponse3);
+      }
+      if (storedResult && storedResult !== "undefined") {
+        const parsedResult = JSON.parse(storedResult);
+        setResult(storedResult);
+        setAddress(parsedResult.address);
+      } else {
+        return null;
+      }
     }
   }, []);
-
-  useEffect(() => {
-    // response1, response2, response3 값이 변경될 때마다 클라이언트 로컬스토리지에 저장
-    localStorage.setItem("response1", response1);
-    localStorage.setItem("response2", response2);
-    localStorage.setItem("response3", response3);
-    localStorage.setItem("result", result);
-  }, [response1, response2, response3, result]);
 
   const Separator = () => {
     return (
