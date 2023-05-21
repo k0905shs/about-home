@@ -1,7 +1,16 @@
 import React from "react";
-import { ListGroup, Accordion } from "react-bootstrap";
+import { Accordion } from "react-bootstrap";
 
 const CheckList = ({ parsedResult }) => {
+  if (!parsedResult) {
+    return {
+      parsedResult: {
+        purchaser: [],
+        provider: [],
+      },
+    };
+  }
+
   const modifiedPurchaser =
     parsedResult &&
     parsedResult.purchaser &&
@@ -134,6 +143,14 @@ const CheckList = ({ parsedResult }) => {
       </h5>
     </>
   );
+};
+
+CheckList.getInitialProps = async () => {
+  // 데이터를 가져오는 로직을 구현합니다.
+
+  return {
+    parsedResult: parsedResult || {}, // parsedResult가 없을 경우 빈 객체로 설정
+  };
 };
 
 export default CheckList;
