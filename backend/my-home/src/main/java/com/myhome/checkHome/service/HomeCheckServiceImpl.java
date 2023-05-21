@@ -35,7 +35,7 @@ public class HomeCheckServiceImpl implements HomeCheckService {
     private final GovService govService;
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public HomeCheckDto.checkLandPriceResult checkLandPrice(HomeCheckDto.checkLandPriceParam checkLandPriceParam) throws Exception {
         List<LandPrice> checkLandPriceList = landPriceRepository.findLandPriceList(checkLandPriceParam);
 
@@ -74,20 +74,14 @@ public class HomeCheckServiceImpl implements HomeCheckService {
 
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public List<HomeCheckDto.checkBuildingSaleResult> checkBuildingSale(HomeCheckDto.checkBuildingSaleParam checkBuildingSaleParam) throws Exception {
         List<BuildingSale> buildingSaleList =
                 buildingSaleRepository.findBuildingSaleList(checkBuildingSaleParam); //입력 받은 param으로 추출한 도큐먼트 리스트
 
-        //Document list -> dto List
-        List<HomeCheckDto.checkBuildingSaleResult> results =
-                buildingSaleList.stream()
-                        .map(HomeCheckDto.checkBuildingSaleResult::new)
-                        .collect(Collectors.toList());
-
         //Document list -> 검색이 완료된 'dealYmd'
-        List<String> searchedDateList = results.stream()
-                .map(HomeCheckDto.checkBuildingSaleResult::getDate)
+        List<String> searchedDateList = buildingSaleList.stream()
+                .map(v -> v.getRequest().getDealYmd())
                 .collect(Collectors.toList());
 
         //검색 시작 년월
@@ -114,28 +108,21 @@ public class HomeCheckServiceImpl implements HomeCheckService {
         if (reCheck) {
             buildingSaleList =
                     buildingSaleRepository.findBuildingSaleList(checkBuildingSaleParam); //입력 받은 param으로 추출한 도큐먼트 리스트
-
-            //Document list -> dto List
-             results = buildingSaleList.stream()
-                     .map(HomeCheckDto.checkBuildingSaleResult::new)
-                     .collect(Collectors.toList());
         }
-        return results;
+        //Document list -> dto List
+        return buildingSaleList.stream()
+                .map(HomeCheckDto.checkBuildingSaleResult::new)
+                .collect(Collectors.toList());
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public List<HomeCheckDto.checkBuildingRentResult> checkBuildingRent(HomeCheckDto.checkBuildingRentParam checkBuildingRentParam) throws Exception {
         List<BuildingRent> buildingRentList = buildingRentRepository.findBuildingRentList(checkBuildingRentParam);
-        //Document list -> dto List
-        List<HomeCheckDto.checkBuildingRentResult> results =
-                buildingRentList.stream()
-                        .map(HomeCheckDto.checkBuildingRentResult::new)
-                        .collect(Collectors.toList());
 
         //Document list -> 검색이 완료된 'dealYmd'
-        List<String> searchedDateList = results.stream()
-                .map(HomeCheckDto.checkBuildingRentResult::getDate)
+        List<String> searchedDateList = buildingRentList.stream()
+                .map(v -> v.getRequest().getDealYmd())
                 .collect(Collectors.toList());
 
         //검색 시작 년월
@@ -162,13 +149,11 @@ public class HomeCheckServiceImpl implements HomeCheckService {
         if (reCheck) {
             buildingRentList =
                     buildingRentRepository.findBuildingRentList(checkBuildingRentParam); //입력 받은 param으로 추출한 도큐먼트 리스트
-
-            //Document list -> dto List
-            results = buildingRentList.stream()
-                    .map(HomeCheckDto.checkBuildingRentResult::new)
-                    .collect(Collectors.toList());
         }
 
-        return results;
+        //Document list -> dto List
+        return buildingRentList.stream()
+                .map(HomeCheckDto.checkBuildingRentResult::new)
+                .collect(Collectors.toList());
     }
 }

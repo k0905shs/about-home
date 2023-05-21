@@ -72,7 +72,7 @@ public class BuildingSaleRepositoryImpl implements BuildingSaleCustomRepository<
         Query query = new Query();
         query.addCriteria(
                 new Criteria().andOperator(
-                        Criteria.where("request.dealYmd").gte(buildingSale.getRequest().getDealYmd()),
+                        Criteria.where("request.dealYmd").is(buildingSale.getRequest().getDealYmd()),
                         Criteria.where("request.buildingType").is(buildingSale.getRequest().getBuildingType()),
                         Criteria.where("request.lawdCd").is(buildingSale.getRequest().getLawdCd())
                 )

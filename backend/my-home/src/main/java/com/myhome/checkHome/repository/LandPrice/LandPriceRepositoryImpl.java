@@ -49,7 +49,7 @@ public class LandPriceRepositoryImpl implements LandPriceCustomRepository<LandPr
         query.addCriteria(
                 new Criteria().andOperator(
                         Criteria.where("request.pnu").is(landPrice.getRequest().getPnu()),
-                        Criteria.where("request.stdrYear").gte(landPrice.getRequest().getStdrYear())
+                        Criteria.where("request.stdrYear").is(landPrice.getRequest().getStdrYear())
                 )
         );
         LandPrice savedDoc = mongoTemplate.findOne(query, LandPrice.class);
