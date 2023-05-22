@@ -24,7 +24,7 @@ https://www.mongodb.com/docs/manual/core/transactions/
 
 https://gofnrk.tistory.com/123
 
-  
+
 
 기존처럼 RestTemplate안쓰고 WebClient 사용
 https://gngsn.tistory.com/154
@@ -37,7 +37,7 @@ https://gngsn.tistory.com/154
 - exchangeStrategies : HTTP 메시지 reader & writer 커스터마이징
 - clientConnector : HTTP 클라이언트 라이브러리 세팅
 
-  
+    
 
 3. marshalling , unmarshalling
 marshalling(마셜링), unmarshalling(언마셜링) 의 의미는 다음과 같습니다.
