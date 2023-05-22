@@ -4,9 +4,16 @@ name: my_home Spring
 on:
   push:
     branches: [ "backend" ]
-  pull_request:
-    branches: [ "backend" ]
-
+#   pull_request:
+#     branches: [ "backend" ]
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'     
+        required: true
+        default: 'warning'
+      tags:
+        description: 'Test scenario tags'
 jobs:
   deploy: 
     runs-on: ubuntu-latest
