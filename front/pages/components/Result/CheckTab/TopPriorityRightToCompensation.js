@@ -2,17 +2,11 @@ import React from "react";
 import { Table, Accordion } from "react-bootstrap";
 import { commaFormat } from "@/utils/util";
 
-const TopPriorityRightToCompensation = ({ response4 }) => {
-  let result = [];
-  try {
-    if (typeof response4 === "string") {
-      result = JSON.parse(response4)?.data || [];
-    }
-  } catch (error) {
-    console.error("Error parsing JSON:", error);
+const TopPriorityRightToCompensation = ({ parsedResult2 }) => {
+  console.log(parsedResult2);
+  if (!parsedResult2 || !parsedResult2.policyList) {
+    return null;
   }
-  console.log(result);
-
   return (
     <>
       <div>
@@ -31,8 +25,10 @@ const TopPriorityRightToCompensation = ({ response4 }) => {
             <Accordion.Header>
               <h4>
                 담보물권설정일 <br />
-                {result.startDate} ~{" "}
-                {result.endDate === "9999-12-31" ? "현재" : result.endDate}
+                {parsedResult2.startDate} ~{" "}
+                {parsedResult2.endDate === "9999-12-31"
+                  ? "현재"
+                  : parsedResult2.endDate}
               </h4>
             </Accordion.Header>
             <Accordion.Body>
@@ -45,7 +41,7 @@ const TopPriorityRightToCompensation = ({ response4 }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {result.policyList.map((arr, index) => (
+                  {parsedResult2.policyList.map((arr, index) => (
                     <tr key={index}>
                       <td>{arr.region}</td>
                       <td>{commaFormat(arr.deposit)}만원 이하</td>
