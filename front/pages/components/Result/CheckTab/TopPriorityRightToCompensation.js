@@ -3,8 +3,6 @@ import { Table, Accordion } from "react-bootstrap";
 import { commaFormat } from "@/utils/util";
 
 const TopPriorityRightToCompensation = ({ response4 }) => {
-  console.log("최우선변제권", response4);
-
   let result = [];
   try {
     if (typeof response4 === "string") {
