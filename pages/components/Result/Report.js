@@ -9,6 +9,15 @@ const Report = ({ result, response4 }) => {
     parsedResult = JSON.parse(result) || [];
   }
 
+  let parsedResult2 = [];
+  try {
+    if (typeof response4 === "string") {
+      parsedResult2 = JSON.parse(response4)?.data || [];
+    }
+  } catch (error) {
+    console.error("Error parsing JSON:", error);
+  }
+
   const Separator = () => {
     return (
       <hr
@@ -29,7 +38,7 @@ const Report = ({ result, response4 }) => {
         </div>
         <TopPriorityRightToCompensation
           parsedResult={parsedResult}
-          response4={response4}
+          parsedResult2={parsedResult2}
         ></TopPriorityRightToCompensation>
         <Separator />
 
