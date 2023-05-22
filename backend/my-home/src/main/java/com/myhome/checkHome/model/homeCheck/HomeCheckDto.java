@@ -2,13 +2,18 @@ package com.myhome.checkHome.model.homeCheck;
 
 import com.myhome.checkHome.collection.BuildingRent;
 import com.myhome.checkHome.collection.BuildingSale;
+import com.myhome.checkHome.collection.PriorityRepay;
+import com.myhome.checkHome.collection.SearchRecord;
 import com.myhome.checkHome.type.BuildingType;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,7 +68,7 @@ public class HomeCheckDto {
         private String buildingCode;
         @Min(1)
         private int searchMonth; //총 검색 월
-        @NotBlank
+        @NotNull
         private BuildingType buildingType; //건물 타입
     }
 
@@ -113,15 +118,12 @@ public class HomeCheckDto {
         @Size(min = 1)
         @NotBlank
         private String jibun;
-
         @Size(min = 20)
         @NotBlank
         private String buildingCode;
-
         @Min(1)
         private int searchMonth; //총 검색 월
-
-        @NotBlank
+        @NotNull
         private BuildingType buildingType; //건물 타입
     }
 
@@ -157,6 +159,72 @@ public class HomeCheckDto {
             this.saleDate = buildingRentDetail.getMonth() + "-" + buildingRentDetail.getDay();
             this.area = buildingRentDetail.getArea();
         }
+    }
 
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class searchRecordParam{
+        @Size(min = 20)@NotBlank
+        private String buildingCode; //빌딩 코드
+        @Size(min = 1)@NotBlank
+        private String jibun; //지번
+        @NotNull
+        private BuildingType buildingType;
+
+        public SearchRecord toDocument() {
+            return SearchRecord.builder()
+                    .buildingCode(this.buildingCode)
+                    .jibun(this.jibun)
+                    .sidoCode(this.buildingCode.substring(0,5))
+                    .buildingType(buildingType)
+                    .build();
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class searchRecordResult{
+        private boolean success;
+        public searchRecordResult(boolean success) {
+            this.success = success;
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class checkPriorityRepayParam{
+        // TODO 나중에 추가적으로 필드값 받아서 검색하면 해당 데이터 기반 최우선 변제금 추출 로직 개발
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
+        private LocalDate targetDate;
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class checkPriorityRepayResult{
+        private String startDate; //정책 시작일
+        private String endDate; //정책 종료일
+        List<HomeCheckDto.checkPriorityPolicy> policyList; //정책 리스트
+
+        public checkPriorityRepayResult(PriorityRepay priorityRepay) {
+            this.startDate = priorityRepay.getStartDate();
+            this.endDate = priorityRepay.getEndDate();
+            this.policyList = priorityRepay.getPolicyList().stream()
+                    .map(checkPriorityPolicy::new).collect(Collectors.toList());
+
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class checkPriorityPolicy{
+        private String region; //지역 정보
+        private BigDecimal deposit; //보증금 범위
+        private BigDecimal repayAmount; //변제 금액
+
+        public checkPriorityPolicy(PriorityRepay.policy policy) {
+            this.region = policy.getRegion();
+            this.deposit = policy.getDeposit();
+            this.repayAmount = policy.getRepayAmount();
+        }
     }
 }

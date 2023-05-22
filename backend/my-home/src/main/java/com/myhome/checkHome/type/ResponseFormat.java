@@ -3,6 +3,9 @@ package com.myhome.checkHome.type;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * response데이터 반환 타입 Enum
+ */
 @AllArgsConstructor
 @Getter
 public enum ResponseFormat {

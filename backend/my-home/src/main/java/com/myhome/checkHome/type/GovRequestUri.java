@@ -3,6 +3,9 @@ package com.myhome.checkHome.type;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * 사용중인 공공데이터 uri 정보 및 반환 타입 Enum
+ */
 @AllArgsConstructor
 @Getter
 public enum GovRequestUri {
