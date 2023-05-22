@@ -60,6 +60,9 @@ const CheckMyHome = () => {
     setShowDaumPostcode(!showDaumPostcode);
   };
 
+  // 기준일
+  const [dateInput, setDateInput] = useState("");
+
   // 갑구 체크박스
   const handleCheckboxChangePurchaser = (e) => {
     const { name, value, checked } = e.target;
@@ -164,6 +167,7 @@ const CheckMyHome = () => {
       detailAddress: detailAddress,
       building: building,
       jibun: jibun,
+      dateInput: dateInput,
     };
 
     // result에 새로운 값을 추가합니다.
@@ -186,6 +190,7 @@ const CheckMyHome = () => {
               response1: JSON.stringify(res.data.response1),
               response2: JSON.stringify(res.data.response2),
               response3: JSON.stringify(res.data.response3),
+              response4: JSON.stringify(res.data.response4),
               result: JSON.stringify(newResult),
             },
           },
@@ -422,9 +427,16 @@ const CheckMyHome = () => {
                     type="number"
                     name="collateral"
                     min="0"
-                    required
                     value={inputVal.collateral}
                     onChange={handleInputChange}
+                  />
+                  <Form.Label>
+                    <h5 style={{ marginTop: "20px" }}>근저당권 설정일자</h5>
+                  </Form.Label>
+                  <Form.Control
+                    type="date"
+                    value={dateInput}
+                    onChange={(e) => setDateInput(e.target.value)}
                   />
                   <Button
                     style={{

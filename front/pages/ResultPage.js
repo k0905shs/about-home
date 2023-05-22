@@ -17,15 +17,17 @@ const ResultPage = () => {
     response1: initialResponse1,
     response2: initialResponse2,
     response3: initialResponse3,
+    response4: initialResponse4,
     result: initialResult,
   } = router.query;
 
   const [response1, setResponse1] = useState(initialResponse1 || []);
   const [response2, setResponse2] = useState(initialResponse2 || []);
   const [response3, setResponse3] = useState(initialResponse3 || []);
+  const [response4, setResponse4] = useState(initialResponse4 || []);
   const [result, setResult] = useState(initialResult || []);
   const [address, setAddress] = useState("");
-
+  console.log("result", result);
   useEffect(() => {
     const handleBeforeUnload = (event) => {
       event.preventDefault();
@@ -34,6 +36,7 @@ const ResultPage = () => {
         const storedResponse1 = localStorage.getItem("response1");
         const storedResponse2 = localStorage.getItem("response2");
         const storedResponse3 = localStorage.getItem("response3");
+        const storedResponse4 = localStorage.getItem("response4");
         const storedResult = localStorage.getItem("result");
 
         if (storedResponse1 && storedResponse1 !== "undefined") {
@@ -44,6 +47,9 @@ const ResultPage = () => {
         }
         if (storedResponse3 && storedResponse3 !== "undefined") {
           setResponse3(storedResponse3);
+        }
+        if (storedResponse4 && storedResponse4 !== "undefined") {
+          setResponse4(storedResponse4);
         }
         if (storedResult && storedResult !== "undefined") {
           const parsedResult = JSON.parse(storedResult);
@@ -100,7 +106,7 @@ const ResultPage = () => {
           <HighDelinquent></HighDelinquent>
         </Tab>
         <Tab eventKey="Check" title="확인사항">
-          <Report result={result}></Report>
+          <Report result={result} response4={response4}></Report>
         </Tab>
       </Tabs>
     </>
