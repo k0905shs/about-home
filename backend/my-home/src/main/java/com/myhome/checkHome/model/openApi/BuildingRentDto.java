@@ -15,6 +15,9 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * 공공데이터 건물 전/월세 가격 정보 Data Transfer Object
+ */
 public class BuildingRentDto {
 
     @Getter

@@ -28,7 +28,6 @@ import static org.springframework.data.mongodb.core.aggregation.ComparisonOperat
 @Repository
 @RequiredArgsConstructor
 public class BuildingRentRepositoryImpl implements BuildingRentCustomRepository<BuildingRent> {
-    //반드시 클래스명은 XXXRepositoryImpl 이어야 Spring data 에서 구현체로 인식할 수 있다.있다
 
     private final MongoTemplate mongoTemplate;
 

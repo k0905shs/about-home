@@ -3,6 +3,9 @@ package com.myhome.checkHome.type;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * 조회가 가능한 건물 타입 Enum
+ */
 @AllArgsConstructor
 @Getter
 public enum BuildingType {

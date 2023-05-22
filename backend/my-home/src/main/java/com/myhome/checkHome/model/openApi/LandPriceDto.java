@@ -9,8 +9,7 @@ import lombok.*;
 import java.util.List;
 
 /**
- * 개별 공시 시가 정보 API 관련 DTO
- * https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15059127
+ * 개별 공시지가 정보 Data Transfer Object
  */
 public class LandPriceDto {
 

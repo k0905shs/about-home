@@ -1,16 +1,16 @@
 package com.myhome.checkHome.service;
 
 
-import com.myhome.checkHome.collection.BuildingRent;
-import com.myhome.checkHome.collection.BuildingSale;
-import com.myhome.checkHome.collection.LandPrice;
+import com.myhome.checkHome.collection.*;
 import com.myhome.checkHome.model.homeCheck.HomeCheckDto;
 import com.myhome.checkHome.model.openApi.BuildingRentDto;
 import com.myhome.checkHome.model.openApi.BuildingSaleDto;
 import com.myhome.checkHome.model.openApi.LandPriceDto;
 import com.myhome.checkHome.repository.LandPrice.LandPriceRepository;
+import com.myhome.checkHome.repository.PriorityRepay.PriorityRepayRepository;
 import com.myhome.checkHome.repository.buildingRent.BuildingRentRepository;
 import com.myhome.checkHome.repository.buildingSale.BuildingSaleRepository;
+import com.myhome.checkHome.repository.searchRecord.SearchRecordRepository;
 import com.myhome.util.AddressCodeUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +31,8 @@ public class HomeCheckServiceImpl implements HomeCheckService {
     private final LandPriceRepository landPriceRepository;
     private final BuildingSaleRepository buildingSaleRepository;
     private final BuildingRentRepository buildingRentRepository;
+    private final SearchRecordRepository searchRecordRepository;
+    private final PriorityRepayRepository priorityRepayRepository;
     private final GovService govService;
 
     @Override
@@ -151,5 +153,17 @@ public class HomeCheckServiceImpl implements HomeCheckService {
         return buildingRentList.stream()
                 .map(HomeCheckDto.checkBuildingRentResult::new)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public HomeCheckDto.searchRecordResult saveRecord(HomeCheckDto.searchRecordParam searchRecordParam) {
+        SearchRecord searchRecord = searchRecordRepository.save(searchRecordParam.toDocument());
+        return new HomeCheckDto.searchRecordResult(true);
+    }
+
+    @Override
+    public HomeCheckDto.checkPriorityRepayResult checkPriorityRepay(HomeCheckDto.checkPriorityRepayParam checkPriorityRepayParam) {
+        PriorityRepay priorityRepay = priorityRepayRepository.findPolicyByTargetDate(checkPriorityRepayParam);
+        return new HomeCheckDto.checkPriorityRepayResult(priorityRepay);
     }
 }

@@ -13,8 +13,6 @@ public class AddressCodeUtils {
 
     /**
      * 빌딩코드로 pnu code 확인
-     * @param buildingCode 건물 코드
-     * @return pnu code
      */
     public static String getPnu(String buildingCode, String jibun) {
         StringBuilder sb = new StringBuilder(buildingCode.substring(0, 11));
@@ -31,8 +29,6 @@ public class AddressCodeUtils {
 
     /**
      * 건물 코드로 지번 확인
-     * @param buildingCode
-     * @return
      */
     public static String getPostCode(String buildingCode) {
         String mainCode = removeZero(buildingCode.substring(11, 15));
@@ -42,17 +38,13 @@ public class AddressCodeUtils {
 
     /**
      * 건물 코드로 lawd_cd(지역별 코드) 확인
-     * @param buildingCode
-     * @return
      */
     public static String getLawdCd(String buildingCode) {
         return buildingCode.substring(0, 5);
     }
 
     /**
-     * 입력받은 숫자 코드에서 첫번쨰 숫자가 나오기 전까지 0 제거
-     * @param code
-     * @return 0을 제거한 코드값
+     * 입력받은 숫자 코드에서 첫번쨰 0이 아닌 숫자가 나올때 까지 0 제거
      */
     private static String removeZero(String code) {
         StringBuilder sb = new StringBuilder(code);
@@ -68,8 +60,6 @@ public class AddressCodeUtils {
 
     /**
      * 입력받은 숫자 코드에서 max 자리수 될때가지 앞에 0 추가
-     * @param code
-     * @return 0을 제거한 코드값
      */
     private static String addZero(String code, int max) {
         StringBuilder sb = new StringBuilder();

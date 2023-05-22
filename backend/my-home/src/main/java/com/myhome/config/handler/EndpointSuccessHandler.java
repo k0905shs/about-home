@@ -2,7 +2,6 @@ package com.myhome.config.handler;
 
 import com.myhome.config.core.GlobalResponse;
 import org.springframework.core.MethodParameter;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
@@ -15,7 +14,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
-@Order(10)
+/**
+ * response Body 변환 전 공통 작업 처리
+ */
 @RestControllerAdvice
 public class EndpointSuccessHandler implements ResponseBodyAdvice<Object> {
 

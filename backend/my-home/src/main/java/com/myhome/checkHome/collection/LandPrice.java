@@ -9,6 +9,9 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
+/**
+ * 개별 공시지가 데이터 doc
+ */
 @Getter
 @Document(collection = "land_price")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

@@ -1,7 +1,10 @@
 package com.myhome.checkHome.collection;
 
 import com.myhome.checkHome.type.BuildingType;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -10,10 +13,12 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * 건물 전/월세 데이터 Doc
+ */
 @Getter
 @Document(collection = "building_rent")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
 public class BuildingRent {
     @MongoId
     private ObjectId id;

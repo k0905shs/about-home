@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * LoggingAdvice에 사용되는 Trace
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
