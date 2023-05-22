@@ -16,7 +16,7 @@ const Header = () => {
           어바웃홈
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
+        <Navbar.Collapse id="basic-navbar-nav" style={{ marginLeft: "15px" }}>
           <Nav className="me-auto">
             <Nav.Link eventKey="/Board">공지사항</Nav.Link>
             <Nav.Link eventKey="/CheckMyHome">진단하기</Nav.Link>
