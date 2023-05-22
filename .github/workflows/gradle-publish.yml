@@ -3,15 +3,17 @@ name: my_home Spring
 # master 브랜치에 push, PR 이벤트 발생시 동작.
 on:
   push:
-    branches: [ "backend" ]
+    branches: [ "master" ]
+    paths: "backend/my-home/**" # backend/my-home/내부 코드 변경시만 실행
 #   pull_request:
 #     branches: [ "backend" ]
 
 jobs:
   deploy: 
     runs-on: ubuntu-latest
-    env:
-      working-directory: /backend/my-home
+    defaults:
+      run : 
+        working-directory: "./backend/my-home"
 
     steps:
     - name: Checkout
@@ -19,7 +21,8 @@ jobs:
     
     # Spring Boot 어플리케이션 Build (1)
     - name: Spring Boot Build
-      run: /backend/my-home/gradlew clean build --exclude-task test
+      run: ./gradlew clean build --exclude-task test
+      working-directory: "./backend/my-home"
     
     # Docker 이미지 Build (2)
     - name: docker image build
