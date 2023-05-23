@@ -7,6 +7,7 @@ import {
   Collapse,
   Badge,
 } from "react-bootstrap";
+import Head from "next/head";
 import DaumPostcode from "react-daum-postcode";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -216,6 +217,26 @@ const CheckMyHome = () => {
 
   return (
     <>
+      <Head>
+        <title>어바웃홈 - 진단하기</title>
+        <meta charset="utf-8" />
+        <meta name="referrer" content="always" />
+        <meta name="description" content="어바웃홈, 진단하기" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+        <meta name="keywords" content="어바웃홈 about-home" />
+        <meta name="robots" content="index,follow" />
+        <meta property="og:site_name" content="어바웃홈 about-home, 진단하기" />
+        <meta property="og:title" content="어바웃홈 about-home, 진단하기" />
+        <meta
+          property="og:description"
+          content="어바웃홈 about-home, 진단하기"
+        />
+        <meta property="og:url" content="https://about-home.net" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="어바웃홈 about-home" />
+        <meta name="twitter:description" content="어바웃홈 about-home" />
+      </Head>
       {isLoading ? (
         <LoadingPage />
       ) : (
