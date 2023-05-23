@@ -22,43 +22,17 @@ const ResultPage = () => {
     result: initialResult,
   } = router.query;
 
-  const [response1, setResponse1] = useState(initialResponse1 || []);
-  const [response2, setResponse2] = useState(initialResponse2 || []);
-  const [response3, setResponse3] = useState(initialResponse3 || []);
-  const [response4, setResponse4] = useState(initialResponse4 || []);
-  const [result, setResult] = useState(initialResult || []);
+  const [response1] = useState(initialResponse1 || []);
+  const [response2] = useState(initialResponse2 || []);
+  const [response3] = useState(initialResponse3 || []);
+  const [response4] = useState(initialResponse4 || []);
+  const [result] = useState(initialResult || []);
   const [address, setAddress] = useState("");
-  console.log("result", result);
+
   useEffect(() => {
     const handleBeforeUnload = (event) => {
-      event.preventDefault();
-      // 컴포넌트가 마운트될 때 클라이언트 로컬스토리지에서 값 가져오기
-      if (typeof localStorage !== "undefined") {
-        const storedResponse1 = localStorage.getItem("response1");
-        const storedResponse2 = localStorage.getItem("response2");
-        const storedResponse3 = localStorage.getItem("response3");
-        const storedResponse4 = localStorage.getItem("response4");
-        const storedResult = localStorage.getItem("result");
-
-        if (storedResponse1 && storedResponse1 !== "undefined") {
-          setResponse1(storedResponse1);
-        }
-        if (storedResponse2 && storedResponse2 !== "undefined") {
-          setResponse2(storedResponse2);
-        }
-        if (storedResponse3 && storedResponse3 !== "undefined") {
-          setResponse3(storedResponse3);
-        }
-        if (storedResponse4 && storedResponse4 !== "undefined") {
-          setResponse4(storedResponse4);
-        }
-        if (storedResult && storedResult !== "undefined") {
-          const parsedResult = JSON.parse(storedResult);
-          setResult(parsedResult);
-          setAddress(parsedResult.address);
-        }
-      }
       // 이벤트 메시지 설정
+      event.preventDefault();
       event.returnValue = ""; // 크로스 브라우징을 위한 반환값 설정
     };
 
