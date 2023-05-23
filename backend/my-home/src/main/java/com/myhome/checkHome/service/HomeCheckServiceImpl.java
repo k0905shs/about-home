@@ -108,6 +108,11 @@ public class HomeCheckServiceImpl implements HomeCheckService {
             buildingSaleList =
                     buildingSaleRepository.findBuildingSaleList(checkBuildingSaleParam); //입력 받은 param으로 추출한 도큐먼트 리스트
         }
+
+        // TODO : 검색 정보 몽고에 저장 -- 해당 검색 정보 저장기능 추후 확장하면서 분리할 예정
+        searchRecordRepository.save(new SearchRecord(checkBuildingSaleParam));
+
+
         //Document list -> dto List
         return buildingSaleList.stream()
                 .map(HomeCheckDto.checkBuildingSaleResult::new)
