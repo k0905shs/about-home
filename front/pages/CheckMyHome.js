@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   Container,
   Stack,
@@ -6,6 +6,8 @@ import {
   Button,
   Collapse,
   Badge,
+  Overlay,
+  Popover,
 } from "react-bootstrap";
 import Head from "next/head";
 import DaumPostcode from "react-daum-postcode";
@@ -66,6 +68,26 @@ const CheckMyHome = () => {
 
   const handleOpenPostcode = () => {
     setShowDaumPostcode(!showDaumPostcode);
+  };
+
+  //권리사항 툴팁
+  const [show, setShow] = useState(false);
+  const [target, setTarget] = useState(null);
+  const ref = useRef(null);
+
+  const handleClick = (e) => {
+    setShow(!show);
+    setTarget(e.target);
+  };
+
+  //근저당 툴팁
+  const [showCollateral, setShowCollateral] = useState(false);
+  const [targetCollateral, setTargetCollateral] = useState(null);
+  const refCollateral = useRef(null);
+
+  const handleClick2 = (e) => {
+    setShowCollateral(!showCollateral);
+    setTargetCollateral(e.target);
   };
 
   // 기준일
@@ -384,9 +406,39 @@ const CheckMyHome = () => {
                       required
                     />
                   </div>
+                  <Form.Group style={{ display: "flex", alignItems: "center" }}>
+                    <Form.Label>
+                      <h5 style={{ marginTop: "50px" }}>권리사항</h5>
+                    </Form.Label>
+                    <div ref={ref}>
+                      <Button
+                        style={{ marginTop: "40px", marginLeft: "10px" }}
+                        onClick={handleClick}
+                        variant="outline-primary"
+                        size="sm"
+                      >
+                        참고
+                      </Button>
+
+                      <Overlay
+                        show={show}
+                        target={target}
+                        placement="right"
+                        container={ref}
+                        containerPadding={20}
+                      >
+                        <Popover id="popover-contained ">
+                          <Popover.Body>
+                            1. 현재 등기부등본의 갑구/을구의 해당 사항을
+                            체크해주세요 <br />
+                            2. 해당 내용이 없으면 비워도 되요
+                          </Popover.Body>
+                        </Popover>
+                      </Overlay>
+                    </div>
+                  </Form.Group>
                   <Form.Label>
-                    <h4 style={{ marginTop: "20px" }}>권리사항</h4>
-                    <h5 style={{ marginTop: "20px" }}>갑구 </h5>
+                    <h5>갑구 </h5>
                   </Form.Label>
                   <Form.Group>
                     <Form.Check
@@ -454,11 +506,36 @@ const CheckMyHome = () => {
                       inline
                     />
                   </Form.Group>
-                  <Form.Label>
-                    <h5 style={{ marginTop: "20px" }}>
-                      최초 설정 근저당(채권최고액)
-                    </h5>
-                  </Form.Label>
+                  <Form.Group style={{ display: "flex", alignItems: "center" }}>
+                    <Form.Label>
+                      <h5 style={{ marginTop: "20px" }}>최초 설정 근저당</h5>
+                    </Form.Label>
+                    <div ref={refCollateral}>
+                      <Button
+                        style={{ marginTop: "10px", marginLeft: "10px" }}
+                        onClick={handleClick2}
+                        variant="outline-primary"
+                        size="sm"
+                      >
+                        참고
+                      </Button>
+
+                      <Overlay
+                        show={showCollateral}
+                        target={targetCollateral}
+                        placement="right"
+                        container={refCollateral}
+                        containerPadding={20}
+                      >
+                        <Popover id="popover-contained">
+                          <Popover.Body>
+                            1. 근저당권 설정과 설정일자를 비워도 되요! <br />
+                            2. 입력하면 최우선변제권을 알 수 있어요
+                          </Popover.Body>
+                        </Popover>
+                      </Overlay>
+                    </div>
+                  </Form.Group>
                   <Form.Control
                     type="text"
                     name="collateral"
