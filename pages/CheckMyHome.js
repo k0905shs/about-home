@@ -423,7 +423,7 @@ const CheckMyHome = () => {
                       <Overlay
                         show={show}
                         target={target}
-                        placement="right"
+                        placement="bottom"
                         container={ref}
                         containerPadding={20}
                       >
@@ -523,7 +523,7 @@ const CheckMyHome = () => {
                       <Overlay
                         show={showCollateral}
                         target={targetCollateral}
-                        placement="right"
+                        placement="bottom"
                         container={refCollateral}
                         containerPadding={20}
                       >
