@@ -360,6 +360,7 @@ const CheckMyHome = () => {
                     />
                   </div>
                   <Form.Label>
+                    <h4 style={{ marginTop: "20px" }}>권리사항</h4>
                     <h5 style={{ marginTop: "20px" }}>갑구 </h5>
                   </Form.Label>
                   <Form.Group>
@@ -429,7 +430,9 @@ const CheckMyHome = () => {
                     />
                   </Form.Group>
                   <Form.Label>
-                    <h5 style={{ marginTop: "20px" }}>근저당</h5>
+                    <h5 style={{ marginTop: "20px" }}>
+                      최초 설정 근저당(채권최고액)
+                    </h5>
                   </Form.Label>
                   <Form.Control
                     type="number"
