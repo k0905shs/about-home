@@ -43,9 +43,16 @@ const CheckMyHome = () => {
 
   const [validated, setValidated] = useState(false);
 
+  //input 천자리 콤마
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setInputVal({ ...inputVal, [name]: value });
+    let inputValue = Number(value.replaceAll(",", ""));
+    if (isNaN(inputValue)) {
+      setInputVal({ ...inputVal, [name]: 0 });
+    } else {
+      const formatValue = inputValue.toLocaleString("ko-KR");
+      setInputVal({ ...inputVal, [name]: formatValue });
+    }
   };
 
   const handleRadioChange = (e) => {
@@ -300,9 +307,8 @@ const CheckMyHome = () => {
                     <h5 style={{ marginTop: "20px" }}>보증금</h5>
                   </Form.Label>
                   <Form.Control
-                    type="number"
+                    type="text"
                     name="deposit"
-                    min="0"
                     required
                     value={inputVal.deposit}
                     onChange={handleInputChange}
@@ -311,9 +317,8 @@ const CheckMyHome = () => {
                     <h5 style={{ marginTop: "20px" }}>월 임차료</h5>
                   </Form.Label>
                   <Form.Control
-                    type="number"
+                    type="text"
                     name="rentalFee"
-                    min="0"
                     required
                     value={inputVal.rentalFee}
                     onChange={handleInputChange}
@@ -455,9 +460,8 @@ const CheckMyHome = () => {
                     </h5>
                   </Form.Label>
                   <Form.Control
-                    type="number"
+                    type="text"
                     name="collateral"
-                    min="0"
                     value={inputVal.collateral}
                     onChange={handleInputChange}
                   />
