@@ -2,10 +2,8 @@ import axios from "axios";
 import moment from "moment";
 
 export default function handler(req, res) {
-  console.log("req", req);
   if (req.method === "POST") {
     const { result } = req.body;
-    console.log("result", result);
 
     const targetDate = result.dateInput
       ? result.dateInput
