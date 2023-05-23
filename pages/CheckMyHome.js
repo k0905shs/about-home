@@ -222,7 +222,6 @@ const CheckMyHome = () => {
         <Container style={{ width: "80%" }}>
           <h2 style={{ marginTop: "10px" }}>우리집 진단하기</h2>
           <div style={{ fontWeight: "bold" }}>
-            진단을 하려면 해당 주소의{" "}
             <a
               onClick={() => setOpen(!open)}
               aria-controls="example-collapse-text"
@@ -231,7 +230,7 @@ const CheckMyHome = () => {
               <Badge pill bg="danger">
                 등기부등본
               </Badge>{" "}
-              이 먼저 필요해요!
+              이 있으면 더 정확하게 진단할 수 있어요!
             </a>
             <Collapse in={open}>
               <div id="example-collapse-text" style={{ marginTop: "10px" }}>
