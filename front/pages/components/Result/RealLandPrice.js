@@ -48,7 +48,7 @@ const RealLandPrice = ({ response2 }) => {
   let realPiceStackData = [];
 
   const getStackData = (landPrice) => {
-    for (let i = 0; i < landPrice.length; i++) {
+    for (let i = landPrice.length - 1; i >= 0; i--) {
       let stackData = landPrice[i].buildingSaleInfoList;
       if (landPrice[i].totalPrice !== 0) {
         const date = `${landPrice[i].date.substring(0, 4)}.${landPrice[

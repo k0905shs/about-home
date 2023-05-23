@@ -37,7 +37,7 @@ const LongtermRent = ({ response3 }) => {
   const LongtermRentStackData = [];
 
   // landPrice 배열을 기반으로 LongtermStackData 배열 구성
-  landPrice.forEach((item) => {
+  landPrice.reverse().forEach((item) => {
     const { date, buildingSaleInfoList } = item;
 
     buildingSaleInfoList.forEach((building) => {
@@ -50,7 +50,7 @@ const LongtermRent = ({ response3 }) => {
 
       if (rentPrice === 0) {
         LongtermRentStackData.push({
-          date,
+          date: `${date.substring(0, 4)}.${date.substring(4, 6)}`,
           deposit,
           rentPrice,
           area,
@@ -92,7 +92,7 @@ const LongtermRent = ({ response3 }) => {
 
     const averageDeposit = (totalDeposit / count).toFixed(0);
 
-    LongtermRentAverageData.push({
+    LongtermRentAverageData.unshift({
       quarter: key,
       averageDeposit,
     });
