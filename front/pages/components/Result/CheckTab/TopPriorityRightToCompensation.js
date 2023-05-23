@@ -2,9 +2,9 @@ import React from "react";
 import { Table, Accordion } from "react-bootstrap";
 import { commaFormat } from "@/utils/util";
 
-const TopPriorityRightToCompensation = ({ parsedResult2 }) => {
-  console.log(parsedResult2);
-  if (!parsedResult2 || !parsedResult2.policyList) {
+const TopPriorityRightToCompensation = ({ parsedResult, parsedResult2 }) => {
+  console.log(parsedResult);
+  if (!parsedResult || !parsedResult2 || !parsedResult2.policyList) {
     return null;
   }
   return (
@@ -32,6 +32,8 @@ const TopPriorityRightToCompensation = ({ parsedResult2 }) => {
               </h4>
             </Accordion.Header>
             <Accordion.Body>
+              <h5> 입력한 보증금 {commaFormat(parsedResult.deposit)}원</h5>
+              <h5> 입력한 근저당 {commaFormat(parsedResult.collateral)}원</h5>
               <Table>
                 <thead>
                   <tr>
