@@ -68,7 +68,7 @@ const LongtermRent = ({ response3 }) => {
     const { date, deposit } = item;
 
     const year = date.substring(0, 4); // 년도 추출
-    const month = date.substring(4, 6); // 월 추출
+    const month = date.substring(5, 7); // 월 추출
     const quarter = Math.ceil(Number(month) / 3); // 분기 계산
 
     const key = `${year}.${quarter}분기`; // 분기를 포함한 키 생성
