@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Container, Tab, Tabs } from "react-bootstrap";
+import Head from "next/head";
 
 //page
 import RealLandPrice from "./components/Result/RealLandPrice";
@@ -84,6 +85,26 @@ const ResultPage = () => {
 
   return (
     <>
+      <Head>
+        <title>어바웃홈 - 진단결과</title>
+        <meta charset="utf-8" />
+        <meta name="referrer" content="always" />
+        <meta name="description" content="어바웃홈, 진단결과" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+        <meta name="keywords" content="어바웃홈 about-home" />
+        <meta name="robots" content="index,follow" />
+        <meta property="og:site_name" content="어바웃홈 about-home, 진단결과" />
+        <meta property="og:title" content="어바웃홈 about-home, 진단결과" />
+        <meta
+          property="og:description"
+          content="어바웃홈 about-home, 진단결과"
+        />
+        <meta property="og:url" content="https://about-home.net" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="어바웃홈 about-home" />
+        <meta name="twitter:description" content="어바웃홈 about-home" />
+      </Head>
       <Tabs
         style={{ marginTop: "20px" }}
         defaultActiveKey="ResultPage"
