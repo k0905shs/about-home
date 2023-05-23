@@ -79,7 +79,7 @@ const Footer = () => {
   useEffect(() => {
     if (status === "ready" && typeof window !== "undefined" && window.Kakao) {
       if (!window.Kakao.isInitialized()) {
-        window.Kakao.init("d3bc5655e50ada258ccb3361b6cb0e40");
+        window.Kakao.init("0e9ef83ad9de7c229b9adc8096dec7cf");
       }
     }
   }, [status]);
