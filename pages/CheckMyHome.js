@@ -62,6 +62,14 @@ const CheckMyHome = () => {
 
   // 기준일
   const [dateInput, setDateInput] = useState("");
+  const minDate = "1984-01-01";
+
+  const handleDateChange = (e) => {
+    const selectedDate = e.target.value;
+    if (minDate <= selectedDate) {
+      setDateInput(selectedDate);
+    }
+  };
 
   // 갑구 체크박스
   const handleCheckboxChangePurchaser = (e) => {
@@ -431,12 +439,15 @@ const CheckMyHome = () => {
                     onChange={handleInputChange}
                   />
                   <Form.Label>
-                    <h5 style={{ marginTop: "20px" }}>근저당권 설정일자</h5>
+                    <h5 style={{ marginTop: "20px" }}>
+                      최초 근저당권 설정일자
+                    </h5>
                   </Form.Label>
                   <Form.Control
                     type="date"
                     value={dateInput}
-                    onChange={(e) => setDateInput(e.target.value)}
+                    onChange={handleDateChange}
+                    min={minDate}
                   />
                   <Button
                     style={{
