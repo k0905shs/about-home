@@ -1,5 +1,6 @@
 package com.myhome.checkHome.collection;
 
+import com.myhome.checkHome.model.homeCheck.HomeCheckDto;
 import com.myhome.checkHome.type.BuildingType;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -34,5 +35,13 @@ public class SearchRecord {
         this.sidoCode = sidoCode;
         this.jibun = jibun;
         this.buildingType = buildingType;
+    }
+
+    //TODO : 검색 테이저 저장을 위한 임시 생성자 추후 제거 예정
+    public SearchRecord(HomeCheckDto.checkBuildingSaleParam checkBuildingSaleParam) {
+        this.buildingType = checkBuildingSaleParam.getBuildingType();
+        this.buildingCode = checkBuildingSaleParam.getBuildingCode();
+        this.jibun = checkBuildingSaleParam.getJibun();
+        this.sidoCode = checkBuildingSaleParam.getBuildingCode().substring(0, 5);
     }
 }
