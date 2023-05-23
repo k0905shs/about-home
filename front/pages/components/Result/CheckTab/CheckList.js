@@ -99,7 +99,7 @@ const CheckList = ({ parsedResult }) => {
         해당 등기의 갑구에{" "}
         <strong style={{ color: "red" }}>{strPurchaser}</strong>
         {modifiedPurchaser.length > 0
-          ? " 내용이 있어요!!! 정확한 권리사항 확인이 필요해 보여요!!"
+          ? " 내용이 있어요, 정확한 권리사항 확인이 필요해 보여요!"
           : "특이사항이 없어요!"}
       </h5>
       <div>
@@ -138,7 +138,7 @@ const CheckList = ({ parsedResult }) => {
         해당 등기의 을구에{" "}
         <strong style={{ color: "red" }}>{strProvider}</strong>
         {modifiedProvider.length > 0
-          ? " 내용이 있어요!!! 정확한 권리사항 확인이 필요해 보여요!!"
+          ? " 내용이 있어요, 정확한 권리사항 확인이 필요해 보여요!"
           : "특이사항이 없어요!"}
       </h5>
     </>
