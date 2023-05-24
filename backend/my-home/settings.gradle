@@ -1,1 +1,5 @@
 rootProject.name = 'my-home'
+include 'home-core'
+include 'home-app-api'
+include 'admin-app-api'
+
