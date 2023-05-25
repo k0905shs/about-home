@@ -41,4 +41,7 @@ out/
 application-db.yml
 application-db-mongo.yml
 
+###Qfile###
+**/generated/
+
 

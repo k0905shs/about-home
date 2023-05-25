@@ -25,7 +25,7 @@ dependencies {
 
 
 subprojects {
-	apply plugin: 'java'
+	apply plugin: 'java-library'
 	apply plugin: 'org.springframework.boot'
 	apply plugin: 'io.spring.dependency-management'
 
@@ -36,7 +36,10 @@ subprojects {
 	}
 
 	dependencies {
-		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+		testImplementation('org.springframework.boot:spring-boot-starter-test') {
+			exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+		}
+
 		//lombok
 		compileOnly 'org.projectlombok:lombok'
 		annotationProcessor 'org.projectlombok:lombok'
@@ -54,14 +57,24 @@ subprojects {
 
 		//StringUtils
 		implementation 'org.apache.commons:commons-lang3:3.6'
-
-		//mongo
-		implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 	}
 	tasks.named('test') {
 		useJUnitPlatform()
 	}
 }
+
+project(':home-app-api') {
+	dependencies {
+		implementation project(':home-core')
+	}
+}
+
+project(':admin-app-api') {
+	dependencies {
+		implementation project(':home-core')
+	}
+}
+
 
 bootJar {
 	enabled = false
